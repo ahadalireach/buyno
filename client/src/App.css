@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.category-circle {
+  position: relative;
+  z-index: 1;
+  border: 2.5px solid gray;
+  transition: border-color 0.3s;
+}
+
+.group:hover .category-circle {
+  border-color: transparent;
+}
+
+.group:hover .category-circle::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  border-radius: 9999px;
+  border: 2.3px dashed #ff6600;
+  animation: spin 5s linear infinite;
+  z-index: -1;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
