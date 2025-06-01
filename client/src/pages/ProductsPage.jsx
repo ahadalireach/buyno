@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { productData } from "../static/data";
 import { useSearchParams } from "react-router-dom";
 import { Header, Footer, Breadcrumb, ProductCard } from "../components";
-import { productData } from "../static/data";
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();

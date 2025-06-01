@@ -1,10 +1,11 @@
-const express = require("express");
-const User = require("../models/User");
 const fs = require("fs");
+const express = require("express");
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 const sendMail = require("../utils/sendMail");
-const errorHandler = require("../utils/errorHandler");
 const sendToken = require("../utils/jwtToken");
+const errorHandler = require("../utils/errorHandler");
+const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 
 const createActivationToken = (user) => {
   return jwt.sign(user, process.env.ACTIVATION_TOKEN_SECRET, {
@@ -12,7 +13,7 @@ const createActivationToken = (user) => {
   });
 };
 
-exports.signUp = async (req, res, next) => {
+exports.signUp = catchAsyncErrors(async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const userEmail = await User.findOne({ email });
@@ -32,6 +33,7 @@ exports.signUp = async (req, res, next) => {
     const user = { name, email, password, avatar: fileUrl };
     const activationToken = createActivationToken(user);
     const activationUrl = `${process.env.FRONTEND_URL}/activation/${activationToken}`;
+
     try {
       await sendMail({
         email: user.email,
@@ -43,15 +45,15 @@ exports.signUp = async (req, res, next) => {
         message: `Please check your email:- ${user.email} to activate your account!`,
       });
     } catch (error) {
-      return next(new errorHandler(error.message), 400);
+      return next(new errorHandler(error.message), 500);
     }
   } catch (error) {
     console.log(error);
     return next(new errorHandler(error.message), 400);
   }
-};
+});
 
-exports.activateUser = async (req, res, next) => {
+exports.activateUser = catchAsyncErrors(async (req, res, next) => {
   try {
     const { activation_token } = req.body;
     const user = jwt.verify(
@@ -61,6 +63,7 @@ exports.activateUser = async (req, res, next) => {
     if (!user) {
       return next(new errorHandler("Invalid activation token", 400));
     }
+
     const { name, email, password, avatar } = user;
     const userEmail = await User.findOne({ email });
     if (userEmail) {
@@ -76,9 +79,9 @@ exports.activateUser = async (req, res, next) => {
   } catch (error) {
     return next(new errorHandler(error.message, 500));
   }
-};
+});
 
-exports.login = async (req, res, next) => {
+exports.login = catchAsyncErrors(async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -96,9 +99,9 @@ exports.login = async (req, res, next) => {
   } catch (error) {
     return next(new errorHandler(error.message, 500));
   }
-};
+});
 
-exports.getUser = async (req, res, next) => {
+exports.getUser = catchAsyncErrors(async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -111,4 +114,19 @@ exports.getUser = async (req, res, next) => {
   } catch (error) {
     return next(new errorHandler(error.message, 500));
   }
-};
+});
+
+exports.logout = catchAsyncErrors(async (req, res, next) => {
+  try {
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 
-const Login = () => {
+const LoginShop = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/user/login`,
+        `${process.env.REACT_APP_BACKEND_URL}/shop/login-shop`,
         {
           email,
           password,
@@ -24,7 +24,7 @@ const Login = () => {
         }
       );
       if (response.data.success) {
-        toast.success("Login successful!");
+        toast.success("Login Shop successful!");
         navigate("/");
         window.location.reload(true);
       }
@@ -112,10 +112,10 @@ const Login = () => {
             </div>
             <div className="flex gap-4 mt-4">
               <Link
-                to="/sign-up"
+                to="/shop/create"
                 className="w-1/2 py-2 bg-gray-800 text-white text-base text-center rounded-none uppercase hover:bg-gray-200 hover:text-black transition"
               >
-                Create a account
+                Create a shop
               </Link>
               <Link
                 to="/forgot-password"
@@ -131,4 +131,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginShop;

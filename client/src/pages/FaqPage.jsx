@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Header, Footer, Breadcrumb } from "../components";
+
 const FAQS = [
   {
     question: "What is your return policy?",

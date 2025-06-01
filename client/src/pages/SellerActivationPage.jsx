@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const ActivationPage = () => {
+const SellerActivationPage = () => {
   const { activation_token } = useParams();
   const [error, setError] = useState(false);
 
@@ -13,7 +13,7 @@ const ActivationPage = () => {
       const activationEmail = async () => {
         try {
           await axios.post(
-            `${process.env.REACT_APP_BACKEND_URL}/user/activation`,
+            `${process.env.REACT_APP_BACKEND_URL}/shop/activation`,
             { activation_token }
           );
         } catch (error) {
@@ -85,7 +85,7 @@ const ActivationPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            {error ? "Activation Failed" : "Account Activated"}
+            {error ? "Activation Failed" : "Seller Account Activated"}
           </motion.h2>
           <motion.p
             className="text-lg text-gray-700 text-center mb-4"
@@ -95,7 +95,7 @@ const ActivationPage = () => {
           >
             {error
               ? "Your token is expired!"
-              : "Your account has been created successfully!"}
+              : "Your seller account has been created successfully!"}
           </motion.p>
           {!error && (
             <motion.a
@@ -116,4 +116,4 @@ const ActivationPage = () => {
   );
 };
 
-export default ActivationPage;
+export default SellerActivationPage;

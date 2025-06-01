@@ -1,12 +1,12 @@
 import {
+  Hero,
+  Header,
+  Events,
+  Footer,
   BestDeals,
+  Sponsored,
   Categories,
   FeaturedProducts,
-  Header,
-  Hero,
-  Events,
-  Sponsored,
-  Footer,
 } from "../components";
 
 const HomePage = () => {

@@ -1,12 +1,12 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { RxCross1 } from "react-icons/rx";
 import {
   AiFillHeart,
   AiOutlineHeart,
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { RxCross1 } from "react-icons/rx";
-import { Link } from "react-router-dom";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const [count, setCount] = useState(1);
@@ -37,7 +37,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
             </button>
 
             <div className="flex flex-col md:flex-row gap-8">
-              {/* Left: Product Image & Shop */}
               <div className="flex-1 flex flex-col items-center">
                 <div className="w-full flex justify-center mb-4">
                   <img

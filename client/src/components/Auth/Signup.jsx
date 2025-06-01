@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { RxAvatar } from "react-icons/rx";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { RxAvatar } from "react-icons/rx";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import axios from "axios";
 
 const Signup = () => {

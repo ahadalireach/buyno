@@ -1,5 +1,5 @@
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { BsStarHalf } from "react-icons/bs";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 const Ratings = ({ rating }) => {
   const stars = [];

@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const connectDB = require("./db/db");
 const errorHandler = require("./middleware/error");
 const userRoutes = require("./routes/userRoutes");
+const shopRoutes = require("./routes/shopRoutes");
 
 process.on("uncaughtException", (err) => {
   console.log(`Error: ${err.message}`.underline);
@@ -34,6 +35,7 @@ app.use("/test", (req, res) => {
 });
 
 app.use("/api/user", userRoutes);
+app.use("/api/shop", shopRoutes);
 
 app.use(errorHandler);
 const server = app.listen(process.env.PORT, () => {

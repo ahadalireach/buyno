@@ -1,25 +1,51 @@
+// ===================== Layout Components ===================
 import Header from "./Layout/Header";
 import Footer from "./Layout/Footer";
+import Loader from "./Layout/Loader";
 import Breadcrumb from "./Layout/Breadcrumb";
-import Signup from "./Auth/Signup";
+
+// ===================== Auth Components =====================
 import Login from "./Auth/Login";
+import Signup from "./Auth/Signup";
+
+// ===================== Profile Components ==================
+import ProfileSidebar from "./Profile/ProfileSidebar";
+import ProfileContent from "./Profile/ProfileContent";
+
+// ===================== Home & Shared UI Components =========
 import Hero from "./Hero/Hero";
-import Categories from "./Categories/Categories";
 import BestDeals from "./BestDeals/BestDeals";
+import Sponsored from "./Sponsored/Sponsored";
+import Categories from "./Categories/Categories";
+import FeaturedProducts from "./FeaturedProducts/FeaturedProducts";
+
+// ===================== Event Components ====================
 import Events from "./Events/Events";
 import EventCard from "./Events/EventCard";
-import FeaturedProducts from "./FeaturedProducts/FeaturedProducts";
-import Sponsored from "./Sponsored/Sponsored";
-import ProductCard from "./Products/ProductCard";
-import ProductDetailsCard from "./Products/ProductDetailsCard";
+
+// ===================== Product Components ==================
 import Ratings from "./Products/Ratings";
+import ProductCard from "./Products/ProductCard";
+import ProductDetails from "./Products/ProductDetails";
+import SuggestedProducts from "./Products/SuggestedProducts";
+import ProductDetailsCard from "./Products/ProductDetailsCard";
+
+// ===================== Cart Components =====================
+import Cart from "./Cart/Cart";
+
+// ===================== Shop Components =====================
+import LoginShop from "./Shop/LoginShop";
+import CreateShop from "./Shop/CreateShop";
 
 export {
   Header,
   Footer,
   Breadcrumb,
+  Loader,
   Signup,
   Login,
+  ProfileSidebar,
+  ProfileContent,
   Hero,
   Categories,
   BestDeals,
@@ -29,5 +55,10 @@ export {
   Sponsored,
   ProductCard,
   ProductDetailsCard,
+  ProductDetails,
+  SuggestedProducts,
   Ratings,
+  Cart,
+  CreateShop,
+  LoginShop,
 };

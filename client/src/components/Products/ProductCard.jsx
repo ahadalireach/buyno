@@ -1,12 +1,12 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import ProductDetailsCard from "./ProductDetailsCard";
 import {
   AiFillHeart,
   AiOutlineEye,
   AiOutlineHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { Link } from "react-router-dom";
-import ProductDetailsCard from "./ProductDetailsCard";
 import Ratings from "./Ratings";
 
 const ProductCard = ({ data, isEvent }) => {
@@ -24,8 +24,8 @@ const ProductCard = ({ data, isEvent }) => {
           <Link
             to={
               isEvent
-                ? `/product/${data._id}?isEvent=true`
-                : `/product/${data._id}`
+                ? `/product/${data.name}?isEvent=true`
+                : `/product/${data.name}`
             }
             className="w-full h-full flex items-center justify-center"
           >
@@ -49,7 +49,6 @@ const ProductCard = ({ data, isEvent }) => {
                 <AiOutlineHeart size={20} color="#FF7D1A" />
               )}
             </button>
-            {/* Quick View */}
             <button
               className="bg-white rounded-full p-2 shadow hover:bg-orange-100 transition"
               onClick={() => setQuickViewOpen(true)}
@@ -57,7 +56,6 @@ const ProductCard = ({ data, isEvent }) => {
             >
               <AiOutlineEye size={20} color="#333" />
             </button>
-            {/* Add to Cart */}
             <button
               className="bg-orange-500 rounded-full p-2 shadow hover:bg-orange-600 transition"
               onClick={() => addToCartHandler(data._id)}
@@ -77,8 +75,8 @@ const ProductCard = ({ data, isEvent }) => {
         <Link
           to={
             isEvent
-              ? `/product/${data._id}?isEvent=true`
-              : `/product/${data._id}`
+              ? `/product/${data.name}?isEvent=true`
+              : `/product/${data.name}`
           }
         >
           <h4 className="font-semibold text-gray-900 text-base leading-tight min-h-[48px] mb-2 hover:text-orange-500 transition-colors">
