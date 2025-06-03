@@ -1,38 +1,43 @@
-//! ===================== Common Pages =====================
-import FaqPage from "./FaqPage";
-import HomePage from "./HomePage";
-import EventsPage from "./EventsPage";
-import NotFoundPage from "./NotFoundPage";
-import ProductsPage from "./ProductsPage";
-import BestSellingPage from "./BestSellingPage";
-import ProductDetailsPage from "./ProductDetailsPage";
-
-//! ===================== User (Buyer) Pages ===============
-import LoginPage from "./LoginPage";
-import SignUpPage from "./SignUpPage";
-import ProfilePage from "./ProfilePage";
-import ActivationPage from "./ActivationPage";
-
-//! ===================== Seller (Shop) Pages ==============
-import ShopPage from "./ShopPage";
-import ShopLoginPage from "./ShopLoginPage";
-import CreateShopPage from "./CreateShopPage";
-import SellerActivationPage from "./SellerActivationPage";
+import FaqPage from "./Misc/FaqPage";
+import HomePage from "./Home/HomePage";
+import EventsPage from "./Misc/EventsPage";
+import NotFoundPage from "./Misc/NotFoundPage";
+import UserLoginPage from "./Auth/User/UserLoginPage";
+import UserProfilePage from "./Profile/UserProfilePage";
+import ProductListPage from "./Products/ProductListPage";
+import CreateEventPage from "./SellerDashboard/CreateEventPage";
+import SellerProfilePage from "./Profile/SellerProfilePage";
+import SellerLoginPage from "./Auth/Seller/SellerLoginPage";
+import UserRegisterPage from "./Auth/User/UserRegisterPage";
+import AddProductPage from "./SellerDashboard/AddProductPage";
+import ProductDetailsPage from "./Products/ProductDetailsPage";
+import UserActivationPage from "./Auth/User/UserActivationPage";
+import SellerRegisterPage from "./Auth/Seller/SellerRegisterPage";
+import DashboardHomePage from "./SellerDashboard/DashboardHomePage";
+import SellerActivationPage from "./Auth/Seller/SellerActivationPage";
+import SellerProductsPage from "./SellerDashboard/SellerProductsPage";
+import BestSellingProductsPage from "./Products/BestSellingProductsPage";
+import SellerEventsPage from "./SellerDashboard/SellerEventsPage";
 
 export {
-  HomePage,
-  SignUpPage,
-  ActivationPage,
-  LoginPage,
-  ProfilePage,
-  NotFoundPage,
-  ProductsPage,
-  ProductDetailsPage,
-  BestSellingPage,
-  EventsPage,
   FaqPage,
-  CreateShopPage,
+  HomePage,
+  EventsPage,
+  NotFoundPage,
+  UserLoginPage,
+  AddProductPage,
+  UserProfilePage,
+  ProductListPage,
+  CreateEventPage,
+  SellerLoginPage,
+  SellerEventsPage,
+  UserRegisterPage,
+  SellerProfilePage,
+  DashboardHomePage,
+  ProductDetailsPage,
+  SellerProductsPage,
+  UserActivationPage,
+  SellerRegisterPage,
   SellerActivationPage,
-  ShopLoginPage,
-  ShopPage,
+  BestSellingProductsPage,
 };

@@ -4,10 +4,10 @@ const { upload } = require("../multer");
 const { isAuthenticated } = require("../middleware/auth");
 const userController = require("../controllers/userController");
 
-router.post("/sign-up", upload.single("file"), userController.signUp);
-router.post("/activation", userController.activateUser);
-router.post("/login", userController.login);
-router.get("/getuser", isAuthenticated, userController.getUser);
-router.get("/logout", isAuthenticated, userController.logout);
+router.post("/register", upload.single("file"), userController.registerUser);
+router.post("/activate", userController.activateUser);
+router.post("/login", userController.loginUser);
+router.get("/profile", isAuthenticated, userController.getUserProfile);
+router.get("/logout", isAuthenticated, userController.logoutUser);
 
 module.exports = router;

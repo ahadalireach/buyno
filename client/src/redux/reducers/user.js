@@ -6,7 +6,7 @@ const initialState = {
 
 export const userReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase("getUserLoading", (state) => {
+    .addCase("getUserRequest", (state) => {
       state.loading = true;
     })
     .addCase("getUserSuccess", (state, action) => {
@@ -14,7 +14,7 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.user = action.payload;
     })
-    .addCase("getUserFailed", (state, action) => {
+    .addCase("getUserFail", (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.isAuthenticated = false;

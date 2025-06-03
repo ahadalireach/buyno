@@ -5,16 +5,16 @@ const jwt = require("jsonwebtoken");
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please enter your name!"],
+    required: [true, "Please enter your name."],
   },
   email: {
     type: String,
-    required: [true, "Please enter your email!"],
+    required: [true, "Please enter your email address."],
   },
   password: {
     type: String,
-    required: [true, "Please enter your password!"],
-    minLength: [4, "Password should be greater than 4 characters!"],
+    required: [true, "Please enter your password."],
+    minLength: [4, "Password should be greater than 4 characters."],
     select: false,
   },
   phoneNumber: {
@@ -48,7 +48,6 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: "default_avatar.png",
   },
   createdAt: {
     type: Date,

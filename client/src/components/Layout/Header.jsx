@@ -21,6 +21,7 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [openWishlist, setOpenWishlist] = useState(false);
+  const { isSeller } = useSelector((state) => state.seller);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, user } = useSelector((state) => state.user);
 
@@ -136,7 +137,7 @@ const Header = () => {
             <span className="h-8 border-l border-gray-300 mx-3"></span>
             <div>
               {isAuthenticated ? (
-                <Link to="/profile">
+                <Link to="/user/profile">
                   <img
                     src={`${process.env.REACT_APP_BACKEND_NON_API_URL}${
                       user?.avatar?.startsWith("/")
@@ -148,16 +149,19 @@ const Header = () => {
                   />
                 </Link>
               ) : (
-                <Link to="/login">
-                  <FiUser size={22} className="text-gray-500" />
-                </Link>
+                !isSeller && (
+                  <Link to="/user/login">
+                    <FiUser size={22} className="text-gray-500" />
+                  </Link>
+                )
               )}
             </div>
             <Link
-              to="/shop/create"
-              className="ml-4 px-4 py-2 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 transition"
+              to={`${isSeller ? "/dashboard" : "/seller/register"}`}
+              className="ml-4 px-4 py-2 bg-orange-500 text-white rounded-lg
+              font-medium hover:bg-orange-600 transition"
             >
-              Become Seller
+              {isSeller ? "Go Dashboard" : "Become Seller"}
             </Link>
           </div>
 
@@ -183,7 +187,7 @@ const Header = () => {
             style={{ zIndex: 20 }}
           >
             <button
-              className="h-full w-full flex justify-between items-center pl-8 pr-4 bg-orange-500 text-white font-sans text-base font-medium select-none"
+              className="h-full w-full flex justify-between items-center pl-8 pr-4 bg-orange-500 hover:bg-orange-600 text-white font-sans text-base font-medium select-none"
               onClick={() => setDropDown((prev) => !prev)}
               type="button"
             >
@@ -290,7 +294,10 @@ const Header = () => {
               </button>
               <div>
                 {isAuthenticated ? (
-                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
+                  <Link
+                    to="/user/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     <img
                       src={`${process.env.REACT_APP_BACKEND_NON_API_URL}${
                         user?.avatar?.startsWith("/")
@@ -302,13 +309,16 @@ const Header = () => {
                     />
                   </Link>
                 ) : (
-                  <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Link
+                    to="/user/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     <FiUser size={22} className="text-gray-500" />
                   </Link>
                 )}
               </div>
               <Link
-                to="/shop/create"
+                to="/seller/register"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg font-medium text-center hover:bg-orange-600 transition"
               >

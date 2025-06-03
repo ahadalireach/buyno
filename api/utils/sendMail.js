@@ -1,6 +1,11 @@
 const nodemailer = require("nodemailer");
 
 const sendMail = async (options) => {
+  const isSeller =
+    options.subject && options.subject.toLowerCase().includes("seller");
+  const entityLabel = isSeller ? "Seller Seller" : "Account";
+  const entityLabelLower = isSeller ? "seller account" : "account";
+
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -16,6 +21,37 @@ const sendMail = async (options) => {
     to: options.email,
     subject: options.subject,
     text: options.message || options.text,
+    html: `
+      <div style="font-family: Arial, sans-serif; background: #f9fafb; padding: 40px 0;">
+        <div style="max-width: 480px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0000000d; overflow: hidden;">
+          <div style="background: #ea580c; padding: 24px 0; text-align: center;">
+            <h1 style="color: #fff; margin: 0; font-size: 2rem;">Multivendor Marketplace</h1>
+          </div>
+          <div style="padding: 32px;">
+            <h2 style="color: #ea580c; margin-top: 0;">Activate your ${entityLabelLower}</h2>
+            <p style="color: #374151; font-size: 1rem;">
+              Hello <b>${options.name || "there"}</b>,
+            </p>
+            <p style="color: #374151; font-size: 1rem;">
+              Thank you for registering on our marketplace! Please click the button below to activate your ${entityLabelLower}.
+            </p>
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="${
+                options.activationUrl
+              }" style="background: #ea580c; color: #fff; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 1rem;">
+                Activate ${entityLabel}
+              </a>
+            </div>
+            <p style="color: #6b7280; font-size: 0.95rem;">
+              If you did not create a ${entityLabelLower}, you can safely ignore this email.
+            </p>
+          </div>
+          <div style="background: #f3f4f6; padding: 16px; text-align: center; color: #9ca3af; font-size: 0.9rem;">
+            &copy; ${new Date().getFullYear()} Multivendor Marketplace. All rights reserved.
+          </div>
+        </div>
+      </div>
+    `,
   };
 
   await transporter.sendMail(mailOptions);

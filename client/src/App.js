@@ -8,83 +8,126 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   FaqPage,
   HomePage,
-  ShopPage,
-  LoginPage,
   EventsPage,
-  SignUpPage,
-  ProfilePage,
   NotFoundPage,
-  ProductsPage,
-  ShopLoginPage,
-  ActivationPage,
-  CreateShopPage,
-  BestSellingPage,
+  UserLoginPage,
+  UserProfilePage,
+  ProductListPage,
+  CreateEventPage,
+  SellerProfilePage,
+  SellerLoginPage,
+  UserRegisterPage,
+  AddProductPage,
   ProductDetailsPage,
+  UserActivationPage,
+  SellerRegisterPage,
+  DashboardHomePage,
   SellerActivationPage,
+  SellerEventsPage,
+  SellerProductsPage,
+  BestSellingProductsPage,
 } from "./pages";
 import "./App.css";
 import store from "./redux/store";
 import "react-toastify/dist/ReactToastify.css";
+import { Loader } from "./components";
 
 const App = () => {
-  const { isLoading, isSeller } = useSelector((state) => state.seller);
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
+  const { isLoading } = useSelector((state) => state.seller);
+  const { loading } = useSelector((state) => state.user);
 
-  // Fetch user and seller info on mount
   useEffect(() => {
     store.dispatch(getUser());
     store.dispatch(getSeller());
   }, []);
 
   if (loading || isLoading) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <Loader />
+      </div>
+    );
   }
 
   return (
     <BrowserRouter>
       <Routes>
-        {/* ---------- Public/Common Routes ---------- */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/products" element={<ProductListPage />} />
         <Route path="/product/:name" element={<ProductDetailsPage />} />
-        <Route path="/best-selling" element={<BestSellingPage />} />
+        <Route path="/best-selling" element={<BestSellingProductsPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/faq" element={<FaqPage />} />
         <Route path="*" element={<NotFoundPage />} />
-
-        {/* ---------- User (Buyer) Routes ---------- */}
-        <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/user/register" element={<UserRegisterPage />} />
         <Route
-          path="/activation/:activation_token"
-          element={<ActivationPage />}
+          path="/user/activation/:activation_token"
+          element={<UserActivationPage />}
         />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/user/login" element={<UserLoginPage />} />
         <Route
-          path="/profile"
+          path="/user/profile"
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <ProfilePage />
+            <ProtectedRoute>
+              <UserProfilePage />
             </ProtectedRoute>
           }
         />
-
-        {/* ---------- Seller Shop Routes ---------- */}
-        <Route path="/shop/create" element={<CreateShopPage />} />
+        <Route path="/seller/register" element={<SellerRegisterPage />} />
         <Route
           path="/seller/activation/:activation_token"
           element={<SellerActivationPage />}
         />
-        <Route path="/shop/login" element={<ShopLoginPage />} />
+        <Route path="/seller/login" element={<SellerLoginPage />} />
         <Route
-          path="/shop/:id"
+          path="/seller/:id"
           element={
-            <SellerProtectedRoute isSeller={isSeller}>
-              <ShopPage />
+            <SellerProtectedRoute>
+              <SellerProfilePage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard"
+          element={
+            <SellerProtectedRoute>
+              <DashboardHomePage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-create-product"
+          element={
+            <SellerProtectedRoute>
+              <AddProductPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-products"
+          element={
+            <SellerProtectedRoute>
+              <SellerProductsPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-create-event"
+          element={
+            <SellerProtectedRoute>
+              <CreateEventPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-events"
+          element={
+            <SellerProtectedRoute>
+              <SellerEventsPage />
             </SellerProtectedRoute>
           }
         />
       </Routes>
-
       <ToastContainer
         position="bottom-center"
         autoClose={5000}

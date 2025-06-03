@@ -13,7 +13,7 @@ const Navbar = () => {
             <Link
               key={i.url}
               to={i.url}
-              className={`px-5 py-2 font-semibold text-base transition-all duration-200 h-full flex items-center
+              className={`px-5 py-2 font-semibold text-base transition-all hover:text-orange-400 duration-200 h-full flex items-center
                 ${
                   isActive
                     ? "text-orange-500 shadow-sm"

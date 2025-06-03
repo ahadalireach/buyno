@@ -3,10 +3,10 @@ import axios from "axios";
 export const getUser = () => async (dispatch) => {
   try {
     dispatch({
-      type: "getUserLoading",
+      type: "getUserRequest",
     });
     const { data } = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}/user/getuser`,
+      `${process.env.REACT_APP_BACKEND_URL}/users/profile`,
       {
         withCredentials: true,
       }
@@ -18,7 +18,7 @@ export const getUser = () => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: "getUserFailed",
+      type: "getUserFail",
       payload: error.response?.data?.message || error.message,
     });
   }
@@ -27,10 +27,10 @@ export const getUser = () => async (dispatch) => {
 export const getSeller = () => async (dispatch) => {
   try {
     dispatch({
-      type: "getSellerLoading",
+      type: "getSellerRequest",
     });
     const { data } = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}/shop/getseller`,
+      `${process.env.REACT_APP_BACKEND_URL}/sellers/profile`,
       {
         withCredentials: true,
       }
@@ -41,7 +41,7 @@ export const getSeller = () => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: "getSellerFailed",
+      type: "getSellerFail",
       payload: error.response?.data?.message || error.message,
     });
   }

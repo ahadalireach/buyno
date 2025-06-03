@@ -3,12 +3,14 @@ const app = express();
 const cors = require("cors");
 const dotenv = require("dotenv");
 const colors = require("colors");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const connectDB = require("./db/db");
-const errorHandler = require("./middleware/error");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/userRoutes");
-const shopRoutes = require("./routes/shopRoutes");
+const errorHandler = require("./middleware/error");
+const eventRoutes = require("./routes/eventRoutes");
+const sellerRoutes = require("./routes/sellerRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 process.on("uncaughtException", (err) => {
   console.log(`Error: ${err.message}`.underline);
@@ -29,13 +31,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
-
 app.use("/test", (req, res) => {
   res.send("Hello world!");
 });
 
-app.use("/api/user", userRoutes);
-app.use("/api/shop", shopRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/sellers", sellerRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/events", eventRoutes);
 
 app.use(errorHandler);
 const server = app.listen(process.env.PORT, () => {

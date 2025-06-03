@@ -1,12 +1,12 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
-  isLoading: false,
+  isLoading: true,
 };
 
 export const sellerReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase("getSellerLoading", (state) => {
+    .addCase("getSellerRequest", (state) => {
       state.isLoading = true;
     })
     .addCase("getSellerSuccess", (state, action) => {
@@ -14,7 +14,7 @@ export const sellerReducer = createReducer(initialState, (builder) => {
       state.isLoading = false;
       state.seller = action.payload;
     })
-    .addCase("getSellerFailed", (state, action) => {
+    .addCase("getSellerFail", (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
       state.isSeller = false;

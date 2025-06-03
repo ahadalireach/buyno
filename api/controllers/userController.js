@@ -13,7 +13,7 @@ const createActivationToken = (user) => {
   });
 };
 
-exports.signUp = catchAsyncErrors(async (req, res, next) => {
+exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const userEmail = await User.findOne({ email });
@@ -27,18 +27,22 @@ exports.signUp = catchAsyncErrors(async (req, res, next) => {
           }
         });
       }
-      return next(new errorHandler("User already exists", 400));
+      return next(
+        new errorHandler("A user with this email already exists.", 400)
+      );
     }
     const fileUrl = req.file ? req.file.filename : "";
     const user = { name, email, password, avatar: fileUrl };
     const activationToken = createActivationToken(user);
-    const activationUrl = `${process.env.FRONTEND_URL}/activation/${activationToken}`;
+    const activationUrl = `${process.env.FRONTEND_URL}/user/activation/${activationToken}`;
 
     try {
       await sendMail({
         email: user.email,
         subject: "Activate your account",
-        text: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`,
+        name: user.name,
+        activationUrl,
+        message: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`,
       });
       res.status(201).json({
         success: true,
@@ -61,13 +65,15 @@ exports.activateUser = catchAsyncErrors(async (req, res, next) => {
       process.env.ACTIVATION_TOKEN_SECRET
     );
     if (!user) {
-      return next(new errorHandler("Invalid activation token", 400));
+      return next(new errorHandler("Invalid activation token.", 400));
     }
 
     const { name, email, password, avatar } = user;
     const userEmail = await User.findOne({ email });
     if (userEmail) {
-      return next(new errorHandler("User already exists", 400));
+      return next(
+        new errorHandler("A user with this email already exists.", 400)
+      );
     }
     const newUser = await User.create({
       name,
@@ -81,19 +87,23 @@ exports.activateUser = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-exports.login = catchAsyncErrors(async (req, res, next) => {
+exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return next(new errorHandler("Please provide email and password", 400));
+      return next(
+        new errorHandler("Please provide both email and password.", 400)
+      );
     }
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
-      return next(new errorHandler("User not found.", 401));
+      return next(
+        new errorHandler("User does not exist with this email..", 401)
+      );
     }
     const isPasswordMatched = await user.comparePassword(password);
     if (!isPasswordMatched) {
-      return next(new errorHandler("Invalid password", 401));
+      return next(new errorHandler("Invalid password.", 401));
     }
     sendToken(user, 200, res);
   } catch (error) {
@@ -101,11 +111,11 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-exports.getUser = catchAsyncErrors(async (req, res, next) => {
+exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
-      return next(new errorHandler("User doesn't exists", 400));
+      return next(new errorHandler("User does not exists.", 400));
     }
     res.status(200).json({
       success: true,
@@ -116,7 +126,7 @@ exports.getUser = catchAsyncErrors(async (req, res, next) => {
   }
 });
 
-exports.logout = catchAsyncErrors(async (req, res, next) => {
+exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
   try {
     res.cookie("token", null, {
       expires: new Date(Date.now()),
@@ -124,7 +134,7 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
     });
     res.status(200).json({
       success: true,
-      message: "Logged out successfully",
+      message: "Logged out successfully.",
     });
   } catch (error) {
     return next(new errorHandler(error.message, 500));
