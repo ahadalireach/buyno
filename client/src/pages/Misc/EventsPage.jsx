@@ -1,15 +1,23 @@
-import { Header, Footer, Breadcrumb, EventCard } from "../../components";
+import { useSelector } from "react-redux";
+import {
+  Header,
+  Footer,
+  Breadcrumb,
+  Loader,
+  EventCard,
+} from "../../components";
 
 const EventsPage = () => {
-  return (
+  const { allEvents, isLoading } = useSelector((state) => state.events);
+
+  return isLoading ? (
+    <Loader />
+  ) : (
     <div className="min-h-screen">
       <Header />
-      <Breadcrumb mainTitle="Upcoming Events" page="Events" />
+      <Breadcrumb mainTitle="Hot Events" page="Events" />
       <main className="max-w-4xl mx-auto py-12 px-4">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">
-          Hot Events
-        </h1>
-        <EventCard active={true} />
+        <EventCard active={true} data={allEvents && allEvents[0]} />
       </main>
       <Footer />
     </div>

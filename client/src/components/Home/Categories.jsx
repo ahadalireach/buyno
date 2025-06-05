@@ -51,7 +51,8 @@ const Categories = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-8 place-items-center">
           {categoriesData.map((category) => {
             const handleClick = () => {
-              navigate(`/products?category=${category.title}`);
+              const encodedCategory = encodeURIComponent(category.title);
+              navigate(`/products?category=${encodedCategory}`);
             };
             return (
               <div
@@ -59,14 +60,14 @@ const Categories = () => {
                 onClick={handleClick}
                 className="group flex flex-col items-center cursor-pointer"
               >
-                <div className="w-36 h-36 md:w-40 md:h-40 rounded-full border-4 border-orange-400 bg-white shadow-lg flex items-center justify-center">
+                <div className="w-36 h-36 md:w-40 md:h-40 rounded-full border-[3px] border-gray-900 hover:border-orange-500 transition bg-white shadow-lg flex items-center justify-center">
                   <img
                     src={category.image_Url}
                     alt={category.title}
-                    className="w-20 h-20 object-contain rounded-full"
+                    className="w-20 h-20 object-contain rounded-md"
                   />
                 </div>
-                <span className="mt-4 text-center text-lg font-semibold text-gray-800 group-hover:text-orange-500 transition">
+                <span className="mt-4 text-center text-lg font-semibold text-gray-900 group-hover:text-orange-500 transition">
                   {category.title}
                 </span>
               </div>
@@ -77,7 +78,7 @@ const Categories = () => {
 
       <div className="w-full mt-8">
         <div
-          className="relative overflow-hidden bg-[#101233] py-6 px-0"
+          className="relative overflow-hidden bg-gray-900 py-6 px-0"
           style={{ minHeight: 80 }}
         >
           <div

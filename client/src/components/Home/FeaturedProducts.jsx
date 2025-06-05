@@ -1,7 +1,9 @@
-import { productData } from "../../static/data";
+import { useSelector } from "react-redux";
 import ProductCard from "../Products/ProductCard";
 
 const FeaturedProducts = () => {
+  const { allProducts } = useSelector((state) => state.products);
+
   return (
     <section className="w-full py-12 bg-white">
       <div className="w-11/12 mx-auto">
@@ -14,8 +16,8 @@ const FeaturedProducts = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 mb-12">
-          {productData && productData.length !== 0 ? (
-            productData.map((i, index) => <ProductCard data={i} key={index} />)
+          {allProducts && allProducts.length !== 0 ? (
+            allProducts.map((i, index) => <ProductCard data={i} key={index} />)
           ) : (
             <div className="col-span-full text-center text-gray-400 py-10">
               No featured products.

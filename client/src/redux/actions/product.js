@@ -31,7 +31,7 @@ export const addProduct = (formData) => async (dispatch) => {
   }
 };
 
-export const getAllProductsShop = (id) => async (dispatch) => {
+export const getAllSellerProducts = (id) => async (dispatch) => {
   try {
     dispatch({
       type: "getSellerProductsRequest",
@@ -81,6 +81,27 @@ export const deleteProduct = (productId) => async (dispatch) => {
     dispatch({
       type: "deleteProductFailed",
       payload: error.response?.data?.message || error.message,
+    });
+  }
+};
+
+export const getAllProducts = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllProductsRequest",
+    });
+
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/products/all`
+    );
+    dispatch({
+      type: "getAllProductsSuccess",
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllProductsFail",
+      payload: error.response.data.message,
     });
   }
 };

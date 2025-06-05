@@ -2,7 +2,10 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
-import { deleteProduct, getAllProductsShop } from "../../redux/actions/product";
+import {
+  deleteProduct,
+  getAllSellerProducts,
+} from "../../redux/actions/product";
 import Loader from "../Layout/Loader";
 
 const SellerProducts = () => {
@@ -12,7 +15,7 @@ const SellerProducts = () => {
 
   useEffect(() => {
     if (seller?._id) {
-      dispatch(getAllProductsShop(seller._id));
+      dispatch(getAllSellerProducts(seller._id));
     }
   }, [dispatch, seller?._id]);
 

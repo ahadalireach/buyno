@@ -160,3 +160,19 @@ exports.logoutSeller = catchAsyncErrors(async (req, res, next) => {
     return next(new errorHandler(error.message, 500));
   }
 });
+
+exports.getSellerInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const seller = await Seller.findById(req.params.id);
+    if (!seller) {
+      return next(new errorHandler("Seller does not exist.", 400));
+    }
+
+    res.status(200).json({
+      success: true,
+      seller,
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});

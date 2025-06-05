@@ -1,17 +1,30 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
-const CountDown = () => {
+const CountDown = ({ data }) => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
+
+    if (
+      typeof timeLeft.days === "undefined" &&
+      typeof timeLeft.hours === "undefined" &&
+      typeof timeLeft.minutes === "undefined" &&
+      typeof timeLeft.seconds === "undefined"
+    ) {
+      axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}/events/event/${data._id}`
+      );
+    }
+
     return () => clearTimeout(timer);
   });
 
   function calculateTimeLeft() {
-    const difference = +new Date("2025-06-01") - +new Date();
+    const difference = +new Date(data.finishDate) - +new Date();
     let timeLeft = {};
 
     if (difference > 0) {

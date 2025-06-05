@@ -1,50 +1,63 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { productData } from "../../../static/data";
+import { getAllSellerProducts } from "../../../redux/actions/product";
 import ProductCard from "../../Products/ProductCard";
 import Ratings from "../../Products/Ratings";
 
-const allReviews = [
-  {
-    user: {
-      name: "Alice Smith",
-      avatar: { url: "https://randomuser.me/api/portraits/women/1.jpg" },
-    },
-    rating: 5,
-    comment: "Fantastic product! Will buy again.",
-    createdAt: "2025-05-30T10:00:00Z",
-  },
-  {
-    user: {
-      name: "Bob Johnson",
-      avatar: { url: "https://randomuser.me/api/portraits/men/2.jpg" },
-    },
-    rating: 4,
-    comment: "Very good, but shipping was slow.",
-    createdAt: "2025-05-28T15:30:00Z",
-  },
-  {
-    user: {
-      name: "Carol Lee",
-      avatar: { url: "https://randomuser.me/api/portraits/women/3.jpg" },
-    },
-    rating: 3,
-    comment: "Average experience, could be better.",
-    createdAt: "2025-05-25T09:20:00Z",
-  },
-  {
-    user: {
-      name: "David Kim",
-      avatar: { url: "https://randomuser.me/api/portraits/men/4.jpg" },
-    },
-    rating: 5,
-    comment: "Loved it! Highly recommended.",
-    createdAt: "2025-05-20T12:45:00Z",
-  },
-];
+// const allReviews = [
+//   {
+//     user: {
+//       name: "Alice Smith",
+//       avatar: { url: "https://randomuser.me/api/portraits/women/1.jpg" },
+//     },
+//     rating: 5,
+//     comment: "Fantastic product! Will buy again.",
+//     createdAt: "2025-05-30T10:00:00Z",
+//   },
+//   {
+//     user: {
+//       name: "Bob Johnson",
+//       avatar: { url: "https://randomuser.me/api/portraits/men/2.jpg" },
+//     },
+//     rating: 4,
+//     comment: "Very good, but shipping was slow.",
+//     createdAt: "2025-05-28T15:30:00Z",
+//   },
+//   {
+//     user: {
+//       name: "Carol Lee",
+//       avatar: { url: "https://randomuser.me/api/portraits/women/3.jpg" },
+//     },
+//     rating: 3,
+//     comment: "Average experience, could be better.",
+//     createdAt: "2025-05-25T09:20:00Z",
+//   },
+//   {
+//     user: {
+//       name: "David Kim",
+//       avatar: { url: "https://randomuser.me/api/portraits/men/4.jpg" },
+//     },
+//     rating: 5,
+//     comment: "Loved it! Highly recommended.",
+//     createdAt: "2025-05-20T12:45:00Z",
+//   },
+// ];
 
-const SellerProfileData = ({ isOwner, shop }) => {
+const SellerProfileData = ({ isOwner }) => {
   const [active, setActive] = useState(1);
+  const { products } = useSelector((state) => state.products);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllSellerProducts(id));
+  }, [dispatch]);
+
+  const allReviews =
+    products && products.map((product) => product.reviews).flat();
 
   return (
     <div className="w-full">
@@ -58,7 +71,7 @@ const SellerProfileData = ({ isOwner, shop }) => {
             }`}
             onClick={() => setActive(1)}
           >
-            Shop Products
+            Seller Products
           </button>
           <button
             className={`text-[18px] font-semibold px-2 py-1 rounded-t transition-colors ${
@@ -78,7 +91,7 @@ const SellerProfileData = ({ isOwner, shop }) => {
             }`}
             onClick={() => setActive(3)}
           >
-            Shop Reviews
+            Seller Reviews
           </button>
         </div>
         {isOwner && (
@@ -93,13 +106,13 @@ const SellerProfileData = ({ isOwner, shop }) => {
       <div className="mt-8">
         {active === 1 && (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-12">
-            {productData && productData.length > 0 ? (
-              productData.map((i, index) => (
-                <ProductCard data={i} key={index} isShop={true} />
+            {products && products.length > 0 ? (
+              products.map((i, index) => (
+                <ProductCard data={i} key={index} isOwner={true} />
               ))
             ) : (
               <h5 className="w-full text-center py-5 text-[18px] text-gray-500">
-                No products found for this shop!
+                No products found{!isOwner && " for this seller"}!
               </h5>
             )}
           </div>
@@ -109,16 +122,11 @@ const SellerProfileData = ({ isOwner, shop }) => {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-12">
             {productData && productData.length > 0 ? (
               productData.map((i, index) => (
-                <ProductCard
-                  data={i}
-                  key={index}
-                  isShop={true}
-                  isEvent={true}
-                />
+                <ProductCard data={i} key={index} />
               ))
             ) : (
               <h5 className="w-full text-center py-5 text-[18px] text-gray-500">
-                No events found for this shop!
+                No events found{!isOwner && " for this seller"}!
               </h5>
             )}
           </div>
@@ -153,7 +161,7 @@ const SellerProfileData = ({ isOwner, shop }) => {
               ))
             ) : (
               <h5 className="w-full text-center py-5 text-[18px] text-gray-500">
-                No reviews found for this shop!
+                No reviews found{!isOwner && " for this seller"}!
               </h5>
             )}
           </div>

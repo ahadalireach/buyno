@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
 const Seller = require("../models/Seller");
 const Product = require("../models/Product");
 const errorHandler = require("../utils/errorHandler");
@@ -50,10 +51,36 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
       return next(new errorHandler("Product is not found with this id", 404));
     }
 
+    product.images.forEach((imageUrl) => {
+      const filename = imageUrl;
+      const filePath = `uploads/${filename}`;
+
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error(`Error deleting file ${filePath}:`, err);
+        } else {
+          console.log(`File ${filePath} deleted successfully.`);
+        }
+      });
+    });
+
     await Product.deleteOne({ _id: req.params.id });
     res.status(200).json({
       success: true,
       message: "Product Deleted successfully.",
+    });
+  } catch (error) {
+    return next(new errorHandler(error, 400));
+  }
+});
+
+exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+
+    res.status(201).json({
+      success: true,
+      products,
     });
   } catch (error) {
     return next(new errorHandler(error, 400));

@@ -1,14 +1,33 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import { productData } from "../../../static/data";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllSellerProducts } from "../../../redux/actions/product";
 import Loader from "../../Layout/Loader";
+import axios from "axios";
 
-const SellerSideBar = () => {
-  const [isLoading] = useState(false);
-  const { seller } = useSelector((state) => state.seller);
+const SellerProfileSideBar = ({ isOwner }) => {
+  const [data, setData] = useState({});
+  const { products } = useSelector((state) => state.products);
+  const [isLoading, setIsLoading] = useState(false);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllSellerProducts(id));
+    setIsLoading(true);
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/sellers/info/${id}`)
+      .then((res) => {
+        setData(res.data.seller);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  }, []);
 
   const logoutHandler = async () => {
     axios
@@ -20,25 +39,19 @@ const SellerSideBar = () => {
         window.location.reload(true);
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        toast.error(error.response?.data.message || "Logout failed");
       });
   };
 
   const totalReviewsLength =
-    productData &&
-    productData.reduce(
-      (acc, product) => acc + (product.reviews?.length || 0),
-      0
-    );
+    products &&
+    products.reduce((acc, product) => acc + product.reviews.length, 0);
 
   const totalRatings =
-    productData &&
-    productData.reduce(
+    products &&
+    products.reduce(
       (acc, product) =>
-        acc +
-        (product.reviews
-          ? product.reviews.reduce((sum, review) => sum + review.rating, 0)
-          : 0),
+        acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
       0
     );
 
@@ -53,72 +66,72 @@ const SellerSideBar = () => {
           <div className="flex flex-col items-center">
             <img
               src={
-                seller?.avatar?.url
-                  ? seller.avatar.url
-                  : seller?.avatar && typeof seller.avatar === "string"
+                data?.avatar?.url
+                  ? data.avatar.url
+                  : data?.avatar && typeof data.avatar === "string"
                   ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
-                      seller.avatar.startsWith("/")
-                        ? seller.avatar
-                        : "/" + seller.avatar
+                      data.avatar.startsWith("/")
+                        ? data.avatar
+                        : "/" + data.avatar
                     }`
                   : "https://ui-avatars.com/api/?name=" +
-                    encodeURIComponent(seller?.name || "Shop")
+                    encodeURIComponent(data?.name || "Seller")
               }
-              alt={seller?.name}
+              alt={data?.name || "Seller"}
               className="w-28 h-28 rounded-full border-2 border-orange-400 object-cover"
             />
             <h3 className="text-center py-2 text-2xl font-bold text-orange-500">
-              {seller.name}
+              {data?.name || "Seller"}
             </h3>
             <p className="text-base text-gray-600 text-center">
-              {seller.description}
+              {data?.description || ""}
             </p>
           </div>
           <div className="mt-6 flex flex-col gap-3">
             <div>
               <h5 className="font-semibold text-gray-900">Address</h5>
-              <h4 className="text-gray-500">{seller.address}</h4>
+              <h4 className="text-gray-500">{data?.address || "N/A"}</h4>
             </div>
             <div>
               <h5 className="font-semibold text-gray-900">Phone Number</h5>
-              <h4 className="text-gray-500">{seller.phoneNumber}</h4>
+              <h4 className="text-gray-500">{data?.phoneNumber || "N/A"}</h4>
             </div>
             <div>
               <h5 className="font-semibold text-gray-900">Total Products</h5>
-              <h4 className="text-gray-500">
-                {productData && productData.length}
-              </h4>
+              <h4 className="text-gray-500">{products && products.length}</h4>
             </div>
             <div>
-              <h5 className="font-semibold text-gray-900">Shop Ratings</h5>
+              <h5 className="font-semibold text-gray-900">Seller Ratings</h5>
               <h4 className="text-gray-500">{averageRating.toFixed(1)}/5</h4>
             </div>
             <div>
               <h5 className="font-semibold text-gray-900">Joined On</h5>
               <h4 className="text-gray-500">
-                {seller.createdAt
-                  ? new Date(seller.createdAt).toLocaleDateString()
-                  : seller.created_at || "N/A"}
+                {data?.createdAt
+                  ? new Date(data.createdAt).toLocaleDateString()
+                  : data?.created_at || "N/A"}
               </h4>
             </div>
           </div>
-          <div className="flex flex-col gap-3 mt-6">
-            <Link to="/seller/settings">
-              <button className="w-full h-11 rounded bg-orange-500 hover:bg-gray-600 text-white font-semibold transition">
-                Edit Shop
+          {isOwner && (
+            <div className="flex flex-col gap-3 mt-6">
+              <Link to="/seller/settings">
+                <button className="w-full h-11 rounded bg-orange-500 hover:bg-gray-600 text-white font-semibold transition">
+                  Edit Seller Info
+                </button>
+              </Link>
+              <button
+                className="w-full h-11 rounded bg-gray-200 hover:bg-gray-600 hover:text-white text-gray-700 font-semibold transition"
+                onClick={logoutHandler}
+              >
+                Log Out
               </button>
-            </Link>
-            <button
-              className="w-full h-11 rounded bg-gray-200 hover:bg-gray-600 hover:text-white text-gray-700 font-semibold transition"
-              onClick={logoutHandler}
-            >
-              Log Out
-            </button>
-          </div>
+            </div>
+          )}
         </div>
       )}
     </>
   );
 };
 
-export default SellerSideBar;
+export default SellerProfileSideBar;

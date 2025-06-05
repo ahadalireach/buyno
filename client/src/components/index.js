@@ -7,7 +7,7 @@ import Hero from "./Home/Hero";
 import BestDeals from "./Home/BestDeals";
 import Categories from "./Home/Categories";
 import FeaturedProducts from "./Home/FeaturedProducts";
-import Sponsored from "./Home/Sponsored";
+import Brands from "./Home/Brands";
 import Breadcrumb from "./Layout/Breadcrumb";
 import Header from "./Layout/Header";
 import Footer from "./Layout/Footer";
@@ -30,6 +30,7 @@ import DashboardSideBar from "./SellerDashboard/DashboardSideBar";
 import SellerProducts from "./SellerDashboard/SellerProducts";
 import SellerEvents from "./SellerDashboard/SellerEvents";
 import Wishlist from "./Wishlist/Wishlist";
+import CouponCode from "./SellerDashboard/CouponCode";
 
 export {
   Cart,
@@ -48,7 +49,7 @@ export {
   Breadcrumb,
   BestDeals,
   Categories,
-  Sponsored,
+  Brands,
   ProductCard,
   ProductDetails,
   SellerProfileSideBar,
@@ -61,6 +62,7 @@ export {
   SellerEvents,
   UserProfileSideBar,
   ProductDetailsCard,
+  CouponCode,
   SuggestedProducts,
   FeaturedProducts,
   SellerProfileData,

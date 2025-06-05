@@ -11,7 +11,7 @@ const sponsoredBrands = [
   { src: afzal, alt: "Afzal Electronics" },
 ];
 
-const Sponsored = () => {
+const Brands = () => {
   const scrollRef = useRef(null);
 
   return (
@@ -91,4 +91,4 @@ const Sponsored = () => {
   );
 };
 
-export default Sponsored;
+export default Brands;

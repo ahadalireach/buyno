@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { productData } from "../../static/data";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   AiFillHeart,
   AiOutlineHeart,
@@ -8,22 +7,40 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import Ratings from "./Ratings";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllSellerProducts } from "../../redux/actions/product";
 
 const ProductDetails = ({ data }) => {
+  const { products } = useSelector((state) => state.products);
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllSellerProducts(data && data?.seller._id));
+  }, [data, dispatch]);
 
-  const incrementCount = () => setCount(count + 1);
-  const decrementCount = () => setCount(count > 1 ? count - 1 : 1);
+  const incrementCount = () => {};
+  const decrementCount = () => {};
+  const removeFromWishlistHandler = (data) => {};
+  const addToWishlistHandler = (data) => {};
 
-  const removeFromWishlistHandler = () => setClick(false);
-  const addToWishlistHandler = () => setClick(true);
+  const handleMessageSubmit = async () => {};
 
-  const handleMessageSubmit = async () => {
-    navigate("/cart");
-  };
+  const totalReviewsLength =
+    products &&
+    products.reduce((acc, product) => acc + product.reviews.length, 0);
+
+  const totalRatings =
+    products &&
+    products.reduce(
+      (acc, product) =>
+        acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
+      0
+    );
+
+  const avg = totalRatings / totalReviewsLength || 0;
+  const averageRating = avg.toFixed(2);
 
   return (
     <div className="w-full flex flex-col items-center bg-[#f5f6fb] py-8 min-h-screen">
@@ -33,7 +50,18 @@ const ProductDetails = ({ data }) => {
             <div className="flex-1 flex flex-col items-center">
               <div className="w-full flex justify-center mb-4">
                 <img
-                  src={data.images && data.images[select]?.url}
+                  src={
+                    data.images && data.images[select]?.url
+                      ? data.images[select].url
+                      : data.images && typeof data.images[select] === "string"
+                      ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                          data.images[select].startsWith("/")
+                            ? data.images[select]
+                            : "/" + data.images[select]
+                        }`
+                      : "https://ui-avatars.com/api/?name=" +
+                        encodeURIComponent(data.name || "Product")
+                  }
                   alt={data?.name}
                   className="w-[90%] h-[400px] object-contain rounded-xl bg-gray-50 shadow"
                 />
@@ -43,8 +71,17 @@ const ProductDetails = ({ data }) => {
                   data.images.map((i, index) => (
                     <img
                       key={index}
-                      src={i?.url}
-                      alt=""
+                      src={
+                        i?.url
+                          ? i.url
+                          : typeof i === "string"
+                          ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                              i.startsWith("/") ? i : "/" + i
+                            }`
+                          : "https://ui-avatars.com/api/?name=" +
+                            encodeURIComponent(data.name || "Product")
+                      }
+                      alt={data?.name}
                       className={`w-16 h-16 object-contain rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                         select === index
                           ? "border-orange-500 shadow-lg scale-105"
@@ -55,19 +92,34 @@ const ProductDetails = ({ data }) => {
                   ))}
               </div>
               <Link
-                to={`/shop/preview/${data?.shop._id}`}
+                to={`/seller/profile/preview/${data?.seller._id}`}
                 className="flex items-center gap-3 mb-4 hover:underline"
               >
                 <img
-                  src={data?.shop?.avatar?.url}
-                  alt={data?.shop?.name}
+                  src={
+                    data?.seller?.avatar?.url
+                      ? data.seller.avatar.url
+                      : data?.seller?.avatar &&
+                        typeof data.seller.avatar === "string"
+                      ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                          data.seller.avatar.startsWith("/")
+                            ? data.seller.avatar
+                            : "/" + data.seller.avatar
+                        }`
+                      : "https://ui-avatars.com/api/?name=" +
+                        encodeURIComponent(data?.seller?.name || "Seller")
+                  }
+                  alt={data?.seller?.name}
                   className="w-12 h-12 rounded-full border-2 border-orange-400 object-cover"
                 />
                 <div>
                   <h3 className="font-semibold text-orange-500">
-                    {data.shop.name}
+                    {data.seller.name}
                   </h3>
-                  <h5 className="text-xs text-gray-500">5 Ratings</h5>
+                  <h5 className="text-xs text-gray-500">
+                    {" "}
+                    ({averageRating}/5) Ratings
+                  </h5>
                 </div>
               </Link>
               <button
@@ -144,7 +196,7 @@ const ProductDetails = ({ data }) => {
           <div className="w-11/12 mt-8">
             <ProductDetailsInfo
               data={data}
-              products={productData}
+              products={products}
               totalReviewsLength={data?.reviews?.length || 0}
               averageRating={
                 data?.reviews?.length
@@ -258,16 +310,28 @@ const ProductDetailsInfo = ({
       {active === 3 && (
         <div className="w-full block 800px:flex p-5">
           <div className="w-full 800px:w-[50%]">
-            <Link to={`/shop/preview/${data.shop._id}`}>
+            <Link to={`/seller/profile/preview/${data.seller._id}`}>
               <div className="flex items-center">
                 <img
-                  src={`${data?.shop?.avatar?.url}`}
+                  src={
+                    data?.seller?.avatar?.url
+                      ? data.seller.avatar.url
+                      : data?.seller?.avatar &&
+                        typeof data.seller.avatar === "string"
+                      ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                          data.seller.avatar.startsWith("/")
+                            ? data.seller.avatar
+                            : "/" + data.seller.avatar
+                        }`
+                      : "https://ui-avatars.com/api/?name=" +
+                        encodeURIComponent(data?.seller?.name || "Seller")
+                  }
                   className="w-[50px] h-[50px] rounded-full border-2 border-orange-400"
-                  alt=""
+                  alt={data?.seller?.name || "Seller"}
                 />
                 <div className="pl-3">
                   <h3 className="font-semibold text-orange-500">
-                    {data.shop.name}
+                    {data.seller.name}
                   </h3>
                   <h5 className="pb-2 text-[15px] text-gray-500">
                     ({averageRating}/5) Ratings
@@ -275,14 +339,14 @@ const ProductDetailsInfo = ({
                 </div>
               </div>
             </Link>
-            <p className="pt-2 text-gray-700">{data.shop.description}</p>
+            <p className="pt-2 text-gray-700">{data.seller.description}</p>
           </div>
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
                 Joined on:{" "}
                 <span className="font-[500]">
-                  {data.shop?.createdAt?.slice(0, 10)}
+                  {data.seller?.createdAt?.slice(0, 10)}
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">
@@ -295,9 +359,11 @@ const ProductDetailsInfo = ({
                 Total Reviews:{" "}
                 <span className="font-[500]">{totalReviewsLength}</span>
               </h5>
-              <Link to="/">
+              <Link to={`/seller/profile/preview/${data.seller._id}`}>
                 <div className="rounded-[4px] h-[39.5px] mt-3 bg-orange-500 flex items-center justify-center px-4">
-                  <h4 className="text-white font-semibold">Visit Shop</h4>
+                  <h4 className="text-white font-semibold">
+                    Visit Seller Shop
+                  </h4>
                 </div>
               </Link>
             </div>

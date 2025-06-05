@@ -1,15 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { productData } from "../../static/data";
 import ProductCard from "../Products/ProductCard";
+import { useSelector } from "react-redux";
 
 const BestDeals = () => {
   const [data, setData] = useState([]);
+  const { allProducts } = useSelector((state) => state.products);
+
+  console.log(allProducts);
+
   useEffect(() => {
-    const allProductsData = productData ? [...productData] : [];
-    const sortedData = allProductsData?.sort((a, b) => b.sold_out - a.sold_out);
-    const firstFive = sortedData && sortedData.slice(0, 5);
+    const allProductsData = allProducts ? [...allProducts] : [];
+    const sortedData = allProductsData.sort((a, b) => b.sold_out - a.sold_out);
+    const firstFive = sortedData.slice(0, 5);
     setData(firstFive);
-  }, []);
+  }, [allProducts]);
 
   return (
     <section className="w-full py-12">

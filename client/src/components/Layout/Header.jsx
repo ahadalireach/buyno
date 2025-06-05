@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { IoIosArrowDown } from "react-icons/io";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { FiMenu, FiX, FiUser } from "react-icons/fi";
-import { categoriesData, productData } from "../../static/data";
+import { categoriesData } from "../../static/data";
 import { AiOutlineHeart, AiOutlineSearch } from "react-icons/ai";
 import Navbar from "./Navbar";
 import Cart from "../Cart/Cart";
@@ -24,14 +24,15 @@ const Header = () => {
   const { isSeller } = useSelector((state) => state.seller);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { allProducts } = useSelector((state) => state.products);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
 
     const filteredProducts =
-      productData &&
-      productData.filter((product) =>
+      allProducts &&
+      allProducts.filter((product) =>
         product.name.toLowerCase().includes(term.toLowerCase())
       );
     setSearchData(filteredProducts);
@@ -79,13 +80,20 @@ const Header = () => {
   return (
     <>
       <div className="w-[95%] sm:w-11/12 mx-auto border-b border-gray-300 bg-white">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between py-6 px-4">
-          <Link to="/">
-            <img src={logo} alt="Logo" className="h-12" />
+        <div className="max-w-[1400px] mx-auto flex flex-wrap items-center justify-between py-4 px-4 gap-4">
+          <Link to="/" className="flex-shrink-0">
+            <img
+              src={logo}
+              alt="Multivendor"
+              className="h-10 sm:h-12 md:h-14 w-auto object-contain"
+            />
           </Link>
 
-          <div className="hidden 800px:flex items-center gap-4">
-            <div className="relative w-[300px]" ref={searchRef}>
+          <div className="hidden 800px:flex items-center flex-wrap gap-4">
+            <div
+              className="relative w-[200px] sm:w-[250px] md:w-[300px]"
+              ref={searchRef}
+            >
               <input
                 type="text"
                 placeholder="Search for products..."
@@ -96,6 +104,7 @@ const Header = () => {
               <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
                 <AiOutlineSearch size={20} />
               </button>
+
               {searchData && searchData.length !== 0 && (
                 <div className="absolute left-0 right-0 mt-2 bg-white shadow-lg rounded z-10 max-h-60 overflow-y-auto">
                   {searchData.map((i) => (
@@ -105,7 +114,18 @@ const Header = () => {
                       className="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
                       <img
-                        src={i.images[0]?.url}
+                        src={
+                          i.images && i.images[0]?.url
+                            ? i.images[0].url
+                            : i.images && typeof i.images[0] === "string"
+                            ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                                i.images[0].startsWith("/")
+                                  ? i.images[0]
+                                  : "/" + i.images[0]
+                              }`
+                            : "https://ui-avatars.com/api/?name=" +
+                              encodeURIComponent(i.name || "Product")
+                        }
                         alt={i.name}
                         className="w-8 h-8 mr-3 rounded"
                       />
@@ -115,8 +135,8 @@ const Header = () => {
                 </div>
               )}
             </div>
-            <span className="h-8 border-l border-gray-300 mx-3"></span>
 
+            <span className="h-8 border-l border-gray-300 mx-3"></span>
             <button onClick={() => setOpenWishlist(true)} className="relative">
               <AiOutlineHeart
                 size={22}
@@ -134,6 +154,7 @@ const Header = () => {
                 0
               </span>
             </button>
+
             <span className="h-8 border-l border-gray-300 mx-3"></span>
             <div>
               {isAuthenticated ? (
@@ -156,10 +177,10 @@ const Header = () => {
                 )
               )}
             </div>
+
             <Link
-              to={`${isSeller ? "/dashboard" : "/seller/register"}`}
-              className="ml-4 px-4 py-2 bg-orange-500 text-white rounded-lg
-              font-medium hover:bg-orange-600 transition"
+              to={`${isSeller ? "/seller/dashboard" : "/seller/register"}`}
+              className="ml-4 px-4 py-2 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 transition"
             >
               {isSeller ? "Go Dashboard" : "Become Seller"}
             </Link>
@@ -178,7 +199,7 @@ const Header = () => {
       <div
         className={`${
           active ? "shadow-sm z-10" : ""
-        } transition hidden 800px:flex items-center w-full bg-[#393c41] h-[60px]`}
+        } transition hidden 800px:flex items-center w-full bg-gray-900 h-[60px]`}
       >
         <div className="w-[95%] sm:w-11/12 mx-auto flex justify-between items-center h-full px-2">
           <div

@@ -6,30 +6,44 @@ import {
   ProductDetails,
   SuggestedProducts,
 } from "../../components";
-import { productData } from "../../static/data";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const ProductDetailsPage = () => {
-  const { name } = useParams();
+  const { allProducts } = useSelector((state) => state.products);
+  const { allEvents } = useSelector((state) => state.events);
+  const [searchParams] = useSearchParams();
+  const eventData = searchParams.get("isEvent");
   const [data, setData] = useState(null);
-
-  const productName = name.replace(/-/g, " ");
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
-    const product = productData.find((item) => item.name === productName);
-    if (product) {
-      setData(product);
+    let found = null;
+    if (eventData !== null) {
+      found = allEvents && allEvents.find((i) => i._id === id);
+      setData(found || null);
+      if (allEvents.length && !found) {
+        toast.error("Oops! The Event you're looking for is not found.");
+        navigate("/");
+      }
     } else {
-      setData(null);
+      found = allProducts && allProducts.find((i) => i._id === id);
+      setData(found || null);
+      if (allProducts.length && !found) {
+        toast.error("Oops! The Product you're looking for is not found.");
+        navigate("/");
+      }
     }
-  }, [productName]);
+  }, [id, allProducts, allEvents, eventData, navigate]);
 
   return (
     <>
       <Header />
       <Breadcrumb mainTitle={data?.name || "Product"} page="Product Details" />
       <ProductDetails data={data} />
-      {data && <SuggestedProducts data={data} />}
+      {!eventData && data && <SuggestedProducts data={data} />}
       <Footer />
     </>
   );

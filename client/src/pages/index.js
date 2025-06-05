@@ -17,7 +17,9 @@ import DashboardHomePage from "./SellerDashboard/DashboardHomePage";
 import SellerActivationPage from "./Auth/Seller/SellerActivationPage";
 import SellerProductsPage from "./SellerDashboard/SellerProductsPage";
 import BestSellingProductsPage from "./Products/BestSellingProductsPage";
+import SellerProfilePreviewPage from "./Profile/SellerShopPreviewPage";
 import SellerEventsPage from "./SellerDashboard/SellerEventsPage";
+import CouponCodePage from "./SellerDashboard/CouponCodePage";
 
 export {
   FaqPage,
@@ -30,7 +32,9 @@ export {
   ProductListPage,
   CreateEventPage,
   SellerLoginPage,
+  CouponCodePage,
   SellerEventsPage,
+  SellerProfilePreviewPage,
   UserRegisterPage,
   SellerProfilePage,
   DashboardHomePage,

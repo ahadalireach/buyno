@@ -10,5 +10,8 @@ router.post(
   isSeller,
   eventController.createEvent
 );
+router.delete("/event/:id", eventController.deleteEvent);
+router.get("/seller/:id", eventController.getSellerEvents);
+router.get("/all", eventController.getAllEvents);
 
 module.exports = router;

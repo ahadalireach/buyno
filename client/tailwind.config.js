@@ -14,6 +14,14 @@ module.exports = {
         "1300px": "1300px",
         "400px": "400px",
       },
+      animation: {
+        "spin-clockwise": "spin-clockwise 1.2s linear infinite",
+      },
+      keyframes: {
+        "spin-clockwise": {
+          to: { transform: "rotate(360deg)" },
+        },
+      },
     },
   },
   plugins: [],

@@ -20,17 +20,28 @@ const ProductCard = ({ data, isEvent }) => {
   return (
     <>
       <div className="w-full h-[350px] bg-white rounded-2xl shadow-sm hover:shadow-md border border-gray-100 p-4 relative transition-all group flex flex-col">
-        <div className="w-full h-[190px] flex items-center justify-center bg-[#F2F2F2] rounded-xl relative overflow-hidden mb-4">
+        <div className="w-full h-[190px] flex items-center justify-center bg-gray-200 rounded-xl relative overflow-hidden mb-4">
           <Link
             to={
               isEvent
-                ? `/product/${data.name}?isEvent=true`
-                : `/product/${data.name}`
+                ? `/product/${data._id}?isEvent=true`
+                : `/product/${data._id}`
             }
             className="w-full h-full flex items-center justify-center"
           >
             <img
-              src={data.images && data.images[0]?.url}
+              src={
+                data.images && data.images[0]?.url
+                  ? data.images[0].url
+                  : data.images && typeof data.images[0] === "string"
+                  ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                      data.images[0].startsWith("/")
+                        ? data.images[0]
+                        : "/" + data.images[0]
+                    }`
+                  : "https://ui-avatars.com/api/?name=" +
+                    encodeURIComponent(data.name || "Product")
+              }
               alt={data.name}
               className="w-[80%] h-[150px] object-contain transition-transform duration-300 group-hover:scale-105"
             />
@@ -58,7 +69,7 @@ const ProductCard = ({ data, isEvent }) => {
             </button>
             <button
               className="bg-orange-500 rounded-full p-2 shadow hover:bg-orange-600 transition"
-              onClick={() => addToCartHandler(data._id)}
+              onClick={() => addToCartHandler(data?._id)}
               aria-label="Add to Cart"
             >
               <AiOutlineShoppingCart size={20} color="#fff" />
@@ -66,17 +77,17 @@ const ProductCard = ({ data, isEvent }) => {
           </div>
         </div>
 
-        <Link to={`/shop/preview/${data?.shop._id}`}>
+        <Link to={`/seller/profile/preview/${data?.seller?._id}`}>
           <h5 className="text-xs font-semibold text-orange-500 mb-1 hover:underline tracking-wide">
-            {data.shop.name}
+            {data.seller?.name}
           </h5>
         </Link>
 
         <Link
           to={
             isEvent
-              ? `/product/${data.name}?isEvent=true`
-              : `/product/${data.name}`
+              ? `/product/${data._id}?isEvent=true`
+              : `/product/${data._id}`
           }
         >
           <h4 className="font-semibold text-gray-900 text-base leading-tight min-h-[48px] mb-2 hover:text-orange-500 transition-colors">
@@ -85,17 +96,17 @@ const ProductCard = ({ data, isEvent }) => {
         </Link>
 
         <div className="flex items-center mb-2">
-          <Ratings rating={data?.ratings} />
+          <Ratings rating={data?.reviews} />
         </div>
 
         <div className="flex items-center justify-between mt-auto pt-2">
           <div className="flex items-end gap-2">
-            <h5 className="text-xl font-bold text-orange-500">
+            <h5 className="text-md font-bold text-orange-500">
               ${data.discountPrice}
             </h5>
             {data.originalPrice &&
               data.originalPrice !== data.discountPrice && (
-                <h4 className="text-sm text-gray-400 line-through">
+                <h4 className="text-xs text-gray-400 line-through">
                   ${data.originalPrice}
                 </h4>
               )}
@@ -105,7 +116,6 @@ const ProductCard = ({ data, isEvent }) => {
           </span>
         </div>
 
-        {/* Quick View Modal */}
         {quickViewOpen && (
           <ProductDetailsCard setOpen={setQuickViewOpen} data={data} />
         )}

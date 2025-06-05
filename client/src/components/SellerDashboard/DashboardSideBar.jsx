@@ -60,9 +60,9 @@ const sidebarItems = [
   },
   {
     key: 9,
-    label: "Discount Codes",
+    label: "Coupon Codes",
     icon: AiOutlineGift,
-    route: "/dashboard-coupouns",
+    route: "/seller/dashboard-coupon-codes",
   },
   {
     key: 10,

@@ -24,37 +24,43 @@ import {
   DashboardHomePage,
   SellerActivationPage,
   SellerEventsPage,
+  SellerProfilePreviewPage,
   SellerProductsPage,
   BestSellingProductsPage,
+  CouponCodePage,
 } from "./pages";
 import "./App.css";
 import store from "./redux/store";
 import "react-toastify/dist/ReactToastify.css";
-import { Loader } from "./components";
+import { getAllProducts } from "./redux/actions/product";
+import { getAllEvents } from "./redux/actions/event";
+// import { Loader } from "./components";
 
 const App = () => {
-  const { isLoading } = useSelector((state) => state.seller);
-  const { loading } = useSelector((state) => state.user);
+  //   const { isLoading } = useSelector((state) => state.seller);
+  //   const { loading } = useSelector((state) => state.user);
 
   useEffect(() => {
     store.dispatch(getUser());
     store.dispatch(getSeller());
+    store.dispatch(getAllProducts());
+    store.dispatch(getAllEvents());
   }, []);
 
-  if (loading || isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <Loader />
-      </div>
-    );
-  }
+  //   if (loading || isLoading) {
+  //     return (
+  //       <div className="min-h-screen flex items-center justify-center bg-white">
+  //         <Loader />
+  //       </div>
+  //     );
+  //   }
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<ProductListPage />} />
-        <Route path="/product/:name" element={<ProductDetailsPage />} />
+        <Route path="/product/:id" element={<ProductDetailsPage />} />
         <Route path="/best-selling" element={<BestSellingProductsPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/faq" element={<FaqPage />} />
@@ -79,6 +85,10 @@ const App = () => {
           element={<SellerActivationPage />}
         />
         <Route path="/seller/login" element={<SellerLoginPage />} />
+        <Route
+          path="/seller/profile/preview/:id"
+          element={<SellerProfilePreviewPage />}
+        />
         <Route
           path="/seller/:id"
           element={
@@ -124,6 +134,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <SellerEventsPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-coupon-codes"
+          element={
+            <SellerProtectedRoute>
+              <CouponCodePage />
             </SellerProtectedRoute>
           }
         />

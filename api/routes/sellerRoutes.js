@@ -12,6 +12,7 @@ router.post(
 router.post("/activate", sellerController.activateSeller);
 router.post("/login", sellerController.loginSeller);
 router.get("/profile", isSeller, sellerController.getSellerProfile);
+router.get("/info/:id", sellerController.getSellerInfo);
 router.get("/logout", sellerController.logoutSeller);
 
 module.exports = router;

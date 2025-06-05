@@ -27,7 +27,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
       {data ? (
         <div className="fixed w-full h-screen top-0 left-0 bg-black/30 z-40 flex items-center justify-center">
           <div className="w-[95%] max-w-4xl h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl relative p-6 flex flex-col gap-4">
-            {/* Close Button */}
             <button
               className="absolute right-4 top-4 z-50 bg-white rounded-full p-2 shadow hover:bg-orange-100 transition"
               onClick={() => setOpen(false)}
@@ -40,26 +39,49 @@ const ProductDetailsCard = ({ setOpen, data }) => {
               <div className="flex-1 flex flex-col items-center">
                 <div className="w-full flex justify-center mb-4">
                   <img
-                    src={data.images && data.images[0]?.url}
+                    src={
+                      data.images && data.images[0]?.url
+                        ? data.images[0].url
+                        : data.images && typeof data.images[0] === "string"
+                        ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                            data.images[0].startsWith("/")
+                              ? data.images[0]
+                              : "/" + data.images[0]
+                          }`
+                        : "https://ui-avatars.com/api/?name=" +
+                          encodeURIComponent(data.name || "Product")
+                    }
                     alt={data.name}
                     className="w-[220px] h-[220px] object-contain rounded-xl bg-gray-50 shadow"
                   />
                 </div>
                 <Link
-                  to={`/shop/preview/${data.shop._id}`}
+                  to={`/seller/profile/preview/${data.seller._id}`}
                   className="flex items-center gap-3 mb-4 hover:underline"
                 >
                   <img
-                    src={data.images && data.images[0]?.url}
-                    alt={data.shop.name}
+                    src={
+                      data.seller?.avatar?.url
+                        ? data.seller.avatar.url
+                        : data.seller?.avatar &&
+                          typeof data.seller.avatar === "string"
+                        ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                            data.seller.avatar.startsWith("/")
+                              ? data.seller.avatar
+                              : "/" + data.seller.avatar
+                          }`
+                        : "https://ui-avatars.com/api/?name=" +
+                          encodeURIComponent(data.seller?.name || "Seller")
+                    }
+                    alt={data.seller.name}
                     className="w-12 h-12 rounded-full border-2 border-orange-400 object-cover"
                   />
                   <div>
                     <h3 className="font-semibold text-orange-500">
-                      {data.shop.name}
+                      {data.seller.name}
                     </h3>
                     <h5 className="text-xs text-gray-500">
-                      {data?.shop.ratings} Ratings
+                      {data?.seller.ratings} Ratings
                     </h5>
                   </div>
                 </Link>
@@ -74,7 +96,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 </h5>
               </div>
 
-              {/* Right: Product Details */}
               <div className="flex-1 flex flex-col gap-4">
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">
                   {data.name}
@@ -93,9 +114,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                     )}
                 </div>
 
-                {/* Quantity & Wishlist */}
                 <div className="flex items-center gap-6 mt-4">
-                  {/* Quantity */}
                   <div className="flex items-center border rounded-lg overflow-hidden">
                     <button
                       className="bg-gray-100 text-gray-700 px-3 py-2 hover:bg-orange-100 transition"
@@ -113,7 +132,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                       +
                     </button>
                   </div>
-                  {/* Wishlist */}
                   <button
                     className="bg-white rounded-full p-2 shadow hover:bg-orange-100 transition"
                     onClick={() => setWishlisted((w) => !w)}
@@ -129,7 +147,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   </button>
                 </div>
 
-                {/* Add to Cart */}
                 <button
                   className="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg py-3 shadow-lg transition"
                   onClick={() => addToCartHandler(data._id)}

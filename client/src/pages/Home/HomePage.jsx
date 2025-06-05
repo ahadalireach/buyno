@@ -4,7 +4,7 @@ import {
   Events,
   Footer,
   BestDeals,
-  Sponsored,
+  Brands,
   Categories,
   FeaturedProducts,
 } from "../../components";
@@ -18,7 +18,7 @@ const HomePage = () => {
       <BestDeals />
       <Events />
       <FeaturedProducts />
-      <Sponsored />
+      <Brands />
       <Footer />
     </div>
   );

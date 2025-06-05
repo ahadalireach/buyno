@@ -6,15 +6,24 @@ import {
   SellerProfileData,
   SellerProfileSideBar,
 } from "../../components";
-import { useParams } from "react-router-dom";
-import NotFoundPage from "../Misc/NotFoundPage";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const SellerProfilePage = () => {
   const { id } = useParams();
   const { seller } = useSelector((state) => state.seller);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (seller?._id !== id) {
+      toast.error("You can only manage your own profile.");
+      navigate(`/seller/${seller?._id}`);
+    }
+  }, [seller, id, navigate]);
 
   if (seller?._id !== id) {
-    return <NotFoundPage />;
+    return null;
   }
 
   return (
