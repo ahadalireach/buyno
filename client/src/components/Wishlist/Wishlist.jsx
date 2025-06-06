@@ -2,51 +2,28 @@ import { useState, useEffect } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { BsCartPlus } from "react-icons/bs";
 import { AiOutlineHeart } from "react-icons/ai";
+import { addToCart } from "../../redux/actions/cart";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromWishlist } from "../../redux/actions/wishlist";
 
 const Wishlist = ({ setOpenWishlist }) => {
-  const removeFromWishlistHandler = (data) => {};
-  const addToCartHandler = (data) => {};
-
-  const wishlist = [
-    {
-      name: "Sample Product",
-      discountPrice: 20,
-      qty: 1,
-      stock: 10,
-      images: [
-        {
-          url: "https://s.alicdn.com/@sc04/kf/H776186991f2848ea890c936814a8aba4A.jpg_300x300.jpg",
-        },
-      ],
-    },
-    {
-      name: "Another Product",
-      discountPrice: 15,
-      qty: 2,
-      stock: 5,
-      images: [
-        {
-          url: "https://m.media-amazon.com/images/I/41oT2DONfqL._AC_SY1000_.jpg",
-        },
-      ],
-    },
-    {
-      name: "Third Product",
-      discountPrice: 30,
-      qty: 1,
-      stock: 8,
-      images: [
-        { url: "https://i.ebayimg.com/images/g/dXkAAOSwVm9lsocK/s-l225.jpg" },
-      ],
-    },
-  ];
-
-  // Animation state for open/close
+  const dispatch = useDispatch();
+  const { wishlist } = useSelector((state) => state.wishlist);
   const [wishlistVisible, setWishlistVisible] = useState(false);
 
   useEffect(() => {
     setTimeout(() => setWishlistVisible(true), 10);
   }, []);
+
+  const addToCartHandler = (data) => {
+    const newData = { ...data, qty: 1 };
+    dispatch(addToCart(newData));
+    setOpenWishlist(false);
+  };
+
+  const removeFromWishlistHandler = (data) => {
+    dispatch(removeFromWishlist(data));
+  };
 
   const handleClose = () => {
     setWishlistVisible(false);
@@ -113,33 +90,53 @@ const WishlistSingle = ({
   removeFromWishlistHandler,
   addToCartHandler,
 }) => {
-  const [value] = useState(data.qty);
+  const [value] = useState(1);
   const totalPrice = data.discountPrice * value;
 
   return (
-    <div className="border-b border-orange-100 p-4 flex items-center gap-3 relative">
-      <img
-        src={data?.images[0]?.url}
-        alt={data.name}
-        className="w-[80px] h-[80px] object-cover rounded-[5px] border border-orange-100"
-      />
-      <div className="flex-1 pl-2">
-        <h1 className="font-semibold text-gray-800">{data.name}</h1>
-        <h4 className="font-bold text-[17px] pt-1 text-orange-500">
-          US${totalPrice}
-        </h4>
+    <div className="flex items-center gap-4 bg-white p-4 mb-4 border border-orange-100 relative">
+      <div className="flex-shrink-0 flex items-center justify-center w-24 h-24 bg-orange-50 rounded-lg overflow-hidden border border-orange-200">
+        <img
+          src={
+            data.images && data.images[0]?.url
+              ? data.images[0].url
+              : data.images && typeof data.images[0] === "string"
+              ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                  data.images[0].startsWith("/")
+                    ? data.images[0]
+                    : "/" + data.images[0]
+                }`
+              : "https://ui-avatars.com/api/?name=" +
+                encodeURIComponent(data.name || "Product")
+          }
+          alt={data.name}
+          className="w-20 h-20 max-w-full max-h-full object-contain bg-white"
+        />
       </div>
-      <BsCartPlus
-        size={22}
-        className="cursor-pointer text-orange-500 hover:text-orange-600 transition absolute top-2 right-10"
-        title="Add to cart"
-        onClick={() => addToCartHandler(data)}
-      />
-      <RxCross1
-        className="cursor-pointer text-gray-400 hover:text-orange-500 transition absolute top-2 right-2"
-        onClick={() => removeFromWishlistHandler(data)}
-        size={20}
-      />
+      <div className="flex-1 flex flex-col justify-between">
+        <h2 className="font-semibold text-gray-900 text-sm" title={data.name}>
+          {data.name.length > 30 ? data.name.slice(0, 30) + "..." : data.name}
+        </h2>
+        <span className="text-orange-500 font-bold text-md mt-1">
+          US${totalPrice}
+        </span>
+      </div>
+      <div className="flex flex-col items-end justify-between h-full ml-2 gap-2">
+        <button
+          className="text-orange-500 hover:text-orange-600 transition"
+          title="Add to cart"
+          onClick={() => addToCartHandler(data)}
+        >
+          <BsCartPlus size={24} />
+        </button>
+        <button
+          className="text-gray-400 hover:text-orange-500 transition"
+          title="Remove"
+          onClick={() => removeFromWishlistHandler(data)}
+        >
+          <RxCross1 size={22} />
+        </button>
+      </div>
     </div>
   );
 };

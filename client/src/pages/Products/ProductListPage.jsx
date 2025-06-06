@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import {
   Header,
@@ -7,13 +8,16 @@ import {
   ProductCard,
   Loader,
 } from "../../components";
-import { useSelector } from "react-redux";
 
 const ProductListPage = () => {
+  const [data, setData] = useState([]);
   const [searchParams] = useSearchParams();
   const categoryData = searchParams.get("category");
   const { allProducts, isLoading } = useSelector((state) => state.products);
-  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (!categoryData) {

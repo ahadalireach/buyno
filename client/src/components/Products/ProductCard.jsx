@@ -1,20 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import ProductDetailsCard from "./ProductDetailsCard";
+import { addToCart } from "../../redux/actions/cart";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AiFillHeart,
   AiOutlineEye,
   AiOutlineHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../redux/actions/wishlist";
 import Ratings from "./Ratings";
+import ProductDetailsCard from "./ProductDetailsCard";
 
 const ProductCard = ({ data, isEvent }) => {
-  const [wishlisted, setWishlisted] = useState(false);
+  const dispatch = useDispatch();
+  const [click, setClick] = useState(false);
   const [quickViewOpen, setQuickViewOpen] = useState(false);
+  const { cart } = useSelector((state) => state.cart);
+  const { wishlist } = useSelector((state) => state.wishlist);
+
+  useEffect(() => {
+    if (wishlist && wishlist.find((i) => i._id === data._id)) {
+      setClick(true);
+    } else {
+      setClick(false);
+    }
+  }, [data._id, wishlist]);
+
+  const removeFromWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(removeFromWishlist(data));
+  };
+
+  const addToWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(addToWishlist(data));
+  };
 
   const addToCartHandler = (id) => {
-    console.log("Add to cart:", id);
+    const isItemExists = cart && cart.find((i) => i._id === id);
+    if (isItemExists) {
+      toast.error("Item already in cart!");
+    } else {
+      if (data.stock < 1) {
+        toast.error("Product stock limited!");
+      } else {
+        const cartData = { ...data, qty: 1 };
+        dispatch(addToCart(cartData));
+        toast.success("Item added to cart successfully!");
+      }
+    }
   };
 
   return (
@@ -49,12 +88,14 @@ const ProductCard = ({ data, isEvent }) => {
           <div className="absolute top-3 right-3 z-10 flex flex-col items-center gap-2">
             <button
               className="bg-white rounded-full p-2 shadow hover:bg-orange-100 transition"
-              onClick={() => setWishlisted((w) => !w)}
-              aria-label={
-                wishlisted ? "Remove from wishlist" : "Add to wishlist"
+              onClick={() =>
+                click
+                  ? removeFromWishlistHandler(data)
+                  : addToWishlistHandler(data)
               }
+              aria-label={click ? "Remove from wishlist" : "Add to wishlist"}
             >
-              {wishlisted ? (
+              {click ? (
                 <AiFillHeart size={20} color="red" />
               ) : (
                 <AiOutlineHeart size={20} color="#FF7D1A" />
@@ -112,7 +153,7 @@ const ProductCard = ({ data, isEvent }) => {
               )}
           </div>
           <span className="text-xs font-semibold px-2 py-1 rounded-full bg-green-50 text-green-600 shadow">
-            {data.sold_out} sold
+            {data.soldOut} sold
           </span>
         </div>
 

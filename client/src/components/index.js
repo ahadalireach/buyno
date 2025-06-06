@@ -31,6 +31,8 @@ import SellerProducts from "./SellerDashboard/SellerProducts";
 import SellerEvents from "./SellerDashboard/SellerEvents";
 import Wishlist from "./Wishlist/Wishlist";
 import CouponCode from "./SellerDashboard/CouponCode";
+import Checkout from "./UserDashboard/Checkout";
+import Payment from "./UserDashboard/Payment";
 
 export {
   Cart,
@@ -66,4 +68,6 @@ export {
   SuggestedProducts,
   FeaturedProducts,
   SellerProfileData,
+  Checkout,
+  Payment,
 };

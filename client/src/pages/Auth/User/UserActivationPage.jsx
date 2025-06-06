@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const UserActivationPage = () => {
   const { activation_token } = useParams();
-  console.log(activation_token);
-
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -25,6 +23,7 @@ const UserActivationPage = () => {
       };
       activationEmail();
     }
+    window.scrollTo(0, 0);
   }, []);
 
   return (

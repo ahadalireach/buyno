@@ -8,7 +8,7 @@ const Events = () => {
 
   const featuredEvent =
     allEvents && allEvents.length > 0
-      ? [...allEvents].sort((a, b) => b.sold_out - a.sold_out)[0]
+      ? [...allEvents].sort((a, b) => b.soldOut - a.soldOut)[0]
       : null;
 
   return (

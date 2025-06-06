@@ -1,11 +1,11 @@
 const fs = require("fs");
-const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
 const errorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
+const path = require("path");
 
 const createActivationToken = (user) => {
   return jwt.sign(user, process.env.ACTIVATION_TOKEN_SECRET, {
@@ -98,7 +98,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return next(
-        new errorHandler("User does not exist with this email..", 401)
+        new errorHandler("User does not exist with this email.", 401)
       );
     }
     const isPasswordMatched = await user.comparePassword(password);
@@ -135,6 +135,170 @@ exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Logged out successfully.",
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.updateUserInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { email, password, phoneNumber, name } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      return next(
+        new errorHandler("User does not exist with this email.", 400)
+      );
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return next(new errorHandler("Invalid Password.", 400));
+    }
+
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+    if (password) {
+      user.password = password;
+    }
+
+    await user.save();
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.updateUserAvatar = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const existUser = await User.findById(req.user.id);
+    if (!existUser) {
+      return next(new errorHandler("User does not exist.", 400));
+    }
+
+    if (!req.file) {
+      return next(new errorHandler("No file uploaded.", 400));
+    }
+
+    const existAvatar = `uploads/${existUser.avatar}`;
+    if (existUser.avatar && fs.existsSync(existAvatar)) {
+      fs.unlink(existAvatar, (err) => {
+        if (err) {
+          console.error("Error deleting old avatar:", err);
+        }
+      });
+    }
+
+    const fileUrl = req.file.filename;
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { avatar: fileUrl },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    if (req.file) {
+      fs.unlink(`uploads/${req.file.filename}`, () => {});
+    }
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.updateUserAddresses = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    const sameTypeAddress = user.addresses.find(
+      (address) => address.addressType === req.body.addressType
+    );
+    if (sameTypeAddress) {
+      return next(
+        new errorHandler(`${req.body.addressType} address already exists.`)
+      );
+    }
+
+    const existsAddress = user.addresses.find(
+      (address) => address._id === req.body._id
+    );
+
+    if (existsAddress) {
+      Object.assign(existsAddress, req.body);
+    } else {
+      user.addresses.push(req.body);
+    }
+
+    await user.save();
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.deleteUserAddress = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const addressId = req.params.id;
+
+    await User.updateOne(
+      {
+        _id: userId,
+      },
+      { $pull: { addresses: { _id: addressId } } }
+    );
+
+    const user = await User.findById(userId);
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.updateUserPassword = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select("+password");
+
+    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+    if (!isPasswordMatched) {
+      return next(
+        new errorHandler("The old password you entered is incorrect.", 400)
+      );
+    }
+
+    if (req.body.oldPassword === req.body.newPassword) {
+      return next(
+        new errorHandler(
+          "New password cannot be the same as old password.",
+          400
+        )
+      );
+    }
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+      return next(
+        new errorHandler("New password and confirm password do not match.", 400)
+      );
+    }
+    user.password = req.body.newPassword;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully.",
     });
   } catch (error) {
     return next(new errorHandler(error.message, 500));

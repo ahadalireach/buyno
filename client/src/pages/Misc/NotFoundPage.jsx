@@ -1,8 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { img404 } from "../../assets";
+import { useNavigate } from "react-router-dom";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">

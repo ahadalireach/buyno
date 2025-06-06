@@ -1,12 +1,17 @@
+import { useEffect } from "react";
 import {
-  Breadcrumb,
-  CouponCode,
   DashboardHeader,
+  Breadcrumb,
   DashboardSideBar,
+  CouponCode,
   Footer,
 } from "../../components";
 
 const CouponCodePage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <DashboardHeader />

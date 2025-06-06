@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
-  Footer,
   Header,
   Loader,
   Breadcrumb,
   UserProfileSideBar,
   UserProfileData,
+  Footer,
 } from "../../components";
 
 const UserProfilePage = () => {
-  const { loading } = useSelector((state) => state.user);
   const [active, setActive] = useState(1);
+  const { loading } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

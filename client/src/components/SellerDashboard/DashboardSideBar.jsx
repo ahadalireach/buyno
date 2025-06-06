@@ -1,18 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { RxDashboard } from "react-icons/rx";
+import { VscNewFile } from "react-icons/vsc";
+import { MdOutlineLocalOffer } from "react-icons/md";
+import { BiMessageSquareDetail } from "react-icons/bi";
+import { HiOutlineReceiptRefund } from "react-icons/hi";
+import { CiMoneyBill, CiSettings } from "react-icons/ci";
 import { FiShoppingBag, FiPackage } from "react-icons/fi";
 import {
   AiOutlineFolderAdd,
   AiOutlineGift,
   AiOutlineLogin,
 } from "react-icons/ai";
-import { MdOutlineLocalOffer } from "react-icons/md";
-import { VscNewFile } from "react-icons/vsc";
-import { CiMoneyBill, CiSettings } from "react-icons/ci";
-import { BiMessageSquareDetail } from "react-icons/bi";
-import { HiOutlineReceiptRefund } from "react-icons/hi";
 import axios from "axios";
-import { toast } from "react-toastify";
 
 const sidebarItems = [
   { key: 1, label: "Dashboard", icon: RxDashboard, route: "/seller/dashboard" },
@@ -79,7 +79,7 @@ const DashboardSideBar = ({ active }) => {
   const logoutHandler = async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/shop/logout`,
+        `${process.env.REACT_APP_BACKEND_URL}/sellers/logout`,
         { withCredentials: true }
       );
       toast.success(res.data.message);

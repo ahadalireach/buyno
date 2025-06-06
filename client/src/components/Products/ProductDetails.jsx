@@ -9,21 +9,65 @@ import {
 import Ratings from "./Ratings";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllSellerProducts } from "../../redux/actions/product";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../redux/actions/wishlist";
+import { toast } from "react-toastify";
+import { addToCart } from "../../redux/actions/cart";
 
 const ProductDetails = ({ data }) => {
-  const { products } = useSelector((state) => state.products);
-  const [count, setCount] = useState(1);
-  const [click, setClick] = useState(false);
-  const [select, setSelect] = useState(0);
   const dispatch = useDispatch();
+  const [count, setCount] = useState(1);
+  const [select, setSelect] = useState(0);
+  const [click, setClick] = useState(false);
+  const { cart } = useSelector((state) => state.cart);
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const { products } = useSelector((state) => state.products);
+
   useEffect(() => {
     dispatch(getAllSellerProducts(data && data?.seller._id));
-  }, [data, dispatch]);
+    if (wishlist && wishlist.find((i) => i._id === data?._id)) {
+      setClick(true);
+    } else {
+      setClick(false);
+    }
+  }, [data, dispatch, wishlist]);
 
-  const incrementCount = () => {};
-  const decrementCount = () => {};
-  const removeFromWishlistHandler = (data) => {};
-  const addToWishlistHandler = (data) => {};
+  const incrementCount = () => {
+    setCount(count + 1);
+  };
+
+  const decrementCount = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+
+  const removeFromWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(removeFromWishlist(data));
+  };
+
+  const addToWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(addToWishlist(data));
+  };
+
+  const addToCartHandler = (id) => {
+    const isItemExists = cart && cart.find((i) => i._id === id);
+    if (isItemExists) {
+      toast.error("Item already in cart!");
+    } else {
+      if (data.stock < 1) {
+        toast.error("Product stock limited!");
+      } else {
+        const cartData = { ...data, qty: count };
+        dispatch(addToCart(cartData));
+        toast.success("Item added to cart successfully!");
+      }
+    }
+  };
 
   const handleMessageSubmit = async () => {};
 
@@ -182,13 +226,16 @@ const ProductDetails = ({ data }) => {
                   )}
                 </button>
               </div>
-              <button className="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg py-3 shadow-lg transition">
+              <button
+                className="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg py-3 shadow-lg transition"
+                onClick={() => addToCartHandler(data._id)}
+              >
                 Add to cart <AiOutlineShoppingCart size={22} />
               </button>
               <div className="flex items-center mt-4">
                 <Ratings rating={data?.ratings} />
                 <span className="ml-2 text-xs font-semibold px-2 py-1 rounded-full bg-green-50 text-green-600 shadow">
-                  {data.sold_out} sold
+                  {data.soldOut} sold
                 </span>
               </div>
             </div>

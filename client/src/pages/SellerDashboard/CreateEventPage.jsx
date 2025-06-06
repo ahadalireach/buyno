@@ -1,12 +1,17 @@
+import { useEffect } from "react";
 import {
-  Breadcrumb,
-  CreateEvent,
   DashboardHeader,
+  Breadcrumb,
   DashboardSideBar,
+  CreateEvent,
   Footer,
 } from "../../components";
 
 const CreateEventPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <DashboardHeader />

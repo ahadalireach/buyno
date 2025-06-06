@@ -12,10 +12,10 @@ const RegisterSeller = () => {
   const [avatar, setAvatar] = useState(null);
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState();
   const [avatarPreview, setAvatarPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

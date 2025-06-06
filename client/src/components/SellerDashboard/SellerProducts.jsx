@@ -9,9 +9,9 @@ import {
 import Loader from "../Layout/Loader";
 
 const SellerProducts = () => {
-  const { isLoading, products } = useSelector((state) => state.products);
-  const { seller } = useSelector((state) => state.seller);
   const dispatch = useDispatch();
+  const { seller } = useSelector((state) => state.seller);
+  const { isLoading, products } = useSelector((state) => state.products);
 
   useEffect(() => {
     if (seller?._id) {
@@ -61,7 +61,7 @@ const SellerProducts = () => {
                     : "-"}
                 </td>
                 <td className="px-4 py-2 text-sm">{product.stock}</td>
-                <td className="px-4 py-2 text-sm">{product.sold_out || 0}</td>
+                <td className="px-4 py-2 text-sm">{product.soldOut || 0}</td>
                 <td className="px-4 py-2">
                   <button
                     className="bg-orange-500 hover:bg-orange-600 text-white rounded-full p-2 transition"

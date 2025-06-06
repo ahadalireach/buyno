@@ -3,25 +3,25 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
-import { AiOutlinePlusCircle, AiOutlineCloseCircle } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
 import { createEvent } from "../../redux/actions/event";
+import { useDispatch, useSelector } from "react-redux";
+import { AiOutlinePlusCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
 const CreateEvent = () => {
-  const { seller } = useSelector((state) => state.seller);
-  const { success, error } = useSelector((state) => state.events);
-  const [originalPrice, setOriginalPrice] = useState();
-  const [images, setImages] = useState([]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [tags, setTags] = useState("");
-  const [discountPrice, setDiscountPrice] = useState();
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [stock, setStock] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [stock, setStock] = useState();
+  const [name, setName] = useState("");
+  const [tags, setTags] = useState("");
+  const [images, setImages] = useState([]);
+  const [category, setCategory] = useState("");
+  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [description, setDescription] = useState("");
+  const [discountPrice, setDiscountPrice] = useState();
+  const [originalPrice, setOriginalPrice] = useState();
+  const { seller } = useSelector((state) => state.seller);
+  const { success, error } = useSelector((state) => state.events);
 
   const today = new Date().toISOString().slice(0, 10);
   const minEndDate = startDate

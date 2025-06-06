@@ -1,14 +1,19 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
-  Header,
-  Footer,
-  Breadcrumb,
   Loader,
+  Header,
+  Breadcrumb,
   EventCard,
+  Footer,
 } from "../../components";
 
 const EventsPage = () => {
   const { allEvents, isLoading } = useSelector((state) => state.events);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return isLoading ? (
     <Loader />

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { footerAccountLinks, footerInformationLinks } from "../../static/data";
 import {
   AiFillFacebook,
   AiFillYoutube,
@@ -5,8 +7,6 @@ import {
   AiFillLinkedin,
   AiFillPinterest,
 } from "react-icons/ai";
-import { Link } from "react-router-dom";
-import { footerAccountLinks, footerInformationLinks } from "../../static/data";
 
 const Footer = () => {
   return (

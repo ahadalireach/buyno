@@ -66,7 +66,7 @@ const EventCard = ({ active, data }) => {
                 </span>
               </div>
               <span className="text-sm text-green-600 font-semibold">
-                {data.sold_out} sold
+                {data.soldOut} sold
               </span>
             </div>
 

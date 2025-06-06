@@ -1,12 +1,17 @@
+import { useEffect } from "react";
 import {
-  Breadcrumb,
-  AddProduct,
   DashboardHeader,
+  Breadcrumb,
   DashboardSideBar,
+  AddProduct,
   Footer,
 } from "../../components";
 
 const AddProductPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <DashboardHeader />

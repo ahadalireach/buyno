@@ -1,22 +1,26 @@
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { getAllSellerProducts } from "../../redux/actions/product";
 import {
-  Breadcrumb,
   DashboardHeader,
-  Footer,
+  Breadcrumb,
   SellerProfileData,
   SellerProfileSideBar,
+  Footer,
 } from "../../components";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { getAllSellerProducts } from "../../redux/actions/product";
-import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
 
 const SellerProfilePreviewPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [sellerExists, setSellerExists] = useState(true);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     axios

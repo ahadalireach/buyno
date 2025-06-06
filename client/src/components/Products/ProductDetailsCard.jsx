@@ -1,16 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
+import { addToCart } from "../../redux/actions/cart";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AiFillHeart,
   AiOutlineHeart,
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../redux/actions/wishlist";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
+  const dispatch = useDispatch();
   const [count, setCount] = useState(1);
-  const [wishlisted, setWishlisted] = useState(false);
+  const [click, setClick] = useState(false);
+  const { cart } = useSelector((state) => state.cart);
+  const { wishlist } = useSelector((state) => state.wishlist);
+
+  useEffect(() => {
+    if (wishlist && wishlist.find((i) => i._id === data._id)) {
+      setClick(true);
+    } else {
+      setClick(false);
+    }
+  }, [data._id, wishlist]);
 
   const handleMessageSubmit = () => {};
 
@@ -18,9 +36,35 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     if (count > 1) setCount(count - 1);
   };
 
-  const incrementCount = () => setCount(count + 1);
+  const incrementCount = () => {
+    setCount(count + 1);
+  };
 
-  const addToCartHandler = (id) => {};
+  const removeFromWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(removeFromWishlist(data));
+  };
+
+  const addToWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(addToWishlist(data));
+  };
+
+  const addToCartHandler = (id) => {
+    const existingItem = cart.find((item) => item._id === id);
+    if (existingItem) {
+      toast.error("Item already in cart. Please update quantity.");
+      return;
+    } else {
+      if (data.stock < count) {
+        toast.error("Product stock is limited. Please reduce quantity.");
+      } else {
+        const cartData = { ...data, qty: count };
+        dispatch(addToCart(cartData));
+        toast.success("Item added to cart.");
+      }
+    }
+  };
 
   return (
     <div className="bg-[#fff]">
@@ -92,7 +136,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   Send Message <AiOutlineMessage size={20} />
                 </button>
                 <h5 className="text-[15px] text-red-500 mt-4 font-semibold">
-                  ({data.sold_out || 0}) Sold out
+                  ({data.soldOut || 0}) Sold out
                 </h5>
               </div>
 
@@ -134,15 +178,19 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   </div>
                   <button
                     className="bg-white rounded-full p-2 shadow hover:bg-orange-100 transition"
-                    onClick={() => setWishlisted((w) => !w)}
+                    onClick={() =>
+                      click
+                        ? removeFromWishlistHandler(data)
+                        : addToWishlistHandler(data)
+                    }
                     aria-label={
-                      wishlisted ? "Remove from wishlist" : "Add to wishlist"
+                      click ? "Remove from wishlist" : "Add to wishlist"
                     }
                   >
-                    {wishlisted ? (
-                      <AiFillHeart size={26} color="red" />
+                    {click ? (
+                      <AiFillHeart size={20} color="red" />
                     ) : (
-                      <AiOutlineHeart size={26} color="#FF7D1A" />
+                      <AiOutlineHeart size={20} color="#FF7D1A" />
                     )}
                   </button>
                 </div>

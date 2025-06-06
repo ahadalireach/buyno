@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { Header, Breadcrumb, UserLogin, Footer } from "../../../components";
 
 const UserLoginPage = () => {
-  const { isAuthenticated } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
     }
+    window.scrollTo(0, 0);
   }, []);
   return (
     <>

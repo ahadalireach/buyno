@@ -63,7 +63,7 @@ const productSchema = new mongoose.Schema({
     type: Object,
     required: true,
   },
-  sold_out: {
+  soldOut: {
     type: Number,
     default: 0,
   },

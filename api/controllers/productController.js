@@ -1,5 +1,3 @@
-const express = require("express");
-const router = express.Router();
 const fs = require("fs");
 const Seller = require("../models/Seller");
 const Product = require("../models/Product");

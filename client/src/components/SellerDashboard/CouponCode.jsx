@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
+import { useSelector } from "react-redux";
 import { AiOutlineDelete } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Loader from "../Layout/Loader";
 
 const AllCoupons = () => {
-  const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [value, setValue] = useState("");
+  const [open, setOpen] = useState(false);
   const [coupons, setCoupons] = useState([]);
   const [minAmount, setMinAmount] = useState("");
   const [maxAmount, setMaxAmount] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState("");
-  const [value, setValue] = useState("");
   const { seller } = useSelector((state) => state.seller);
-  const { products } = useSelector((state) => state.products);
 
   useEffect(() => {
     setIsLoading(true);
@@ -230,24 +229,6 @@ const AllCoupons = () => {
                       onChange={(e) => setMaxAmount(e.target.value)}
                       placeholder="Enter max amount..."
                     />
-                  </div>
-                  <div>
-                    <label className="block text-base font-semibold text-gray-900 mb-1">
-                      Selected Product
-                    </label>
-                    <select
-                      className="w-full border rounded-md px-4 py-2 focus:ring-orange-500 focus:border-orange-500"
-                      value={selectedProduct}
-                      onChange={(e) => setSelectedProduct(e.target.value)}
-                    >
-                      <option value="">Choose a product</option>
-                      {products &&
-                        products.map((i) => (
-                          <option value={i.name} key={i._id}>
-                            {i.name}
-                          </option>
-                        ))}
-                    </select>
                   </div>
                   <button
                     type="submit"

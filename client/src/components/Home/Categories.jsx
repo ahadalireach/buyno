@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useRef, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
@@ -33,14 +32,14 @@ const Categories = () => {
     animationRef.current = requestAnimationFrame(animate);
   }, []);
 
-  const handleMouseEnter = () => cancelAnimationFrame(animationRef.current);
-  const handleMouseLeave = () =>
-    (animationRef.current = requestAnimationFrame(animate));
-
   useEffect(() => {
     animationRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationRef.current);
   }, [animate]);
+
+  const handleMouseEnter = () => cancelAnimationFrame(animationRef.current);
+  const handleMouseLeave = () =>
+    (animationRef.current = requestAnimationFrame(animate));
 
   return (
     <>

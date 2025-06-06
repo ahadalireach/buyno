@@ -8,19 +8,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../redux/actions/product";
 
 const AddProduct = () => {
-  const { seller } = useSelector((state) => state.seller);
-  const [originalPrice, setOriginalPrice] = useState();
-  const { success, error } = useSelector((state) => state.products);
-  const [images, setImages] = useState([]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [tags, setTags] = useState("");
-  const [discountPrice, setDiscountPrice] = useState();
-  const [stock, setStock] = useState();
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [tags, setTags] = useState("");
+  const [stock, setStock] = useState();
+  const [images, setImages] = useState([]);
+  const [category, setCategory] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [description, setDescription] = useState("");
+  const [discountPrice, setDiscountPrice] = useState();
+  const [originalPrice, setOriginalPrice] = useState();
+  const { seller } = useSelector((state) => state.seller);
+  const { success, error } = useSelector((state) => state.products);
 
   useEffect(() => {
     if (error) {

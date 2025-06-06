@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { Header, Breadcrumb, SellerLogin, Footer } from "../../../components";
 
 const SellerLoginPage = () => {
-  const { isLoading, isSeller } = useSelector((state) => state.seller);
   const navigate = useNavigate();
+  const { isLoading, isSeller } = useSelector((state) => state.seller);
 
   useEffect(() => {
     if (!isLoading) {
@@ -14,6 +14,7 @@ const SellerLoginPage = () => {
         navigate(`/dashboard`);
       }
     }
+    window.scrollTo(0, 0);
   }, []);
 
   return (

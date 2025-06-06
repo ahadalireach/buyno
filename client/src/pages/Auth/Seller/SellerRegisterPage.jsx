@@ -10,13 +10,14 @@ import {
 } from "../../../components";
 
 const SellerRegisterPage = () => {
-  const { isSeller, seller } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const { isSeller, seller } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (isSeller) {
       navigate(`/seller/${seller}`);
     }
+    window.scrollTo(0, 0);
   }, []);
 
   return (

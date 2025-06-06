@@ -1,4 +1,3 @@
-const express = require("express");
 const CouponCode = require("../models/CouponCode");
 const errorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");

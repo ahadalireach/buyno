@@ -1,4 +1,7 @@
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Breadcrumb,
   DashboardHeader,
@@ -6,14 +9,15 @@ import {
   SellerProfileData,
   SellerProfileSideBar,
 } from "../../components";
-import { useParams, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
 
 const SellerProfilePage = () => {
   const { id } = useParams();
-  const { seller } = useSelector((state) => state.seller);
   const navigate = useNavigate();
+  const { seller } = useSelector((state) => state.seller);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (seller?._id !== id) {

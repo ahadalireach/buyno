@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import { getAllEvents } from "./redux/actions/event";
+import { getAllProducts } from "./redux/actions/product";
 import { getUser, getSeller } from "./redux/actions/user";
 import { ProtectedRoute, SellerProtectedRoute } from "./routes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -10,50 +11,38 @@ import {
   HomePage,
   EventsPage,
   NotFoundPage,
+  CheckoutPage,
   UserLoginPage,
+  CouponCodePage,
+  AddProductPage,
   UserProfilePage,
   ProductListPage,
   CreateEventPage,
-  SellerProfilePage,
   SellerLoginPage,
+  SellerEventsPage,
   UserRegisterPage,
-  AddProductPage,
+  DashboardHomePage,
+  SellerProfilePage,
   ProductDetailsPage,
   UserActivationPage,
   SellerRegisterPage,
-  DashboardHomePage,
-  SellerActivationPage,
-  SellerEventsPage,
-  SellerProfilePreviewPage,
   SellerProductsPage,
+  SellerActivationPage,
   BestSellingProductsPage,
-  CouponCodePage,
+  SellerProfilePreviewPage,
+  PaymentPage,
 } from "./pages";
 import "./App.css";
 import store from "./redux/store";
 import "react-toastify/dist/ReactToastify.css";
-import { getAllProducts } from "./redux/actions/product";
-import { getAllEvents } from "./redux/actions/event";
-// import { Loader } from "./components";
 
 const App = () => {
-  //   const { isLoading } = useSelector((state) => state.seller);
-  //   const { loading } = useSelector((state) => state.user);
-
   useEffect(() => {
     store.dispatch(getUser());
     store.dispatch(getSeller());
     store.dispatch(getAllProducts());
     store.dispatch(getAllEvents());
   }, []);
-
-  //   if (loading || isLoading) {
-  //     return (
-  //       <div className="min-h-screen flex items-center justify-center bg-white">
-  //         <Loader />
-  //       </div>
-  //     );
-  //   }
 
   return (
     <BrowserRouter>
@@ -76,6 +65,22 @@ const App = () => {
           element={
             <ProtectedRoute>
               <UserProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <CheckoutPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment"
+          element={
+            <ProtectedRoute>
+              <PaymentPage />
             </ProtectedRoute>
           }
         />

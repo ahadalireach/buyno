@@ -8,11 +8,11 @@ import axios from "axios";
 const RegisterUser = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState(null);
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];

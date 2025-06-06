@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import ProductCard from "./ProductCard";
 
 const SuggestedProduct = ({ data }) => {
-  const { allProducts } = useSelector((state) => state.products);
   const [products, setProducts] = useState([]);
+  const { allProducts } = useSelector((state) => state.products);
 
   useEffect(() => {
     const d =

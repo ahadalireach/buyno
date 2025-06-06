@@ -3,9 +3,9 @@ import { logo } from "../../assets";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IoIosArrowDown } from "react-icons/io";
+import { categoriesData } from "../../static/data";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { FiMenu, FiX, FiUser } from "react-icons/fi";
-import { categoriesData } from "../../static/data";
 import { AiOutlineHeart, AiOutlineSearch } from "react-icons/ai";
 import Navbar from "./Navbar";
 import Cart from "../Cart/Cart";
@@ -21,10 +21,12 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [openWishlist, setOpenWishlist] = useState(false);
-  const { isSeller } = useSelector((state) => state.seller);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { cart } = useSelector((state) => state.cart);
+  const { isSeller } = useSelector((state) => state.seller);
+  const { wishlist } = useSelector((state) => state.wishlist);
   const { allProducts } = useSelector((state) => state.products);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -143,7 +145,7 @@ const Header = () => {
                 className="text-gray-500 cursor-pointer"
               />
               <span className="absolute -top-2 -right-3 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                0
+                {wishlist && wishlist.length > 0 ? wishlist.length : 0}
               </span>
             </button>
 
@@ -151,7 +153,7 @@ const Header = () => {
             <button onClick={() => setOpenCart(true)} className="relative">
               <RiShoppingCartLine size={22} className="text-gray-500" />
               <span className="absolute -top-2 -right-3 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                0
+                {cart && cart.length > 0 ? cart.length : 0}
               </span>
             </button>
 
@@ -298,7 +300,7 @@ const Header = () => {
               >
                 <AiOutlineHeart size={22} className="text-gray-500" />
                 <span className="absolute -top-2 -right-3 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  0
+                  {wishlist && wishlist.length > 0 ? wishlist.length : 0}
                 </span>
               </button>
               <button
@@ -310,7 +312,7 @@ const Header = () => {
               >
                 <RiShoppingCartLine size={22} className="text-gray-500" />
                 <span className="absolute -top-2 -right-3 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  0
+                  {cart && cart.length > 0 ? cart.length : 0}
                 </span>
               </button>
               <div>

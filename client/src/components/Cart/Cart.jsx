@@ -4,56 +4,30 @@ import { Link } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { HiOutlineMinus, HiPlus } from "react-icons/hi";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "../../redux/actions/cart";
 
 const Cart = ({ setOpenCart }) => {
-  const cart = [
-    {
-      name: "Sample Product",
-      discountPrice: 20,
-      qty: 1,
-      stock: 10,
-      images: [
-        {
-          url: "https://s.alicdn.com/@sc04/kf/H776186991f2848ea890c936814a8aba4A.jpg_300x300.jpg",
-        },
-      ],
-    },
-    {
-      name: "Another Product",
-      discountPrice: 15,
-      qty: 2,
-      stock: 5,
-      images: [
-        {
-          url: "https://m.media-amazon.com/images/I/41oT2DONfqL._AC_SY1000_.jpg",
-        },
-      ],
-    },
-    {
-      name: "Third Product",
-      discountPrice: 30,
-      qty: 1,
-      stock: 8,
-      images: [
-        { url: "https://i.ebayimg.com/images/g/dXkAAOSwVm9lsocK/s-l225.jpg" },
-      ],
-    },
-  ];
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.cart);
+  const [cartVisible, setCartVisible] = useState(false);
 
-  const removeFromCartHandler = (data) => {};
+  useEffect(() => {
+    setTimeout(() => setCartVisible(true), 10);
+  }, []);
+
+  const removeFromCartHandler = (data) => {
+    dispatch(removeFromCart(data));
+  };
 
   const totalPrice = cart.reduce(
     (acc, item) => acc + item.qty * item.discountPrice,
     0
   );
 
-  const quantityChangeHandler = (data) => {};
-
-  const [cartVisible, setCartVisible] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => setCartVisible(true), 10);
-  }, []);
+  const quantityChangeHandler = (data) => {
+    dispatch(addToCart(data));
+  };
 
   const handleClose = () => {
     setCartVisible(false);
@@ -145,41 +119,63 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
   };
 
   return (
-    <div className="border-b border-orange-100 p-4 flex items-center gap-3 relative">
-      <div className="flex flex-col items-center gap-2">
-        <button
-          className="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-7 h-7 flex items-center justify-center transition"
-          onClick={() => increment(data)}
-        >
-          <HiPlus size={18} />
-        </button>
-        <span className="font-semibold text-gray-700">{value}</span>
-        <button
-          className="bg-gray-200 hover:bg-orange-100 text-orange-500 rounded-full w-7 h-7 flex items-center justify-center transition"
-          onClick={() => decrement(data)}
-        >
-          <HiOutlineMinus size={16} />
-        </button>
+    <div className="flex items-center gap-4 bg-white p-4 mb-4 border border-orange-100 relative">
+      <div className="flex-shrink-0 flex items-center justify-center w-24 h-24 bg-orange-50 rounded-lg overflow-hidden border border-orange-200">
+        <img
+          src={
+            data.images && data.images[0]?.url
+              ? data.images[0].url
+              : data.images && typeof data.images[0] === "string"
+              ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
+                  data.images[0].startsWith("/")
+                    ? data.images[0]
+                    : "/" + data.images[0]
+                }`
+              : "https://ui-avatars.com/api/?name=" +
+                encodeURIComponent(data.name || "Product")
+          }
+          alt={data.name}
+          className="w-20 h-20 max-w-full max-h-full object-contain bg-white"
+        />
       </div>
-      <img
-        src={data?.images[0]?.url}
-        alt={data.name}
-        className="w-[80px] h-[80px] object-cover rounded-[5px] border border-orange-100"
-      />
-      <div className="flex-1 pl-2">
-        <h1 className="font-semibold text-gray-800">{data.name}</h1>
-        <h4 className="font-normal text-[15px] text-gray-500">
-          ${data.discountPrice} x {value}
-        </h4>
-        <h4 className="font-bold text-[17px] pt-1 text-orange-500">
+      <div className="flex-1 flex flex-col justify-between w-full">
+        <div className="flex flex-row items-center justify-between gap-2">
+          <h2 className="font-semibold text-gray-900 text-sm" title={data.name}>
+            {data.name.length > 30 ? data.name.slice(0, 30) + "..." : data.name}
+          </h2>
+          <button
+            className="text-gray-400 hover:text-orange-500 transition"
+            onClick={() => removeFromCartHandler(data)}
+            title="Remove"
+          >
+            <RxCross1 size={22} />
+          </button>
+        </div>
+        <div className="flex items-center gap-2 mt-2">
+          <span className="text-orange-500 font-bold text-base">
+            ${data.discountPrice}
+          </span>
+          <span className="text-gray-400 text-sm">x {value}</span>
+        </div>
+        <div className="flex items-center gap-2 mt-3">
+          <button
+            className="bg-gray-200 hover:bg-orange-100 text-orange-500 rounded-full w-8 h-8 flex items-center justify-center transition"
+            onClick={() => decrement(data)}
+          >
+            <HiOutlineMinus size={18} />
+          </button>
+          <span className="font-semibold text-gray-700 text-base">{value}</span>
+          <button
+            className="bg-orange-500 hover:bg-orange-600 text-white rounded-full w-8 h-8 flex items-center justify-center transition"
+            onClick={() => increment(data)}
+          >
+            <HiPlus size={20} />
+          </button>
+        </div>
+        <span className="text-orange-600 font-bold text-md mt-4 block sm:mt-2">
           US${totalPrice}
-        </h4>
+        </span>
       </div>
-      <RxCross1
-        className="cursor-pointer text-gray-400 hover:text-orange-500 transition absolute top-2 right-2"
-        onClick={() => removeFromCartHandler(data)}
-        size={20}
-      />
     </div>
   );
 };

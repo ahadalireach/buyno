@@ -8,11 +8,11 @@ import Loader from "../../Layout/Loader";
 import axios from "axios";
 
 const SellerProfileSideBar = ({ isOwner }) => {
-  const [data, setData] = useState({});
-  const { products } = useSelector((state) => state.products);
-  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const { products } = useSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(getAllSellerProducts(id));
