@@ -13,6 +13,7 @@ import UserRegisterPage from "./Auth/User/UserRegisterPage";
 import AddProductPage from "./SellerDashboard/AddProductPage";
 import CouponCodePage from "./SellerDashboard/CouponCodePage";
 import ProductDetailsPage from "./Products/ProductDetailsPage";
+import OrderSuccessPage from "./UserDashboard/OrderSuccessPage";
 import UserActivationPage from "./Auth/User/UserActivationPage";
 import CreateEventPage from "./SellerDashboard/CreateEventPage";
 import SellerEventsPage from "./SellerDashboard/SellerEventsPage";
@@ -38,6 +39,7 @@ export {
   CreateEventPage,
   SellerLoginPage,
   SellerEventsPage,
+  OrderSuccessPage,
   UserRegisterPage,
   SellerProfilePage,
   DashboardHomePage,

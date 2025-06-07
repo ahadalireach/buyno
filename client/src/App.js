@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import { ToastContainer } from "react-toastify";
+import { Elements } from "@stripe/react-stripe-js";
 import { getAllEvents } from "./redux/actions/event";
 import { getAllProducts } from "./redux/actions/product";
 import { getUser, getSeller } from "./redux/actions/user";
@@ -10,6 +12,7 @@ import {
   FaqPage,
   HomePage,
   EventsPage,
+  PaymentPage,
   NotFoundPage,
   CheckoutPage,
   UserLoginPage,
@@ -19,6 +22,7 @@ import {
   ProductListPage,
   CreateEventPage,
   SellerLoginPage,
+  OrderSuccessPage,
   SellerEventsPage,
   UserRegisterPage,
   DashboardHomePage,
@@ -30,23 +34,45 @@ import {
   SellerActivationPage,
   BestSellingProductsPage,
   SellerProfilePreviewPage,
-  PaymentPage,
 } from "./pages";
 import "./App.css";
 import store from "./redux/store";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const App = () => {
+  const [stripeApikey, setStripeApiKey] = useState("");
+
+  async function getStripeApikey() {
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/payments/key`
+    );
+    setStripeApiKey(data.stripeApikey);
+  }
+
   useEffect(() => {
     store.dispatch(getUser());
     store.dispatch(getSeller());
     store.dispatch(getAllProducts());
     store.dispatch(getAllEvents());
+    getStripeApikey();
   }, []);
+
+  const PaymentPageWithStripe = () => (
+    <Elements stripe={loadStripe(stripeApikey)}>
+      <ProtectedRoute>
+        <PaymentPage />
+      </ProtectedRoute>
+    </Elements>
+  );
 
   return (
     <BrowserRouter>
       <Routes>
+        <Route
+          path="/order/payment"
+          element={stripeApikey ? <PaymentPageWithStripe /> : null}
+        />
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<ProductListPage />} />
         <Route path="/product/:id" element={<ProductDetailsPage />} />
@@ -69,7 +95,7 @@ const App = () => {
           }
         />
         <Route
-          path="/checkout"
+          path="/cart/checkout"
           element={
             <ProtectedRoute>
               <CheckoutPage />
@@ -77,10 +103,10 @@ const App = () => {
           }
         />
         <Route
-          path="/payment"
+          path="/order/success"
           element={
             <ProtectedRoute>
-              <PaymentPage />
+              <OrderSuccessPage />
             </ProtectedRoute>
           }
         />

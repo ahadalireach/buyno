@@ -1,4 +1,7 @@
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { addToCart } from "../../redux/actions/cart";
+import { useDispatch, useSelector } from "react-redux";
 import CountDown from "./CountDown";
 
 const MAX_NAME_LENGTH = 50;
@@ -10,7 +13,23 @@ const truncateText = (text, maxLength) => {
 };
 
 const EventCard = ({ active, data }) => {
-  const addToCartHandler = (data) => {};
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.cart);
+
+  const addToCartHandler = (id) => {
+    const isItemExists = cart && cart.find((i) => i._id === id);
+    if (isItemExists) {
+      toast.error("Item already in cart!");
+    } else {
+      if (data.stock < 1) {
+        toast.error("Product stock limited!");
+      } else {
+        const cartData = { ...data, qty: 1 };
+        dispatch(addToCart(cartData));
+        toast.success("Item added to cart successfully!");
+      }
+    }
+  };
 
   return (
     <div
@@ -80,7 +99,7 @@ const EventCard = ({ active, data }) => {
               </button>
             </Link>
             <button
-              onClick={() => addToCartHandler(data)}
+              onClick={() => addToCartHandler(data?._id)}
               className="w-full sm:w-auto bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 shadow"
             >
               Add to cart

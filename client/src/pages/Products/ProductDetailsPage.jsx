@@ -16,8 +16,8 @@ const ProductDetailsPage = () => {
   const [data, setData] = useState(null);
   const [searchParams] = useSearchParams();
   const eventData = searchParams.get("isEvent");
-  const { allProducts } = useSelector((state) => state.products);
   const { allEvents } = useSelector((state) => state.events);
+  const { allProducts } = useSelector((state) => state.products);
 
   useEffect(() => {
     window.scrollTo(0, 0);

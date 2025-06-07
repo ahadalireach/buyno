@@ -83,7 +83,7 @@ const Cart = ({ setOpenCart }) => {
               </div>
             </div>
             <div className="px-5 mb-4">
-              <Link to="/checkout">
+              <Link to="/cart/checkout">
                 <div className="h-[45px] flex items-center justify-center w-full bg-orange-500 hover:bg-orange-600 transition rounded-[5px] shadow-lg">
                   <h1 className="text-white text-[18px] font-semibold">
                     Checkout Now (USD${totalPrice})

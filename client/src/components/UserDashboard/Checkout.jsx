@@ -52,7 +52,7 @@ const Checkout = () => {
       };
 
       localStorage.setItem("latestOrder", JSON.stringify(orderData));
-      navigate("/payment");
+      navigate("/order/payment");
     }
   };
 
@@ -105,8 +105,8 @@ const Checkout = () => {
     : (subTotalPrice + shipping).toFixed(2);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-2">
-      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-8">
+    <div className="w-full flex flex-col items-center py-10 bg-gray-50 min-h-screen">
+      <div className="w-full max-w-5xl flex flex-col md:flex-row gap-8">
         <div className="flex-1">
           <ShippingInfo
             user={user}
@@ -344,7 +344,7 @@ const CartData = ({
       <div className="flex justify-between border-b pb-3 mb-3">
         <span className="text-base font-medium text-gray-700">Discount:</span>
         <span className="text-lg font-bold text-green-600">
-          -{discountPercentenge ? "$" + discountPercentenge.toString() : "$0"}
+          {discountPercentenge ? "$" + discountPercentenge.toString() : "$0"}
         </span>
       </div>
       <div className="flex justify-between items-center pt-2 mb-6">

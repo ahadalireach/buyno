@@ -28,8 +28,10 @@ const Events = () => {
           {featuredEvent ? (
             <EventCard data={featuredEvent} />
           ) : (
-            <div className="text-center text-gray-500 py-8">
-              No Event found!
+            <div className="text-center text-gray-400 py-12 text-lg font-semibold select-none">
+              <span className="inline-block bg-orange-50 text-orange-500 px-4 py-2 rounded-lg shadow-sm">
+                🚫 No events available at the moment. Please check back soon!
+              </span>
             </div>
           )}
         </div>
