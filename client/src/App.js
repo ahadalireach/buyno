@@ -11,8 +11,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   FaqPage,
   HomePage,
+  MainPage,
+  OrderPage,
+  OrdersPage,
   EventsPage,
   PaymentPage,
+  ProductsPage,
   NotFoundPage,
   CheckoutPage,
   UserLoginPage,
@@ -22,15 +26,14 @@ import {
   ProductListPage,
   CreateEventPage,
   SellerLoginPage,
+  OrderDetailsPage,
   OrderSuccessPage,
   SellerEventsPage,
   UserRegisterPage,
-  DashboardHomePage,
   SellerProfilePage,
   ProductDetailsPage,
   UserActivationPage,
   SellerRegisterPage,
-  SellerProductsPage,
   SellerActivationPage,
   BestSellingProductsPage,
   SellerProfilePreviewPage,
@@ -110,6 +113,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/user/order/:id"
+          element={
+            <ProtectedRoute>
+              <OrderDetailsPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/seller/register" element={<SellerRegisterPage />} />
         <Route
           path="/seller/activation/:activation_token"
@@ -132,7 +143,23 @@ const App = () => {
           path="/seller/dashboard"
           element={
             <SellerProtectedRoute>
-              <DashboardHomePage />
+              <MainPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-orders"
+          element={
+            <SellerProtectedRoute>
+              <OrdersPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/order/:id"
+          element={
+            <SellerProtectedRoute>
+              <OrderPage />
             </SellerProtectedRoute>
           }
         />
@@ -148,7 +175,7 @@ const App = () => {
           path="/seller/dashboard-products"
           element={
             <SellerProtectedRoute>
-              <SellerProductsPage />
+              <ProductsPage />
             </SellerProtectedRoute>
           }
         />

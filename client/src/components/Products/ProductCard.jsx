@@ -58,8 +58,8 @@ const ProductCard = ({ data, isEvent }) => {
 
   return (
     <>
-      <div className="w-full h-[350px] bg-white rounded-2xl shadow-sm hover:shadow-md border border-gray-100 p-4 relative transition-all group flex flex-col">
-        <div className="w-full h-[190px] flex items-center justify-center bg-gray-200 rounded-xl relative overflow-hidden mb-4">
+      <div className="w-full h-[350px] bg-white rounded-sm shadow-sm hover:shadow-md border border-gray-100 p-4 relative transition-all group flex flex-col">
+        <div className="w-full h-[190px] flex items-center justify-center bg-gray-200 rounded-sm relative overflow-hidden mb-4">
           <Link
             to={
               isEvent
@@ -87,7 +87,7 @@ const ProductCard = ({ data, isEvent }) => {
           </Link>
           <div className="absolute top-3 right-3 z-10 flex flex-col items-center gap-2">
             <button
-              className="bg-white rounded-full p-2 shadow hover:bg-orange-100 transition"
+              className="bg-white rounded-sm p-2 shadow hover:bg-orange-100 transition"
               onClick={() =>
                 click
                   ? removeFromWishlistHandler(data)
@@ -102,14 +102,14 @@ const ProductCard = ({ data, isEvent }) => {
               )}
             </button>
             <button
-              className="bg-white rounded-full p-2 shadow hover:bg-orange-100 transition"
+              className="bg-white rounded-sm p-2 shadow hover:bg-orange-100 transition"
               onClick={() => setQuickViewOpen(true)}
               aria-label="Quick View"
             >
               <AiOutlineEye size={20} color="#333" />
             </button>
             <button
-              className="bg-orange-500 rounded-full p-2 shadow hover:bg-orange-600 transition"
+              className="bg-orange-500 rounded-sm p-2 shadow hover:bg-gray-800 transition"
               onClick={() => addToCartHandler(data?._id)}
               aria-label="Add to Cart"
             >
@@ -131,7 +131,7 @@ const ProductCard = ({ data, isEvent }) => {
               : `/product/${data._id}`
           }
         >
-          <h4 className="font-semibold text-gray-900 text-base leading-tight min-h-[48px] mb-2 hover:text-orange-500 transition-colors">
+          <h4 className="font-semibold text-gray-800 text-base leading-tight min-h-[48px] mb-2 hover:text-orange-500 transition-colors">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
         </Link>
@@ -152,7 +152,7 @@ const ProductCard = ({ data, isEvent }) => {
                 </h4>
               )}
           </div>
-          <span className="text-xs font-semibold px-2 py-1 rounded-full bg-green-50 text-green-600 shadow">
+          <span className="text-xs font-semibold px-2 py-1 rounded-sm bg-green-50 text-green-600 shadow">
             {data.soldOut} sold
           </span>
         </div>

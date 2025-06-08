@@ -223,26 +223,26 @@ const PaymentInfo = ({
   const [select, setSelect] = useState(1);
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+    <div className="bg-white rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] p-8 mb-6">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
         Select Payment Method
       </h2>
       <div className="space-y-4">
         <div
-          className={`flex items-center gap-3 p-4 rounded-lg border transition cursor-pointer ${
+          className={`flex items-center gap-3 p-4 rounded-sm border transition cursor-pointer ${
             select === 1
-              ? "border-orange-500 bg-orange-50 shadow"
-              : "border-gray-200 bg-white hover:border-orange-300"
+              ? "border-gray-500 bg-gray-50 shadow-[0_0_20px_rgba(0,0,0,0.05)]"
+              : "border-gray-200 bg-white hover:border-gray-800"
           }`}
           onClick={() => setSelect(1)}
         >
           <span
             className={`w-5 h-5 flex items-center justify-center rounded-full border-2 ${
-              select === 1 ? "border-orange-500" : "border-gray-300"
+              select === 1 ? "border-gray-800" : "border-gray-300"
             }`}
           >
             {select === 1 && (
-              <span className="w-3 h-3 bg-orange-500 rounded-full block" />
+              <span className="w-3 h-3 bg-gray-800 rounded-full block" />
             )}
           </span>
           <span className="font-semibold text-gray-800">
@@ -250,39 +250,39 @@ const PaymentInfo = ({
           </span>
         </div>
         <div
-          className={`flex items-center gap-3 p-4 rounded-lg border transition cursor-pointer ${
+          className={`flex items-center gap-3 p-4 rounded-sm border transition cursor-pointer ${
             select === 2
-              ? "border-orange-500 bg-orange-50 shadow"
-              : "border-gray-200 bg-white hover:border-orange-300"
+              ? "border-gray-500 bg-gray-50 shadow-[0_0_20px_rgba(0,0,0,0.05)]"
+              : "border-gray-200 bg-white hover:border-gray-800"
           }`}
           onClick={() => setSelect(2)}
         >
           <span
             className={`w-5 h-5 flex items-center justify-center rounded-full border-2 ${
-              select === 2 ? "border-orange-500" : "border-gray-300"
+              select === 2 ? "border-gray-800" : "border-gray-300"
             }`}
           >
             {select === 2 && (
-              <span className="w-3 h-3 bg-orange-500 rounded-full block" />
+              <span className="w-3 h-3 bg-gray-800 rounded-full block" />
             )}
           </span>
           <span className="font-semibold text-gray-800">Pay with Paypal</span>
         </div>
         <div
-          className={`flex items-center gap-3 p-4 rounded-lg border transition cursor-pointer ${
+          className={`flex items-center gap-3 p-4 rounded-sm border transition cursor-pointer ${
             select === 3
-              ? "border-orange-500 bg-orange-50 shadow"
-              : "border-gray-200 bg-white hover:border-orange-300"
+              ? "border-gray-500 bg-gray-50 shadow-[0_0_20px_rgba(0,0,0,0.05)]"
+              : "border-gray-200 bg-white hover:border-gray-800"
           }`}
           onClick={() => setSelect(3)}
         >
           <span
             className={`w-5 h-5 flex items-center justify-center rounded-full border-2 ${
-              select === 3 ? "border-orange-500" : "border-gray-300"
+              select === 3 ? "border-gray-800" : "border-gray-300"
             }`}
           >
             {select === 3 && (
-              <span className="w-3 h-3 bg-orange-500 rounded-full block" />
+              <span className="w-3 h-3 bg-gray-800 rounded-full block" />
             )}
           </span>
           <span className="font-semibold text-gray-800">Cash on Delivery</span>
@@ -300,7 +300,7 @@ const PaymentInfo = ({
                 <input
                   required
                   placeholder={user && user.name}
-                  className="w-full h-11 px-4 text-[16px] border border-gray-300 rounded-md shadow-sm placeholder:text-gray-500 placeholder:font-normal  focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                  className="w-full h-11 px-4 text-[16px] border border-gray-300 rounded-sm shadow-sm placeholder:text-gray-500 placeholder:font-normal  focus:outline-none focus:ring-orange-500 focus:border-orange-500"
                 />
               </div>
 
@@ -310,7 +310,7 @@ const PaymentInfo = ({
                 </label>
                 <div className="w-full h-11 flex items-center">
                   <CardExpiryElement
-                    className="w-full h-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 bg-white"
+                    className="w-full h-full px-4 py-3 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 bg-white"
                     options={{
                       style: {
                         base: {
@@ -339,7 +339,7 @@ const PaymentInfo = ({
                 </label>
                 <div className="w-full h-11 flex items-center">
                   <CardNumberElement
-                    className="w-full h-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 bg-white"
+                    className="w-full h-full px-4 py-3 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 bg-white"
                     options={{
                       style: {
                         base: {
@@ -364,7 +364,7 @@ const PaymentInfo = ({
                 <label className="block text-sm font-semibold mb-1">CVV</label>
                 <div className="w-full h-11 flex items-center">
                   <CardCvcElement
-                    className="w-full h-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 bg-white"
+                    className="w-full h-full px-4 py-3 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 bg-white"
                     options={{
                       style: {
                         base: {
@@ -388,7 +388,7 @@ const PaymentInfo = ({
 
             <button
               type="submit"
-              className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold text-lg shadow-lg transition"
+              className="w-full py-3 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold text-lg transition"
             >
               Submit
             </button>
@@ -398,7 +398,7 @@ const PaymentInfo = ({
         {select === 2 && (
           <div className="w-full flex flex-col gap-4">
             <button
-              className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold text-lg shadow-lg transition"
+              className="w-full py-3 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold text-lg transition"
               onClick={() => setOpen(true)}
             >
               Pay Now
@@ -406,7 +406,7 @@ const PaymentInfo = ({
 
             {open && (
               <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50">
-                <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md relative">
+                <div className="bg-white rounded-sm shadow-lg p-8 w-full max-w-md relative">
                   <button
                     className="absolute top-3 right-3 text-gray-400 hover:text-orange-500"
                     onClick={() => setOpen(false)}
@@ -434,7 +434,7 @@ const PaymentInfo = ({
           <form className="w-full mt-2" onSubmit={cashOnDeliveryHandler}>
             <button
               type="submit"
-              className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold text-lg shadow-lg transition"
+              className="w-full py-3 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold text-lg transition"
             >
               Confirm
             </button>
@@ -448,16 +448,16 @@ const PaymentInfo = ({
 const CartData = ({ orderData }) => {
   const shipping = orderData?.shipping?.toFixed(2);
   return (
-    <div className="bg-white rounded-2xl shadow-lg pb-2 pt-8 pl-8 pr-8">
+    <div className="bg-white rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] pb-2 pt-8 pl-8 pr-8">
       <div className="flex justify-between mb-3">
         <span className="text-base font-medium text-gray-700">Subtotal:</span>
-        <span className="text-lg font-bold text-gray-900">
+        <span className="text-lg font-bold text-gray-800">
           ${orderData?.subTotalPrice}
         </span>
       </div>
       <div className="flex justify-between mb-3">
         <span className="text-base font-medium text-gray-700">Shipping:</span>
-        <span className="text-lg font-bold text-gray-900">${shipping}</span>
+        <span className="text-lg font-bold text-gray-800">${shipping}</span>
       </div>
       <div className="flex justify-between border-b pb-3 mb-3">
         <span className="text-base font-medium text-gray-700">Discount:</span>
@@ -466,7 +466,7 @@ const CartData = ({ orderData }) => {
         </span>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-lg font-semibold text-gray-900">Total:</span>
+        <span className="text-lg font-semibold text-gray-800">Total:</span>
         <span className="text-2xl font-bold text-orange-500">
           ${orderData?.totalPrice}
         </span>

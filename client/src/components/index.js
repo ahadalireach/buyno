@@ -1,38 +1,41 @@
-import RegisterSeller from "./Auth/Seller/RegisterSeller";
-import SellerLogin from "./Auth/Seller/SellerLogin";
-import RegisterUser from "./Auth/User/RegisterUser";
-import UserLogin from "./Auth/User/UserLogin";
-import Cart from "./Cart/Cart";
 import Hero from "./Home/Hero";
-import BestDeals from "./Home/BestDeals";
-import Categories from "./Home/Categories";
-import FeaturedProducts from "./Home/FeaturedProducts";
+import Cart from "./Cart/Cart";
 import Brands from "./Home/Brands";
-import Breadcrumb from "./Layout/Breadcrumb";
+import Events from "./Home/Events";
 import Header from "./Layout/Header";
 import Footer from "./Layout/Footer";
 import Loader from "./Layout/Loader";
-import EventCard from "./Misc/EventCard";
-import Events from "./Misc/Events";
-import ProductCard from "./Products/ProductCard";
-import ProductDetailsCard from "./Products/ProductDetailsCard";
-import ProductDetails from "./Products/ProductDetails";
 import Ratings from "./Products/Ratings";
-import SuggestedProducts from "./Products/SuggestedProducts";
-import SellerProfileSideBar from "./Profile/Seller/SellerProfileSideBar";
-import SellerProfileData from "./Profile/Seller/SellerProfileData";
-import UserProfileData from "./Profile/User/UserProfileData";
-import UserProfileSideBar from "./Profile/User/UserProfileSideBar";
-import CreateEvent from "./SellerDashboard/CreateEvent";
-import AddProduct from "./SellerDashboard/AddProduct";
-import DashboardHeader from "./SellerDashboard/DashboardHeader";
-import DashboardSideBar from "./SellerDashboard/DashboardSideBar";
-import SellerProducts from "./SellerDashboard/SellerProducts";
-import SellerEvents from "./SellerDashboard/SellerEvents";
+import EventCard from "./Misc/EventCard";
+import BestDeals from "./Home/BestDeals";
 import Wishlist from "./Wishlist/Wishlist";
-import CouponCode from "./SellerDashboard/CouponCode";
-import Checkout from "./UserDashboard/Checkout";
+import Categories from "./Home/Categories";
+import Breadcrumb from "./Layout/Breadcrumb";
 import Payment from "./UserDashboard/Payment";
+import UserLogin from "./Auth/User/UserLogin";
+import Checkout from "./UserDashboard/Checkout";
+import ProductCard from "./Products/ProductCard";
+import SellerLogin from "./Auth/Seller/SellerLogin";
+import RegisterUser from "./Auth/User/RegisterUser";
+import SellerEvents from "./SellerDashboard/Events";
+import CouponCode from "./SellerDashboard/CouponCode";
+import AddProduct from "./SellerDashboard/AddProduct";
+import ProductDetails from "./Products/ProductDetails";
+import FeaturedProducts from "./Home/FeaturedProducts";
+import OrderDetails from "./UserDashboard/OrderDetails";
+import CreateEvent from "./SellerDashboard/CreateEvent";
+import RegisterSeller from "./Auth/Seller/RegisterSeller";
+import SuggestedProducts from "./Products/SuggestedProducts";
+import UserProfileData from "./Profile/User/UserProfileData";
+import DashboardOrder from "./SellerDashboard/DashboardOrder";
+import SellerProducts from "./SellerDashboard/SellerProducts";
+import ProductDetailsCard from "./Products/ProductDetailsCard";
+import DashboardHeader from "./SellerDashboard/DashboardHeader";
+import DashboardOrders from "./SellerDashboard/DashboardOrders";
+import DashboardSideBar from "./SellerDashboard/DashboardSideBar";
+import UserProfileSideBar from "./Profile/User/UserProfileSideBar";
+import SellerProfileData from "./Profile/Seller/SellerProfileData";
+import SellerProfileSideBar from "./Profile/Seller/SellerProfileSideBar";
 
 export {
   Cart,
@@ -41,33 +44,36 @@ export {
   Footer,
   Loader,
   Events,
-  EventCard,
-  Ratings,
-  Wishlist,
-  SellerLogin,
-  UserLogin,
-  RegisterUser,
-  RegisterSeller,
-  Breadcrumb,
-  BestDeals,
-  Categories,
   Brands,
-  ProductCard,
-  ProductDetails,
-  SellerProfileSideBar,
-  UserProfileData,
-  CreateEvent,
-  AddProduct,
-  DashboardHeader,
-  DashboardSideBar,
-  SellerProducts,
-  SellerEvents,
-  UserProfileSideBar,
-  ProductDetailsCard,
-  CouponCode,
-  SuggestedProducts,
-  FeaturedProducts,
-  SellerProfileData,
-  Checkout,
+  Ratings,
   Payment,
+  Wishlist,
+  Checkout,
+  BestDeals,
+  UserLogin,
+  EventCard,
+  Categories,
+  AddProduct,
+  CouponCode,
+  Breadcrumb,
+  CreateEvent,
+  ProductCard,
+  SellerLogin,
+  OrderDetails,
+  SellerEvents,
+  RegisterUser,
+  DashboardOrder,
+  SellerProducts,
+  RegisterSeller,
+  ProductDetails,
+  UserProfileData,
+  DashboardHeader,
+  DashboardOrders,
+  DashboardSideBar,
+  FeaturedProducts,
+  SuggestedProducts,
+  SellerProfileData,
+  ProductDetailsCard,
+  UserProfileSideBar,
+  SellerProfileSideBar,
 };

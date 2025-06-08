@@ -67,12 +67,12 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   };
 
   return (
-    <div className="bg-[#fff]">
+    <div>
       {data ? (
         <div className="fixed w-full h-screen top-0 left-0 bg-black/30 z-40 flex items-center justify-center">
-          <div className="w-[95%] max-w-4xl h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl relative p-6 flex flex-col gap-4">
+          <div className="w-[95%] max-w-4xl h-[90vh] overflow-y-auto bg-white rounded-sm shadow-sm relative p-6 flex flex-col gap-4">
             <button
-              className="absolute right-4 top-4 z-50 bg-white rounded-full p-2 shadow hover:bg-orange-100 transition"
+              className="absolute right-4 top-4 z-50 bg-white rounded-sm p-2 shadow hover:bg-orange-100 transition"
               onClick={() => setOpen(false)}
               aria-label="Close"
             >
@@ -96,7 +96,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                           encodeURIComponent(data.name || "Product")
                     }
                     alt={data.name}
-                    className="w-[220px] h-[220px] object-contain rounded-xl bg-gray-50 shadow"
+                    className="w-[220px] h-[220px] object-contain rounded-sm shadow-sm bg-gray-50"
                   />
                 </div>
                 <Link
@@ -118,7 +118,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                           encodeURIComponent(data.seller?.name || "Seller")
                     }
                     alt={data.seller.name}
-                    className="w-12 h-12 rounded-full border-2 border-orange-400 object-cover"
+                    className="w-12 h-12 rounded-full border-2 border-gray-400 object-cover"
                   />
                   <div>
                     <h3 className="font-semibold text-orange-500">
@@ -130,7 +130,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   </div>
                 </Link>
                 <button
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-orange-500 text-white font-semibold rounded-lg py-2 shadow hover:opacity-90 transition"
+                  className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-gray-300 hover:text-black text-white font-semibold rounded-sm py-2"
                   onClick={handleMessageSubmit}
                 >
                   Send Message <AiOutlineMessage size={20} />
@@ -141,7 +141,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
               </div>
 
               <div className="flex-1 flex flex-col gap-4">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                <h1 className="text-2xl font-bold text-gray-800 mb-2">
                   {data.name}
                 </h1>
                 <p className="text-gray-700 mb-2">{data.description}</p>
@@ -159,7 +159,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 </div>
 
                 <div className="flex items-center gap-6 mt-4">
-                  <div className="flex items-center border rounded-lg overflow-hidden">
+                  <div className="flex items-center border rounded-sm overflow-hidden">
                     <button
                       className="bg-gray-100 text-gray-700 px-3 py-2 hover:bg-orange-100 transition"
                       onClick={decrementCount}
@@ -177,7 +177,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                     </button>
                   </div>
                   <button
-                    className="bg-white rounded-full p-2 shadow hover:bg-orange-100 transition"
+                    className="bg-white rounded-sm p-2 shadow hover:bg-orange-100 transition"
                     onClick={() =>
                       click
                         ? removeFromWishlistHandler(data)
@@ -196,7 +196,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 </div>
 
                 <button
-                  className="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg py-3 shadow-lg transition"
+                  className="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-gray-800 text-white font-semibold rounded-sm py-3 transition"
                   onClick={() => addToCartHandler(data._id)}
                 >
                   Add to cart <AiOutlineShoppingCart size={22} />

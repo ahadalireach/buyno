@@ -16,11 +16,14 @@ import ProductDetailsPage from "./Products/ProductDetailsPage";
 import OrderSuccessPage from "./UserDashboard/OrderSuccessPage";
 import UserActivationPage from "./Auth/User/UserActivationPage";
 import CreateEventPage from "./SellerDashboard/CreateEventPage";
-import SellerEventsPage from "./SellerDashboard/SellerEventsPage";
+import OrderDetailsPage from "./UserDashboard/OrderDetailsPage";
+import SellerEventsPage from "./SellerDashboard/EventsPage";
 import SellerRegisterPage from "./Auth/Seller/SellerRegisterPage";
-import DashboardHomePage from "./SellerDashboard/DashboardHomePage";
+import MainPage from "./SellerDashboard/MainPage";
+import OrderPage from "./SellerDashboard/OrderPage";
 import SellerActivationPage from "./Auth/Seller/SellerActivationPage";
-import SellerProductsPage from "./SellerDashboard/SellerProductsPage";
+import ProductsPage from "./SellerDashboard/ProductsPage";
+import OrdersPage from "./SellerDashboard/OrdersPage";
 import BestSellingProductsPage from "./Products/BestSellingProductsPage";
 import SellerProfilePreviewPage from "./Profile/SellerProfilePreviewPage";
 
@@ -41,12 +44,15 @@ export {
   SellerEventsPage,
   OrderSuccessPage,
   UserRegisterPage,
+  OrderDetailsPage,
   SellerProfilePage,
-  DashboardHomePage,
+  MainPage,
+  OrderPage,
   ProductDetailsPage,
-  SellerProductsPage,
+  ProductsPage,
   UserActivationPage,
   SellerRegisterPage,
+  OrdersPage,
   SellerActivationPage,
   BestSellingProductsPage,
   SellerProfilePreviewPage,

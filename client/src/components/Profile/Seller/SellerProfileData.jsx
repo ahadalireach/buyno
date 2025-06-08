@@ -22,12 +22,12 @@ const SellerProfileData = ({ isOwner }) => {
 
   return (
     <div className="w-full">
-      <div className="flex w-full items-center justify-between border-b border-orange-100 pb-2">
+      <div className="flex w-full items-center justify-between border-b border-gray-100 pb-2">
         <div className="flex gap-6">
           <button
             className={`text-[18px] font-semibold px-2 py-1 rounded-t transition-colors ${
               active === 1
-                ? "text-orange-500 border-b-2 border-orange-500 bg-orange-50"
+                ? "text-gray-500 border-b-2 border-gray-800 bg-gray-50"
                 : "text-gray-700"
             }`}
             onClick={() => setActive(1)}
@@ -37,7 +37,7 @@ const SellerProfileData = ({ isOwner }) => {
           <button
             className={`text-[18px] font-semibold px-2 py-1 rounded-t transition-colors ${
               active === 2
-                ? "text-orange-500 border-b-2 border-orange-500 bg-orange-50"
+                ? "text-gray-500 border-b-2 border-gray-800 bg-gray-50"
                 : "text-gray-700"
             }`}
             onClick={() => setActive(2)}
@@ -47,7 +47,7 @@ const SellerProfileData = ({ isOwner }) => {
           <button
             className={`text-[18px] font-semibold px-2 py-1 rounded-t transition-colors ${
               active === 3
-                ? "text-orange-500 border-b-2 border-orange-500 bg-orange-50"
+                ? "text-gray-500 border-b-2 border-gray-800 bg-gray-50"
                 : "text-gray-700"
             }`}
             onClick={() => setActive(3)}
@@ -57,7 +57,7 @@ const SellerProfileData = ({ isOwner }) => {
         </div>
         {isOwner && (
           <Link to="/seller/dashboard">
-            <div className="rounded h-[39.5px] bg-orange-500 hover:bg-gray-600 flex items-center justify-center px-4">
+            <div className="rounded h-[39.5px] bg-orange-500 hover:bg-gray-800 flex items-center justify-center px-4">
               <span className="text-white font-semibold">Go Dashboard</span>
             </div>
           </Link>
@@ -96,17 +96,17 @@ const SellerProfileData = ({ isOwner }) => {
             {allReviews && allReviews.length > 0 ? (
               allReviews.map((item, index) => (
                 <div
-                  className="w-full flex items-start gap-4 bg-gray-50 rounded-lg p-4 shadow-sm border border-orange-100"
+                  className="w-full flex items-start gap-4 bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-100"
                   key={index}
                 >
                   <img
                     src={item?.user?.avatar?.url}
-                    className="w-14 h-14 rounded-full border border-orange-200 object-cover"
+                    className="w-14 h-14 rounded-full border border-gray-200 object-cover"
                     alt={item?.user?.name}
                   />
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h1 className="font-semibold text-gray-900">
+                      <h1 className="font-semibold text-gray-800">
                         {item?.user?.name}
                       </h1>
                       <Ratings rating={item?.rating} />

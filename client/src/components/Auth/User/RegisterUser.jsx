@@ -61,14 +61,14 @@ const RegisterUser = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-8 shadow-lg rounded-md">
+        <div className="bg-white py-8 px-8 shadow-[0_0_20px_rgba(0,0,0,0.05)]">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="name"
-                className="block text-base font-semibold text-gray-900 mb-1"
+                className="block text-base font-semibold text-gray-800 mb-1"
               >
                 Name <span className="text-orange-600">*</span>
               </label>
@@ -79,14 +79,14 @@ const RegisterUser = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="abdulahad"
-                className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
+                className="block w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
               />
             </div>
 
             <div>
               <label
                 htmlFor="email"
-                className="block text-base font-semibold text-gray-900 mb-1"
+                className="block text-base font-semibold text-gray-800 mb-1"
               >
                 Email <span className="text-orange-600">*</span>
               </label>
@@ -97,14 +97,14 @@ const RegisterUser = () => {
                 placeholder="abdulahad@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
+                className="block w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
               />
             </div>
 
             <div>
               <label
                 htmlFor="password"
-                className="block text-base font-semibold text-gray-900 mb-1"
+                className="block text-base font-semibold text-gray-800 mb-1"
               >
                 Password <span className="text-orange-600">*</span>
               </label>
@@ -116,7 +116,7 @@ const RegisterUser = () => {
                   placeholder="•••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
+                  className="block w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
                 />
                 {visible ? (
                   <AiOutlineEye
@@ -155,7 +155,7 @@ const RegisterUser = () => {
                 </span>
                 <label
                   htmlFor="file-input"
-                  className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                  className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-sm shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                 >
                   <span>Upload a file</span>
                   <input
@@ -173,7 +173,7 @@ const RegisterUser = () => {
             <div>
               <button
                 type="submit"
-                className={`w-full py-2 bg-orange-600 hover:bg-gray-800 text-white rounded-md font-semibold tracking-wide transition flex items-center justify-center`}
+                className={`w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold tracking-wide transition flex items-center justify-center`}
                 disabled={loading}
               >
                 {loading ? (
@@ -205,7 +205,7 @@ const RegisterUser = () => {
             <div className="flex gap-4 mt-4">
               <Link
                 to="/user/login"
-                className="w-full py-2 bg-gray-300 text-black text-base text-center rounded-md font-semibold hover:bg-gray-800 hover:text-white transition"
+                className="w-full py-2 bg-gray-300 text-black text-base text-center rounded-sm font-semibold hover:bg-gray-800 hover:text-white transition"
               >
                 Already have an account?
               </Link>

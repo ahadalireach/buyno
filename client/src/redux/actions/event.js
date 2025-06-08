@@ -55,7 +55,7 @@ export const getAllSellerEvents = (id) => async (dispatch) => {
 export const deleteEvent = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: "deleteeventRequest",
+      type: "deleteEventRequest",
     });
 
     const { data } = await axios.delete(
@@ -65,13 +65,15 @@ export const deleteEvent = (id) => async (dispatch) => {
       }
     );
 
+    console.log(data);
+
     dispatch({
-      type: "deleteeventSuccess",
+      type: "deleteEventSuccess",
       payload: data.message,
     });
   } catch (error) {
     dispatch({
-      type: "deleteeventFail",
+      type: "deleteEventFail",
       payload: error.response.data.message,
     });
   }

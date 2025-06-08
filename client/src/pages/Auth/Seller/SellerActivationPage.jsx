@@ -35,7 +35,7 @@ const SellerActivationPage = () => {
         transition={{ duration: 0.7, ease: [0.36, 1.01, 0.32, 1] }}
       >
         <motion.div
-          className="bg-white py-10 px-8 shadow-2xl rounded-xl flex flex-col items-center border border-orange-200"
+          className="bg-white py-10 px-8 shadow-[0_0_20px_rgba(0,0,0,0.05)] rounded-sm flex flex-col items-center border border-gray-200"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
@@ -81,7 +81,7 @@ const SellerActivationPage = () => {
             </svg>
           </motion.div>
           <motion.h2
-            className="text-3xl font-extrabold text-gray-900 text-center mb-3 uppercase tracking-wide drop-shadow"
+            className="text-3xl font-extrabold text-gray-800 text-center mb-3 uppercase tracking-wide drop-shadow"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
@@ -101,7 +101,7 @@ const SellerActivationPage = () => {
           {!error && (
             <motion.a
               href="/seller/login"
-              className="mt-4 inline-block px-6 py-2 bg-orange-500 text-white rounded-lg font-semibold shadow hover:bg-orange-600 transition-all duration-300"
+              className="mt-4 inline-block px-6 py-2 bg-orange-500 text-white rounded-sm font-semibold shadow hover:bg-gray-800 transition-all duration-300"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.4 }}

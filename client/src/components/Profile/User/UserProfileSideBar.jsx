@@ -41,31 +41,30 @@ const UserSideBar = ({ setActive, active }) => {
   };
 
   return (
-    <div className="w-full bg-white shadow-lg rounded-2xl p-2 pt-4 md:p-4 md:pt-8">
+    <div className="w-full bg-white shadow-[0_0_20px_rgba(0,0,0,0.05)] rounded-sm p-2 pt-4 md:p-4 md:pt-8">
       {sidebarItems.map((item) => {
         const Icon = item.icon;
         const isActive = active === item.key;
         return (
           <div
             key={item.key}
-            className={`flex items-center gap-3 cursor-pointer w-full mb-2 md:mb-4 px-2 md:px-3 py-2 rounded-lg transition
-              ${
-                isActive
-                  ? "bg-orange-50 text-orange-500 font-semibold shadow"
-                  : "hover:bg-orange-50"
-              }
-            `}
+            className={`flex items-center gap-3 cursor-pointer w-full mb-2 md:mb-4 px-2 md:px-3 py-2 rounded-sm transition
+                ${isActive ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"}
+              `}
             onClick={() => {
               setActive(item.key);
               if (item.route) navigate(item.route);
             }}
           >
-            <Icon size={22} color={isActive ? "#FF7D1A" : "#888"} />
+            <Icon
+              size={22}
+              className={isActive ? "text-gray-800" : "text-gray-500"}
+            />
             <span
               className={`
                 pl-1
                 hidden md:inline
-                ${isActive ? "text-orange-500" : "text-gray-700"}
+                ${isActive ? "text-gray-800" : "text-gray-500"}
               `}
             >
               {item.label}

@@ -98,7 +98,7 @@ const Footer = () => {
             />
             <button
               type="submit"
-              className="mt-4 w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 transition text-white font-semibold py-3 rounded"
+              className="mt-4 w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-gray-700 transition text-white font-semibold py-3 rounded"
             >
               <svg
                 className="w-5 h-5"

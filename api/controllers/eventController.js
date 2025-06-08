@@ -1,3 +1,4 @@
+const fs = require("fs");
 const Event = require("../models/Event");
 const Seller = require("../models/Seller");
 const errorHandler = require("../utils/errorHandler");

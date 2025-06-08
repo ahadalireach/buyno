@@ -66,7 +66,7 @@ const Categories = () => {
                     className="w-20 h-20 object-contain rounded-md"
                   />
                 </div>
-                <span className="mt-4 text-center text-lg font-semibold text-gray-900 group-hover:text-orange-500 transition">
+                <span className="mt-4 text-center text-lg font-semibold text-gray-800 group-hover:text-orange-500 transition">
                   {category.title}
                 </span>
               </div>
@@ -77,7 +77,7 @@ const Categories = () => {
 
       <div className="w-full mt-8">
         <div
-          className="relative overflow-hidden bg-gray-900 py-6 px-0"
+          className="relative overflow-hidden bg-gray-800 py-6 px-0"
           style={{ minHeight: 80 }}
         >
           <div

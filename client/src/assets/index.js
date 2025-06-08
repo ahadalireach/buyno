@@ -11,7 +11,7 @@ import dawlance from "./brands/dawlance.png";
 import others from "./categories/others.jpeg";
 import fitness from "./categories/fitness.jpg";
 import clothes from "./categories/clothes.png";
-import furniture from "./categories/furniture.jpg";
+import furniture from "./categories/furniture.png";
 import groceries from "./categories/groceries.jpg";
 import stationery from "./categories/stationery.png";
 import electronics from "./categories/electronics.png";

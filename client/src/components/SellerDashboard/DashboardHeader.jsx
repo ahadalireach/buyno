@@ -18,7 +18,7 @@ const DashboardHeader = () => {
         <img src={logo} alt="Logo" className="h-7 sm:h-12" />
       </Link>
       <div className="flex items-center gap-2 sm:gap-6">
-        <Link to="/seller/dashboard-coupons" title="Coupons">
+        <Link to="/seller/dashboard-coupon-codes" title="Coupons">
           <AiOutlineGift
             size={24}
             className="text-gray-600 hover:text-orange-500 transition"

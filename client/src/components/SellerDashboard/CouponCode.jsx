@@ -6,7 +6,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import axios from "axios";
 import Loader from "../Layout/Loader";
 
-const AllCoupons = () => {
+const CouponCode = () => {
   const [name, setName] = useState("");
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
@@ -90,15 +90,15 @@ const AllCoupons = () => {
         <div className="w-full px-2 md:px-10 pt-2 overflow-x-auto">
           <div className="w-full flex justify-end mb-4">
             <button
-              className="bg-orange-500 hover:bg-gray-600 text-white font-semibold px-5 py-2 rounded-lg transition"
+              className="bg-gray-300 hover:bg-gray-800 hover:text-white font-semibold px-5 py-2 rounded-sm transition-shadow duration-300 focus:outline-none"
               onClick={() => setOpen(true)}
             >
               Create Coupon Code
             </button>
           </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 shadow rounded-lg">
-              <thead className="bg-orange-500 text-white">
+          <div className="overflow-x-auto shadow-[0_0_20px_rgba(0,0,0,0.05)] rounded-sm">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-800 text-white rounded-sm">
                 <tr>
                   <th className="px-4 py-2 text-left text-sm font-medium">
                     ID
@@ -141,7 +141,7 @@ const AllCoupons = () => {
                       </td>
                       <td className="px-4 py-2">
                         <button
-                          className="bg-red-100 hover:bg-red-200 text-red-600 rounded-full p-2 transition"
+                          className="bg-red-700 hover:bg-red-800 text-white rounded-full p-2 shadow-md transition-shadow duration-300 focus:outline-none"
                           title="Delete"
                           onClick={() => handleDelete(item._id)}
                         >
@@ -163,20 +163,20 @@ const AllCoupons = () => {
 
           {open && (
             <div className="fixed w-full h-screen bg-[#0000004b] top-0 left-0 flex items-center justify-center z-50">
-              <div className="w-full max-w-[35rem] bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 relative overflow-y-scroll max-h-[90vh]">
+              <div className="w-full max-w-[35rem] bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10 relative overflow-y-scroll max-h-[90vh]">
                 <div className="w-full flex justify-end p-3">
                   <RxCross1
                     size={30}
-                    className="cursor-pointer text-gray-500 hover:text-orange-500"
+                    className="cursor-pointer text-gray-500 hover:text-gray-800 transition-colors"
                     onClick={() => setOpen(false)}
                   />
                 </div>
-                <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">
+                <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
                   Create Coupon Code
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-base font-semibold text-gray-900 mb-1">
+                    <label className="block text-base font-semibold text-gray-800 mb-1">
                       Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -184,13 +184,13 @@ const AllCoupons = () => {
                       name="name"
                       required
                       value={name}
-                      className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
+                      className="block w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Enter coupon code name..."
                     />
                   </div>
                   <div>
-                    <label className="block text-base font-semibold text-gray-900 mb-1">
+                    <label className="block text-base font-semibold text-gray-800 mb-1">
                       Discount Percentage{" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -199,40 +199,46 @@ const AllCoupons = () => {
                       name="value"
                       value={value}
                       required
-                      className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
+                      max={100}
+                      min={1}
+                      className="block w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
                       onChange={(e) => setValue(e.target.value)}
                       placeholder="Enter discount value..."
                     />
                   </div>
                   <div>
-                    <label className="block text-base font-semibold text-gray-900 mb-1">
+                    <label className="block text-base font-semibold text-gray-800 mb-1">
                       Min Amount
                     </label>
                     <input
                       type="number"
                       name="minAmount"
                       value={minAmount}
-                      className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
+                      min={1}
+                      max={1000000}
+                      className="block w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
                       onChange={(e) => setMinAmount(e.target.value)}
                       placeholder="Enter min amount..."
                     />
                   </div>
                   <div>
-                    <label className="block text-base font-semibold text-gray-900 mb-1">
+                    <label className="block text-base font-semibold text-gray-800 mb-1">
                       Max Amount
                     </label>
                     <input
                       type="number"
                       name="maxAmount"
                       value={maxAmount}
-                      className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
+                      min={1}
+                      max={1000000}
+                      className="block w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
                       onChange={(e) => setMaxAmount(e.target.value)}
                       placeholder="Enter max amount..."
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-2 bg-orange-500 hover:bg-gray-600 text-white rounded-md font-semibold transition"
+                    className="w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
                   >
                     Create
                   </button>
@@ -246,4 +252,4 @@ const AllCoupons = () => {
   );
 };
 
-export default AllCoupons;
+export default CouponCode;

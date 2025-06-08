@@ -182,7 +182,7 @@ const Header = () => {
 
             <Link
               to={`${isSeller ? "/seller/dashboard" : "/seller/register"}`}
-              className="ml-4 px-4 py-2 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 transition"
+              className="ml-4 px-4 py-2 bg-orange-500 text-white rounded-lg font-medium hover:bg-gray-800 transition"
             >
               {isSeller ? "Go Dashboard" : "Become Seller"}
             </Link>
@@ -201,7 +201,7 @@ const Header = () => {
       <div
         className={`${
           active ? "shadow-sm z-10" : ""
-        } transition hidden 800px:flex items-center w-full bg-gray-900 h-[60px]`}
+        } transition hidden 800px:flex items-center w-full bg-gray-800 h-[60px]`}
       >
         <div className="w-[95%] sm:w-11/12 mx-auto flex justify-between items-center h-full px-2">
           <div
@@ -210,7 +210,7 @@ const Header = () => {
             style={{ zIndex: 20 }}
           >
             <button
-              className="h-full w-full flex justify-between items-center pl-8 pr-4 bg-orange-500 hover:bg-orange-600 text-white font-sans text-base font-medium select-none"
+              className="h-full w-full flex justify-between items-center pl-8 pr-4 bg-orange-500 text-white font-sans text-base font-medium select-none"
               onClick={() => setDropDown((prev) => !prev)}
               type="button"
             >
@@ -343,7 +343,7 @@ const Header = () => {
               <Link
                 to="/seller/register"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg font-medium text-center hover:bg-orange-600 transition"
+                className="block mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg font-medium text-center hover:bg-gray-800 transition"
               >
                 Become Seller
               </Link>

@@ -135,7 +135,7 @@ const Checkout = () => {
             discountPercentenge={discountPercentenge}
           />
           <button
-            className="w-full mt-8 py-3 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-lg font-semibold text-lg shadow-lg transition flex items-center justify-center"
+            className="w-full mt-8 py-3 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold text-lg transition flex items-center justify-center"
             onClick={paymentSubmit}
           >
             Go to Payment
@@ -173,8 +173,8 @@ const ShippingInfo = ({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+    <div className="bg-white rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] p-8 mb-6">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
         Shipping Address
       </h2>
       <form className="space-y-5">
@@ -187,7 +187,7 @@ const ShippingInfo = ({
               type="text"
               value={user && user.name}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
+              className="w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
               readOnly
             />
           </div>
@@ -199,7 +199,7 @@ const ShippingInfo = ({
               type="email"
               value={user && user.email}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
+              className="w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
               readOnly
             />
           </div>
@@ -213,7 +213,7 @@ const ShippingInfo = ({
               type="number"
               required
               value={user && user.phoneNumber}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
+              className="w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
               readOnly
             />
           </div>
@@ -224,7 +224,7 @@ const ShippingInfo = ({
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
+              className="w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
             />
           </div>
         </div>
@@ -232,7 +232,7 @@ const ShippingInfo = ({
           <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">Country</label>
             <select
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
+              className="w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
             >
@@ -248,7 +248,7 @@ const ShippingInfo = ({
           <div className="flex-1">
             <label className="block text-sm font-semibold mb-1">City</label>
             <select
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
+              className="w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
               value={city}
               onChange={(e) => setCity(e.target.value)}
             >
@@ -272,7 +272,7 @@ const ShippingInfo = ({
               required
               value={address1}
               onChange={(e) => setAddress1(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
+              className="w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
             />
           </div>
           <div className="flex-1">
@@ -284,7 +284,7 @@ const ShippingInfo = ({
               value={address2}
               onChange={(e) => setAddress2(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
+              className="w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
             />
           </div>
         </div>
@@ -295,7 +295,7 @@ const ShippingInfo = ({
       >
         Choose From Saved Address
       </button>
-      {userInfo && (
+      {userInfo ? (
         <div className="mt-3 space-y-2">
           {user &&
             user.addresses.map((item, index) => (
@@ -313,6 +313,13 @@ const ShippingInfo = ({
               </div>
             ))}
         </div>
+      ) : (
+        <div className="mt-3 text-gray-500">
+          <p>
+            You can save your address for future use in your profile settings.
+          </p>
+          <p>Please fill in the details above to proceed with your order.</p>
+        </div>
       )}
     </div>
   );
@@ -328,16 +335,16 @@ const CartData = ({
   discountPercentenge,
 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8">
+    <div className="bg-white rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] p-8">
       <div className="flex justify-between mb-3">
         <span className="text-base font-medium text-gray-700">Subtotal:</span>
-        <span className="text-lg font-bold text-gray-900">
+        <span className="text-lg font-bold text-gray-800">
           ${subTotalPrice}
         </span>
       </div>
       <div className="flex justify-between mb-3">
         <span className="text-base font-medium text-gray-700">Shipping:</span>
-        <span className="text-lg font-bold text-gray-900">
+        <span className="text-lg font-bold text-gray-800">
           ${shipping.toFixed(2)}
         </span>
       </div>
@@ -348,7 +355,7 @@ const CartData = ({
         </span>
       </div>
       <div className="flex justify-between items-center pt-2 mb-6">
-        <span className="text-lg font-semibold text-gray-900">Total:</span>
+        <span className="text-lg font-semibold text-gray-800">Total:</span>
         <span className="text-2xl font-bold text-orange-500">
           ${totalPrice}
         </span>
@@ -356,14 +363,14 @@ const CartData = ({
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           type="text"
-          className="h-11 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
+          className="h-11 px-3 border border-gray-300 rounded-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
           placeholder="Coupon code"
           value={couponCode}
           onChange={(e) => setCouponCode(e.target.value)}
           required
         />
         <button
-          className="w-full h-11 bg-orange-500 hover:bg-orange-600 text-white rounded-md font-semibold text-base transition"
+          className="w-full h-11 bg-gray-300 hover:bg-gray-800 text-black hover:text-white rounded-sm font-semibold text-base transition"
           type="submit"
         >
           Apply Code

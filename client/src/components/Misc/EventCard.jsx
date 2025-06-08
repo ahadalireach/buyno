@@ -33,16 +33,16 @@ const EventCard = ({ active, data }) => {
 
   return (
     <div
-      className={`relative rounded-2xl overflow-hidden shadow-lg transition hover:shadow-xl ${
-        active ? "border-2 border-orange-500" : "mb-10 border-2"
+      className={`relative rounded-sm overflow-hidden shadow-sm ${
+        active ? "border-2 border-gray-300" : "mb-10 border-2"
       }`}
     >
-      <span className="absolute top-4 left-4 bg-orange-600 text-white text-xs font-semibold px-3 py-1 rounded-full z-10 shadow">
+      <span className="absolute top-4 left-4 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full z-10 shadow">
         🎉 Event of The Day
       </span>
 
       <div className="flex flex-col md:flex-row w-full">
-        <div className="md:w-1/2 w-full bg-orange-500 flex items-center justify-center p-4">
+        <div className="md:w-1/2 w-full bg-gray-200 flex items-center justify-center p-4">
           <img
             src={
               data.images && data.images[0]?.url
@@ -57,7 +57,7 @@ const EventCard = ({ active, data }) => {
                   encodeURIComponent(data.name || "Event")
             }
             alt={data.name || "Event"}
-            className="w-full h-64 md:h-96 object-contain rounded-xl bg-white"
+            className="w-full h-64 md:h-96 object-contain rounded-sm bg-white"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src =
@@ -69,7 +69,7 @@ const EventCard = ({ active, data }) => {
 
         <div className="md:w-1/2 w-full p-6 flex flex-col justify-between bg-white">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
               {truncateText(data.name, MAX_NAME_LENGTH)}
             </h2>
             <p className="text-gray-600 text-sm mb-4">
@@ -94,13 +94,13 @@ const EventCard = ({ active, data }) => {
 
           <div className="mt-6 flex flex-col sm:flex-row gap-4">
             <Link to={`/product/${data._id}?isEvent=true`} className="flex-1">
-              <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 shadow">
+              <button className="w-full bg-orange-500 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-sm transition duration-300 shadow">
                 See Details
               </button>
             </Link>
             <button
               onClick={() => addToCartHandler(data?._id)}
-              className="w-full sm:w-auto bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 shadow"
+              className="w-full sm:w-auto bg-gray-800 hover:bg-gray-300 text-white hover:text-black font-semibold py-2 px-4 rounded-sm transition duration-300 shadow"
             >
               Add to cart
             </button>

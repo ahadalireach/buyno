@@ -18,8 +18,8 @@ const FaqPage = () => {
       <Header />
       <Breadcrumb mainTitle="Commonly Asked Questions" page="FAQ" />
       <div className={`w-11/12 mx-auto my-12`}>
-        <div className="max-w-2xl mx-auto bg-white shadow-xl rounded-xl p-8">
-          <h2 className="text-4xl font-extrabold text-gray-900 mb-8 text-center tracking-tight">
+        <div className="max-w-2xl mx-auto rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] p-8">
+          <h2 className="text-4xl font-extrabold text-gray-800 mb-8 text-center tracking-tight">
             Frequently Asked Questions
           </h2>
           <div className="divide-y divide-gray-200">
@@ -29,7 +29,7 @@ const FaqPage = () => {
                   className={`flex items-center justify-between w-full text-left focus:outline-none transition-colors ${
                     activeTab === idx
                       ? "text-orange-600"
-                      : "text-gray-900 hover:text-orange-500"
+                      : "text-gray-800 hover:text-orange-500"
                   }`}
                   onClick={() => toggleTab(idx)}
                   aria-expanded={activeTab === idx}
@@ -42,7 +42,6 @@ const FaqPage = () => {
                         : "rotate-0"
                     }`}
                   >
-                    {/* Plus/close icon */}
                     <svg
                       className="h-6 w-6"
                       fill="none"

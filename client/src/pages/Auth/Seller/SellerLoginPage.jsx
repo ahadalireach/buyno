@@ -11,7 +11,7 @@ const SellerLoginPage = () => {
   useEffect(() => {
     if (!isLoading) {
       if (isSeller) {
-        navigate(`/dashboard`);
+        navigate(`/seller/dashboard`);
       }
     }
     window.scrollTo(0, 0);

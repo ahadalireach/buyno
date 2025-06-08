@@ -15,7 +15,7 @@ const Success = () => {
   return (
     <div className="flex flex-col items-center justify-center py-16">
       <div className="flex items-center justify-center mb-6">
-        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-lg">
+        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.05)]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -41,7 +41,7 @@ const Success = () => {
           </svg>
         </div>
       </div>
-      <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
+      <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
         Your order was placed successfully!
       </h2>
       <p className="text-lg text-gray-600 text-center mb-8">
@@ -50,7 +50,7 @@ const Success = () => {
       </p>
       <a
         href="/"
-        className="mt-4 px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold text-lg shadow-lg transition"
+        className="mt-4 px-8 py-3 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold text-lg transition"
       >
         Continue Shopping
       </a>

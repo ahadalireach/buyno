@@ -87,10 +87,10 @@ const ProductDetails = ({ data }) => {
   const averageRating = avg.toFixed(2);
 
   return (
-    <div className="w-full flex flex-col items-center bg-[#f5f6fb] py-8 min-h-screen">
+    <div className="w-full flex flex-col items-center py-8 min-h-screen">
       {data ? (
         <>
-          <div className="w-11/12 bg-white rounded-2xl shadow-xl p-6 flex flex-col md:flex-row gap-10 border border-orange-100">
+          <div className="w-11/12 bg-white rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] p-6 flex flex-col md:flex-row gap-10 border border-gray-100">
             <div className="flex-1 flex flex-col items-center">
               <div className="w-full flex justify-center mb-4">
                 <img
@@ -107,7 +107,7 @@ const ProductDetails = ({ data }) => {
                         encodeURIComponent(data.name || "Product")
                   }
                   alt={data?.name}
-                  className="w-[90%] h-[400px] object-contain rounded-xl bg-gray-50 shadow"
+                  className="w-[90%] h-[400px] object-contain rounded-sm bg-gray-50 shadow"
                 />
               </div>
               <div className="flex gap-2 mb-4">
@@ -126,10 +126,10 @@ const ProductDetails = ({ data }) => {
                             encodeURIComponent(data.name || "Product")
                       }
                       alt={data?.name}
-                      className={`w-16 h-16 object-contain rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+                      className={`w-16 h-16 object-contain rounded-sm shadow-sm border-2 cursor-pointer transition-all duration-200 ${
                         select === index
-                          ? "border-orange-500 shadow-lg scale-105"
-                          : "border-gray-200 hover:border-orange-300"
+                          ? "border-gray-500 shadow-lg scale-105"
+                          : "border-gray-200 hover:border-gray-300"
                       }`}
                       onClick={() => setSelect(index)}
                     />
@@ -154,7 +154,7 @@ const ProductDetails = ({ data }) => {
                         encodeURIComponent(data?.seller?.name || "Seller")
                   }
                   alt={data?.seller?.name}
-                  className="w-12 h-12 rounded-full border-2 border-orange-400 object-cover"
+                  className="w-12 h-12 rounded-full border-2 border-gray-400 object-cover"
                 />
                 <div>
                   <h3 className="font-semibold text-orange-500">
@@ -167,7 +167,7 @@ const ProductDetails = ({ data }) => {
                 </div>
               </Link>
               <button
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-orange-500 text-white font-semibold rounded-lg py-2 shadow hover:opacity-90 transition"
+                className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-gray-300 hover:text-black text-white font-semibold rounded-sm py-2 shadow-sm transition"
                 onClick={handleMessageSubmit}
               >
                 Send Message <AiOutlineMessage size={20} />
@@ -175,7 +175,7 @@ const ProductDetails = ({ data }) => {
             </div>
 
             <div className="flex-1 flex flex-col gap-4">
-              <h1 className="text-2xl font-bold text-gray-900 mb-2 leading-tight">
+              <h1 className="text-2xl font-bold text-gray-800 mb-2 leading-tight">
                 {data.name}
               </h1>
               <p className="text-gray-700 mb-2">{data.description}</p>
@@ -191,7 +191,7 @@ const ProductDetails = ({ data }) => {
                   )}
               </div>
               <div className="flex items-center gap-6 mt-4">
-                <div className="flex items-center border rounded-lg overflow-hidden bg-white shadow-sm">
+                <div className="flex items-center border rounded-sm overflow-hidden bg-white shadow-sm">
                   <button
                     className="bg-gray-100 text-gray-700 px-3 py-2 hover:bg-orange-100 transition"
                     onClick={decrementCount}
@@ -209,7 +209,7 @@ const ProductDetails = ({ data }) => {
                   </button>
                 </div>
                 <button
-                  className="bg-white rounded-full p-2 shadow hover:bg-orange-100 transition border border-orange-100"
+                  className="bg-white rounded-smll p-2 shadow hover:bg-orange-100 transition border border-gray-100"
                   onClick={() =>
                     click
                       ? removeFromWishlistHandler(data)
@@ -227,14 +227,14 @@ const ProductDetails = ({ data }) => {
                 </button>
               </div>
               <button
-                className="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg py-3 shadow-lg transition"
+                className="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-gray-800 text-white font-semibold rounded-sm py-3 shadow-lg transition"
                 onClick={() => addToCartHandler(data._id)}
               >
                 Add to cart <AiOutlineShoppingCart size={22} />
               </button>
               <div className="flex items-center mt-4">
                 <Ratings rating={data?.ratings} />
-                <span className="ml-2 text-xs font-semibold px-2 py-1 rounded-full bg-green-50 text-green-600 shadow">
+                <span className="ml-2 text-xs font-semibold px-2 py-1 rounded-smll bg-green-50 text-green-600 shadow">
                   {data.soldOut} sold
                 </span>
               </div>
@@ -272,7 +272,7 @@ const ProductDetailsInfo = ({
   const [active, setActive] = useState(1);
 
   return (
-    <div className="bg-white px-3 800px:px-10 py-6 rounded-2xl shadow-lg border border-orange-100">
+    <div className="bg-white px-3 800px:px-10 py-6 rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] border border-gray-100">
       <div className="w-full flex flex-wrap gap-4 border-b pb-2">
         <div className="relative">
           <h5
@@ -284,7 +284,7 @@ const ProductDetailsInfo = ({
             Product Details
           </h5>
           {active === 1 && (
-            <div className="h-1 bg-orange-500 rounded-t w-full mt-1" />
+            <div className="h-1 bg-orange-500 rounded-smw-full mt-1" />
           )}
         </div>
         <div className="relative">
@@ -297,7 +297,7 @@ const ProductDetailsInfo = ({
             Product Reviews
           </h5>
           {active === 2 && (
-            <div className="h-1 bg-orange-500 rounded-t w-full mt-1" />
+            <div className="h-1 bg-orange-500 rounded-smw-full mt-1" />
           )}
         </div>
         <div className="relative">
@@ -310,7 +310,7 @@ const ProductDetailsInfo = ({
             Seller Information
           </h5>
           {active === 3 && (
-            <div className="h-1 bg-orange-500 rounded-t w-full mt-1" />
+            <div className="h-1 bg-orange-500 rounded-smw-full mt-1" />
           )}
         </div>
       </div>
@@ -326,13 +326,13 @@ const ProductDetailsInfo = ({
             data.reviews &&
             data.reviews.map((item, index) => (
               <div
-                className="w-full flex my-2 bg-gray-50 rounded-lg p-3 shadow-sm"
+                className="w-full flex my-2 bg-gray-50 rounded-sm p-3 shadow-sm"
                 key={index}
               >
                 <img
                   src={`${item.user.avatar?.url}`}
                   alt=""
-                  className="w-[50px] h-[50px] rounded-full border border-orange-100"
+                  className="w-[50px] h-[50px] rounded-smll border border-gray-100"
                 />
                 <div className="pl-2 ">
                   <div className="w-full flex items-center">
@@ -373,7 +373,7 @@ const ProductDetailsInfo = ({
                       : "https://ui-avatars.com/api/?name=" +
                         encodeURIComponent(data?.seller?.name || "Seller")
                   }
-                  className="w-[50px] h-[50px] rounded-full border-2 border-orange-400"
+                  className="w-[50px] h-[50px] rounded-full border-2 border-gray-400"
                   alt={data?.seller?.name || "Seller"}
                 />
                 <div className="pl-3">
@@ -407,7 +407,7 @@ const ProductDetailsInfo = ({
                 <span className="font-[500]">{totalReviewsLength}</span>
               </h5>
               <Link to={`/seller/profile/preview/${data.seller._id}`}>
-                <div className="rounded-[4px] h-[39.5px] mt-3 bg-orange-500 flex items-center justify-center px-4">
+                <div className="rounded-smpx] h-[39.5px] mt-3 bg-orange-500 hover:bg-gray-800 flex items-center justify-center px-4">
                   <h4 className="text-white font-semibold">
                     Visit Seller Shop
                   </h4>
