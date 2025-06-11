@@ -16,9 +16,17 @@ import groceries from "./categories/groceries.jpg";
 import stationery from "./categories/stationery.png";
 import electronics from "./categories/electronics.png";
 import accessories from "./categories/accessories.jpg";
+import eventPlaceholderImg from "./eventPlaceholderImg.jpg";
+import productPlaceholderImg from "./productPlaceholderImg.jpg";
+import profilePlaceholderImg from "./profilePlaceholderImg.jpg";
+import messagePlaceholderImg from "./messagePlaceholderImg.jpg";
 
 export {
   logo,
+  eventPlaceholderImg,
+  productPlaceholderImg,
+  profilePlaceholderImg,
+  messagePlaceholderImg,
   afzal,
   imtiaz,
   dawlance,

@@ -52,6 +52,17 @@ export const productReducer = createReducer(initialState, (builder) => {
       state.isLoading = false;
       state.error = action.payload;
     })
+    .addCase("getAllProductsRequestByAdmin", (state) => {
+      state.adminProductsLoading = true;
+    })
+    .addCase("getAllProductsSuccessByAdmin", (state, action) => {
+      state.adminProductsLoading = false;
+      state.adminProducts = action.payload;
+    })
+    .addCase("getAllProductsFailByAdmin", (state, action) => {
+      state.adminProductsLoading = false;
+      state.error = action.payload;
+    })
     .addCase("clearErrors", (state) => {
       state.error = null;
     });

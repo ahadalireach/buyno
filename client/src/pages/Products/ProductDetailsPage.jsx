@@ -26,18 +26,22 @@ const ProductDetailsPage = () => {
   useEffect(() => {
     let found = null;
     if (eventData !== null) {
-      found = allEvents && allEvents.find((i) => i._id === id);
-      setData(found || null);
-      if (allEvents.length && !found) {
-        toast.error("Oops! The Event you're looking for is not found.");
-        navigate("/");
+      if (Array.isArray(allEvents)) {
+        found = allEvents.find((i) => i._id === id);
+        setData(found || null);
+        if (allEvents.length && !found) {
+          toast.error("Oops! The Event you're looking for is not found.");
+          navigate("/");
+        }
       }
     } else {
-      found = allProducts && allProducts.find((i) => i._id === id);
-      setData(found || null);
-      if (allProducts.length && !found) {
-        toast.error("Oops! The Product you're looking for is not found.");
-        navigate("/");
+      if (Array.isArray(allProducts)) {
+        found = allProducts.find((i) => i._id === id);
+        setData(found || null);
+        if (allProducts.length && !found) {
+          toast.error("Oops! The Product you're looking for is not found.");
+          navigate("/");
+        }
       }
     }
   }, [id, allProducts, allEvents, eventData, navigate]);
@@ -45,8 +49,8 @@ const ProductDetailsPage = () => {
   return (
     <>
       <Header />
-      <Breadcrumb mainTitle={data?.name || "Product"} page="Product Details" />
-      <ProductDetails data={data} />
+      <Breadcrumb mainTitle="Product Details" page="Product" />
+      {data && <ProductDetails data={data} />}
       {!eventData && data && <SuggestedProducts data={data} />}
       <Footer />
     </>

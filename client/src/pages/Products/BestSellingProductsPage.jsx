@@ -23,11 +23,13 @@ const BestSellingProductsPage = () => {
   return (
     <>
       {isLoading ? (
-        <Loader />
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader />
+        </div>
       ) : (
         <div>
           <Header />
-          <Breadcrumb mainTitle="Best Selling Products" page="Best Selling" />
+          <Breadcrumb mainTitle="Best Selling Products" page="Products" />
           <div className={`w-11/12 mx-auto mt-10`}>
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12">
               {data && data.length > 0 ? (

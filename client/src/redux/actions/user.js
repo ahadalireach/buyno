@@ -144,3 +144,27 @@ export const deleteUserAddress = (id) => async (dispatch) => {
     });
   }
 };
+
+export const getAllUsersByAdmin = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllUsersByAdminRequest",
+    });
+
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/users/admin/all-users`,
+      { withCredentials: true }
+    );
+    console.log(data);
+
+    dispatch({
+      type: "getAllUsersSuccessByAdmin",
+      payload: data.users,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllUsersByAdminFail",
+      payload: error.response?.data?.message || error.message,
+    });
+  }
+};

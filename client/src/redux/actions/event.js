@@ -65,8 +65,6 @@ export const deleteEvent = (id) => async (dispatch) => {
       }
     );
 
-    console.log(data);
-
     dispatch({
       type: "deleteEventSuccess",
       payload: data.message,
@@ -95,6 +93,30 @@ export const getAllEvents = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllEventsFail",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getAllEventsByAdmin = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllEventsRequestByAdmin",
+    });
+
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/events/admin/all-events`,
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch({
+      type: "getAllEventsSuccessByAdmin",
+      payload: data.events,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllEventsFailByAdmin",
       payload: error.response.data.message,
     });
   }

@@ -304,3 +304,47 @@ exports.updateUserPassword = catchAsyncErrors(async (req, res, next) => {
     return next(new errorHandler(error.message, 500));
   }
 });
+
+exports.getUserInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    res.status(201).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.getAllUsersByAdmin = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const users = await User.find().sort({
+      createdAt: -1,
+    });
+    res.status(201).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.deleteUserByAdmin = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return next(new errorHandler("User is not available with this id", 400));
+    }
+
+    await User.findByIdAndDelete(req.params.id);
+    res.status(201).json({
+      success: true,
+      message: "User deleted successfully.",
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});

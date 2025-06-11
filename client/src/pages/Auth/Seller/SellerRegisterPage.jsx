@@ -6,7 +6,7 @@ import {
   Breadcrumb,
   Footer,
   Header,
-  RegisterSeller,
+  SellerRegister,
 } from "../../../components";
 
 const SellerRegisterPage = () => {
@@ -24,7 +24,7 @@ const SellerRegisterPage = () => {
     <>
       <Header />
       <Breadcrumb mainTitle="Seller Registration" page="Register" />
-      <RegisterSeller />
+      <SellerRegister />
       <Footer />
     </>
   );

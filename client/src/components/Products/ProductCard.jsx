@@ -15,6 +15,7 @@ import {
 } from "../../redux/actions/wishlist";
 import Ratings from "./Ratings";
 import ProductDetailsCard from "./ProductDetailsCard";
+import { productPlaceholderImg } from "../../assets";
 
 const ProductCard = ({ data, isEvent }) => {
   const dispatch = useDispatch();
@@ -70,19 +71,16 @@ const ProductCard = ({ data, isEvent }) => {
           >
             <img
               src={
-                data.images && data.images[0]?.url
-                  ? data.images[0].url
-                  : data.images && typeof data.images[0] === "string"
-                  ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
-                      data.images[0].startsWith("/")
-                        ? data.images[0]
-                        : "/" + data.images[0]
-                    }`
-                  : "https://ui-avatars.com/api/?name=" +
-                    encodeURIComponent(data.name || "Product")
+                data?.images &&
+                data.images[0] &&
+                `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.images[0]}`
               }
               alt={data.name}
               className="w-[80%] h-[150px] object-contain transition-transform duration-300 group-hover:scale-105"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = productPlaceholderImg;
+              }}
             />
           </Link>
           <div className="absolute top-3 right-3 z-10 flex flex-col items-center gap-2">
@@ -135,9 +133,8 @@ const ProductCard = ({ data, isEvent }) => {
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
         </Link>
-
         <div className="flex items-center mb-2">
-          <Ratings rating={data?.reviews} />
+          <Ratings rating={data?.ratings} />
         </div>
 
         <div className="flex items-center justify-between mt-auto pt-2">

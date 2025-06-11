@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
 import { addToCart } from "../../redux/actions/cart";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,13 +14,18 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../redux/actions/wishlist";
+import axios from "axios";
+import { productPlaceholderImg, profilePlaceholderImg } from "../../assets";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (wishlist && wishlist.find((i) => i._id === data._id)) {
@@ -30,7 +35,32 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     }
   }, [data._id, wishlist]);
 
-  const handleMessageSubmit = () => {};
+  const handleMessageSubmit = async () => {
+    if (isAuthenticated) {
+      const groupTitle = data._id + user._id;
+      const userId = user._id;
+      const sellerId = data.seller._id;
+
+      await axios
+        .post(
+          `${process.env.REACT_APP_BACKEND_URL}/conversations/new-conversation`,
+          {
+            groupTitle,
+            userId,
+            sellerId,
+          }
+        )
+        .then((res) => {
+          navigate(`/user/inbox?${res.data.conversation._id}`);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } else {
+      toast.error("Please login to send a message!");
+      navigate("/user/login");
+    }
+  };
 
   const decrementCount = () => {
     if (count > 1) setCount(count - 1);
@@ -84,19 +114,15 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 <div className="w-full flex justify-center mb-4">
                   <img
                     src={
-                      data.images && data.images[0]?.url
-                        ? data.images[0].url
-                        : data.images && typeof data.images[0] === "string"
-                        ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
-                            data.images[0].startsWith("/")
-                              ? data.images[0]
-                              : "/" + data.images[0]
-                          }`
-                        : "https://ui-avatars.com/api/?name=" +
-                          encodeURIComponent(data.name || "Product")
+                      imgError
+                        ? productPlaceholderImg
+                        : data?.images &&
+                          data.images[0] &&
+                          `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.images[0]}`
                     }
                     alt={data.name}
                     className="w-[220px] h-[220px] object-contain rounded-sm shadow-sm bg-gray-50"
+                    onError={() => setImgError(true)}
                   />
                 </div>
                 <Link
@@ -105,20 +131,15 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 >
                   <img
                     src={
-                      data.seller?.avatar?.url
-                        ? data.seller.avatar.url
-                        : data.seller?.avatar &&
-                          typeof data.seller.avatar === "string"
-                        ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
-                            data.seller.avatar.startsWith("/")
-                              ? data.seller.avatar
-                              : "/" + data.seller.avatar
-                          }`
-                        : "https://ui-avatars.com/api/?name=" +
-                          encodeURIComponent(data.seller?.name || "Seller")
+                      data?.seller?.avatar &&
+                      `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.seller.avatar}`
                     }
                     alt={data.seller.name}
                     className="w-12 h-12 rounded-full border-2 border-gray-400 object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = profilePlaceholderImg;
+                    }}
                   />
                   <div>
                     <h3 className="font-semibold text-orange-500">

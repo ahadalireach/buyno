@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RegisterUser, Breadcrumb, Header, Footer } from "../../../components";
+import { UserRegister, Breadcrumb, Header, Footer } from "../../../components";
 
 const UserRegisterPage = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const UserRegisterPage = () => {
     <>
       <Header />
       <Breadcrumb mainTitle="User Registration" page="Register" />
-      <RegisterUser />
+      <UserRegister />
       <Footer />
     </>
   );

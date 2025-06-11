@@ -16,14 +16,24 @@ const EventsPage = () => {
   }, []);
 
   return isLoading ? (
-    <Loader />
+    <div className="flex items-center justify-center min-h-screen">
+      <Loader />
+    </div>
   ) : (
     <div className="min-h-screen">
       <Header />
       <Breadcrumb mainTitle="Hot Events" page="Events" />
       <main className="max-w-4xl mx-auto py-12 px-4">
-        {allEvents && allEvents.length > 0 ? (
-          <EventCard active={true} data={allEvents && allEvents[0]} />
+        {allEvents && allEvents.length === 1 ? (
+          <EventCard active={true} data={allEvents[0]} />
+        ) : allEvents && allEvents.length > 1 ? (
+          <div className="flex flex-col gap-8">
+            {[...allEvents]
+              .sort((a, b) => (b.soldOut || 0) - (a.soldOut || 0))
+              .map((event, idx) => (
+                <EventCard key={event._id || idx} active={true} data={event} />
+              ))}
+          </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-center py-20 text-gray-500">
             <svg

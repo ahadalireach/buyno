@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const Shop = require("../models/Seller");
+const Seller = require("../models/Seller");
 const errorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("./catchAsyncErrors");
 
@@ -30,7 +30,18 @@ exports.isSeller = catchAsyncErrors(async (req, res, next) => {
   }
 
   const decoded = jwt.verify(seller_token, process.env.JWT_SECRET_KEY);
-  req.seller = await Shop.findById(decoded.id);
+  req.seller = await Seller.findById(decoded.id);
 
   next();
 });
+
+exports.isAdmin = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new errorHandler(`${req.user.role} can not access this resources!`)
+      );
+    }
+    next();
+  };
+};

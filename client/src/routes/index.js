@@ -1,4 +1,5 @@
-import ProtectedRoute from "./ProtectedRoute";
+import UserProtectedRoute from "./UserProtectedRoute";
+import AdminProtectedRoute from "./AdminProtectedRoute";
 import SellerProtectedRoute from "./SellerProtectedRoute";
 
-export { ProtectedRoute, SellerProtectedRoute };
+export { UserProtectedRoute, AdminProtectedRoute, SellerProtectedRoute };

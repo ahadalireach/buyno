@@ -2,11 +2,12 @@
 module.exports = {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
-    fontFamily: {
-      Roboto: ["Roboto", "sans-serif"],
-      Poppins: ["Poppins", "sans-serif"],
-    },
     extend: {
+      fontFamily: {
+        heading: ["Satoshi", "sans-serif"],
+        subheading: ["Satoshi", "sans-serif"],
+        body: ["Merriweather", "serif"],
+      },
       screens: {
         "1000px": "1050px",
         "1100px": "1110px",

@@ -2,7 +2,7 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const Seller = require("../models/Seller");
 const sendMail = require("../utils/sendMail");
-const sendSellerToken = require("../utils/shopToken");
+const sendSellerToken = require("../utils/sellerToken");
 const errorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 
@@ -51,11 +51,11 @@ exports.registerSeller = catchAsyncErrors(async (req, res, next) => {
         subject: "Activate your seller account",
         name: seller.name,
         activationUrl,
-        message: `Hello ${seller.name}, please click on the link to activate your shop: ${activationUrl}`,
+        message: `Hello ${seller.name}, please click on the link to activate your seller: ${activationUrl}`,
       });
       res.status(201).json({
         success: true,
-        message: `please check your email:- ${seller.email} to activate your shop!`,
+        message: `please check your email:- ${seller.email} to activate your seller!`,
       });
     } catch (error) {
       return next(new errorHandler(error.message, 500));
@@ -171,6 +171,144 @@ exports.getSellerInfo = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
       success: true,
       seller,
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.updateSellerAvatar = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const existSeller = await Seller.findById(req.seller.id);
+    if (!existSeller) {
+      return next(new errorHandler("Seller does not exist.", 400));
+    }
+
+    if (!req.file) {
+      return next(new errorHandler("No file uploaded.", 400));
+    }
+
+    const existAvatar = `uploads/${existSeller.avatar}`;
+    if (existSeller.avatar && fs.existsSync(existAvatar)) {
+      fs.unlink(existAvatar, (err) => {
+        if (err) {
+          console.error("Error deleting old avatar:", err);
+        }
+      });
+    }
+
+    const fileUrl = req.file.filename;
+    const seller = await Seller.findByIdAndUpdate(
+      req.seller.id,
+      { avatar: fileUrl },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      seller,
+    });
+  } catch (error) {
+    if (req.file) {
+      fs.unlink(`uploads/${req.file.filename}`, () => {});
+    }
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.updateSellerInfo = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const { name, description, address, phoneNumber, zipCode, password } =
+      req.body;
+
+    const seller = await Seller.findById(req.seller._id).select("+password");
+    if (!seller) {
+      return next(new errorHandler("User not found", 400));
+    }
+    const isPasswordValid = await seller.comparePassword(password);
+    if (!isPasswordValid) {
+      return next(new errorHandler("Invalid password.", 400));
+    }
+    seller.name = name;
+    seller.description = description;
+    seller.address = address;
+    seller.phoneNumber = phoneNumber;
+    seller.zipCode = zipCode;
+    await seller.save();
+    res.status(201).json({
+      success: true,
+      seller,
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.updateSellerWithdrawMethod = catchAsyncErrors(
+  async (req, res, next) => {
+    try {
+      const { withdrawMethod } = req.body;
+      const seller = await Seller.findByIdAndUpdate(req.seller._id, {
+        withdrawMethod,
+      });
+
+      res.status(201).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      return next(new errorHandler(error.message, 500));
+    }
+  }
+);
+
+exports.deleteSellerWithdrawMethod = catchAsyncErrors(
+  async (req, res, next) => {
+    try {
+      const seller = await Seller.findById(req.seller._id);
+      if (!seller) {
+        return next(new errorHandler("Seller not found with this id.", 400));
+      }
+
+      seller.withdrawMethod = null;
+
+      await seller.save();
+      res.status(201).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      return next(new errorHandler(error.message, 500));
+    }
+  }
+);
+
+exports.getAllSellersByAdmin = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const sellers = await Seller.find().sort({
+      createdAt: -1,
+    });
+
+    res.status(201).json({
+      success: true,
+      sellers,
+    });
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.deleteSellerByAdmin = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const seller = await Seller.findById(req.params.id);
+    if (!seller) {
+      return next(new errorHandler("Seller is not found with this id.", 400));
+    }
+
+    await Seller.findByIdAndDelete(req.params.id);
+    res.status(201).json({
+      success: true,
+      message: "Seller deleted successfully.",
     });
   } catch (error) {
     return next(new errorHandler(error.message, 500));

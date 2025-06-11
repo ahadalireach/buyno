@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const CountDown = ({ data }) => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -8,16 +9,20 @@ const CountDown = ({ data }) => {
     const timer = setTimeout(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
-
-    if (
-      typeof timeLeft.days === "undefined" &&
-      typeof timeLeft.hours === "undefined" &&
-      typeof timeLeft.minutes === "undefined" &&
-      typeof timeLeft.seconds === "undefined"
-    ) {
-      axios.delete(
-        `${process.env.REACT_APP_BACKEND_URL}/events/event/${data._id}`
-      );
+    try {
+      if (
+        typeof timeLeft.days === "undefined" &&
+        typeof timeLeft.hours === "undefined" &&
+        typeof timeLeft.minutes === "undefined" &&
+        typeof timeLeft.seconds === "undefined"
+      ) {
+        axios.delete(
+          `${process.env.REACT_APP_BACKEND_URL}/events/event/${data._id}`
+        );
+      }
+    } catch (error) {
+      console.log(error?.response);
+      toast.error(error?.response?.data?.message || "Error deleting event.");
     }
 
     return () => clearTimeout(timer);
@@ -54,7 +59,7 @@ const CountDown = ({ data }) => {
             unit.value !== undefined && (
               <div
                 key={idx}
-                className="flex flex-col items-center px-4 py-2 rounded-lg bg-orange-50 border border-orange-200 shadow text-black min-w-[60px]"
+                className="flex flex-col items-center px-4 py-2 rounded-sm bg-orange-50 border border-orange-200 shadow text-black min-w-[60px]"
               >
                 <span className="font-bold text-2xl leading-none">
                   {unit.value.toString().padStart(2, "0")}

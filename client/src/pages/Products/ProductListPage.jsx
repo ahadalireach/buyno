@@ -34,7 +34,9 @@ const ProductListPage = () => {
   return (
     <>
       {isLoading ? (
-        <Loader />
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader />
+        </div>
       ) : (
         <div>
           <Header />

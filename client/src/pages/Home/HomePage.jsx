@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import {
   Hero,
   Header,
-  Events,
+  HotEvent,
   Footer,
   BestDeals,
   Brands,
@@ -21,7 +21,7 @@ const HomePage = () => {
       <Hero />
       <Categories />
       <BestDeals />
-      <Events />
+      <HotEvent />
       <FeaturedProducts />
       <Brands />
       <Footer />

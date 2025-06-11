@@ -142,7 +142,7 @@ const UserLogin = () => {
                 to="/user/register"
                 className="w-1/2 py-2 bg-gray-800 text-white text-base text-center rounded-sm font-semibold hover:bg-gray-200 hover:text-black transition"
               >
-                Create a user account
+                Create account
               </Link>
               <Link
                 to="/user/forgot-password"

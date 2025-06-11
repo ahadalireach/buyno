@@ -43,3 +43,28 @@ export const getSellerOrders = (sellerId) => async (dispatch) => {
     });
   }
 };
+
+export const getAllOrdersByAdmin = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllOrdersRequestByAdmin",
+    });
+
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/orders/admin/all-orders`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    dispatch({
+      type: "getAllOrdersSuccessByAdmin",
+      payload: data.orders,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllOrdersFailByAdmin",
+      payload: error.response.data.message,
+    });
+  }
+};

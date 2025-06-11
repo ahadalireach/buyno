@@ -12,9 +12,12 @@ const errorHandler = require("./middleware/error");
 const eventRoutes = require("./routes/eventRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const sellerRoutes = require("./routes/sellerRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 const productRoutes = require("./routes/productRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const withdrawRoutes = require("./routes/withdrawRoutes");
 const couponCodeRoutes = require("./routes/couponCodeRoutes");
+const conversationRoutes = require("./routes/conversationRoutes");
 
 process.on("uncaughtException", (err) => {
   console.log(`Error: ${err.message}`.underline);
@@ -42,6 +45,9 @@ app.use("/api/events", eventRoutes);
 app.use("/api/couponCodes", couponCodeRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/withdraws", withdrawRoutes);
+app.use("/api/conversations", conversationRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.use(errorHandler);
 const server = app.listen(process.env.PORT, () => {

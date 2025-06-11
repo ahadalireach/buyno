@@ -1,3 +1,15 @@
+import { RxDashboard } from "react-icons/rx";
+import { VscNewFile } from "react-icons/vsc";
+import { MdOutlineLocalOffer } from "react-icons/md";
+import { BiMessageSquareDetail } from "react-icons/bi";
+import { HiOutlineReceiptRefund, HiOutlineUserGroup } from "react-icons/hi";
+import { CiMoneyBill, CiSettings } from "react-icons/ci";
+import { FiShoppingBag, FiPackage } from "react-icons/fi";
+import {
+  AiOutlineFolderAdd,
+  AiOutlineGift,
+  AiOutlineSetting,
+} from "react-icons/ai";
 import {
   care,
   stationery,
@@ -16,16 +28,56 @@ import {
   pel,
   qmobile,
 } from "../assets";
-import { RxDashboard } from "react-icons/rx";
-import { VscNewFile } from "react-icons/vsc";
-import { MdOutlineLocalOffer } from "react-icons/md";
-import { BiMessageSquareDetail } from "react-icons/bi";
-import { HiOutlineReceiptRefund } from "react-icons/hi";
-import { CiMoneyBill, CiSettings } from "react-icons/ci";
-import { FiShoppingBag, FiPackage } from "react-icons/fi";
-import { AiOutlineFolderAdd, AiOutlineGift } from "react-icons/ai";
+import { GrWorkshop } from "react-icons/gr";
+import { BsHandbag } from "react-icons/bs";
 
-export const sidebarItems = [
+export const adminSidebarItems = [
+  { key: 1, label: "Dashboard", icon: RxDashboard, route: "/admin/dashboard" },
+  {
+    key: 2,
+    label: "All Sellers",
+    icon: GrWorkshop,
+    route: "/admin/dashboard-sellers",
+  },
+  {
+    key: 3,
+    label: "All Users",
+    icon: HiOutlineUserGroup,
+    route: "/admin/dashboard-users",
+  },
+  {
+    key: 4,
+    label: "All Orders",
+    icon: FiShoppingBag,
+    route: "/admin/dashboard-orders",
+  },
+  {
+    key: 5,
+    label: "All Products",
+    icon: BsHandbag,
+    route: "/admin/dashboard-products",
+  },
+  {
+    key: 6,
+    label: "All Events",
+    icon: MdOutlineLocalOffer,
+    route: "/admin/dashboard-events",
+  },
+  {
+    key: 7,
+    label: "Withdraw Requests",
+    icon: CiMoneyBill,
+    route: "/admin/dashboard-withdraw-requests",
+  },
+  {
+    key: 8,
+    label: "Settings",
+    icon: AiOutlineSetting,
+    route: "/admin/profile",
+  },
+];
+
+export const sellerSidebarItems = [
   { key: 1, label: "Dashboard", icon: RxDashboard, route: "/seller/dashboard" },
   {
     key: 2,
@@ -61,13 +113,13 @@ export const sidebarItems = [
     key: 7,
     label: "Withdraw Money",
     icon: CiMoneyBill,
-    route: "/dashboard-withdraw-money",
+    route: "/seller/dashboard-withdraw-money",
   },
   {
     key: 8,
     label: "Shop Inbox",
     icon: BiMessageSquareDetail,
-    route: "/dashboard-messages",
+    route: "/seller/dashboard-messages",
   },
   {
     key: 9,
@@ -79,9 +131,14 @@ export const sidebarItems = [
     key: 10,
     label: "Refunds",
     icon: HiOutlineReceiptRefund,
-    route: "/seller/dashboard-refunds",
+    route: "/seller/dashboard-refund-orders",
   },
-  { key: 11, label: "Settings", icon: CiSettings, route: "/seller/settings" },
+  {
+    key: 11,
+    label: "Settings",
+    icon: CiSettings,
+    route: "/seller/dashboard-settings",
+  },
 ];
 
 export const sponsoredBrands = [

@@ -1,29 +1,39 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { addToCart } from "../../redux/actions/cart";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllSellerProducts } from "../../redux/actions/product";
 import {
   AiFillHeart,
   AiOutlineHeart,
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import Ratings from "./Ratings";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllSellerProducts } from "../../redux/actions/product";
 import {
   addToWishlist,
   removeFromWishlist,
 } from "../../redux/actions/wishlist";
-import { toast } from "react-toastify";
-import { addToCart } from "../../redux/actions/cart";
+import Ratings from "./Ratings";
+import axios from "axios";
+import { productPlaceholderImg, profilePlaceholderImg } from "../../assets";
 
 const ProductDetails = ({ data }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [count, setCount] = useState(1);
   const [select, setSelect] = useState(0);
   const [click, setClick] = useState(false);
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const { products } = useSelector((state) => state.products);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const [imgErrorArr, setImgErrorArr] = useState([]);
+
+  const allImagesError =
+    data?.images &&
+    data.images.length > 0 &&
+    imgErrorArr.length === data.images.length;
 
   useEffect(() => {
     dispatch(getAllSellerProducts(data && data?.seller._id));
@@ -69,7 +79,33 @@ const ProductDetails = ({ data }) => {
     }
   };
 
-  const handleMessageSubmit = async () => {};
+  const handleMessageSubmit = async () => {
+    if (isAuthenticated) {
+      const groupTitle = data._id + user._id;
+      const userId = user._id;
+      const sellerId = data.seller._id;
+      console.log(userId, sellerId);
+
+      await axios
+        .post(
+          `${process.env.REACT_APP_BACKEND_URL}/conversations/new-conversation`,
+          {
+            groupTitle,
+            userId,
+            sellerId,
+          }
+        )
+        .then((res) => {
+          navigate(`/user/inbox?${res.data.conversation._id}`);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } else {
+      toast.error("Please login to send a message!");
+      navigate("/user/login");
+    }
+  };
 
   const totalReviewsLength =
     products &&
@@ -84,7 +120,7 @@ const ProductDetails = ({ data }) => {
     );
 
   const avg = totalRatings / totalReviewsLength || 0;
-  const averageRating = avg.toFixed(2);
+  const averageRating = avg.toFixed(1);
 
   return (
     <div className="w-full flex flex-col items-center py-8 min-h-screen">
@@ -93,47 +129,55 @@ const ProductDetails = ({ data }) => {
           <div className="w-11/12 bg-white rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] p-6 flex flex-col md:flex-row gap-10 border border-gray-100">
             <div className="flex-1 flex flex-col items-center">
               <div className="w-full flex justify-center mb-4">
-                <img
-                  src={
-                    data.images && data.images[select]?.url
-                      ? data.images[select].url
-                      : data.images && typeof data.images[select] === "string"
-                      ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
-                          data.images[select].startsWith("/")
-                            ? data.images[select]
-                            : "/" + data.images[select]
-                        }`
-                      : "https://ui-avatars.com/api/?name=" +
-                        encodeURIComponent(data.name || "Product")
-                  }
-                  alt={data?.name}
-                  className="w-[90%] h-[400px] object-contain rounded-sm bg-gray-50 shadow"
-                />
+                {allImagesError ? (
+                  <img
+                    src={productPlaceholderImg}
+                    alt="No images"
+                    className="w-[90%] h-[400px] object-contain rounded-sm bg-gray-50 shadow"
+                  />
+                ) : (
+                  <img
+                    src={
+                      data?.images &&
+                      data.images[select] &&
+                      `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.images[select]}`
+                    }
+                    alt={data?.name}
+                    className="w-[90%] h-[400px] object-contain rounded-sm bg-gray-50 shadow"
+                    onError={() => {
+                      setImgErrorArr((prev) =>
+                        prev.includes(select) ? prev : [...prev, select]
+                      );
+                    }}
+                  />
+                )}
               </div>
               <div className="flex gap-2 mb-4">
                 {data.images &&
-                  data.images.map((i, index) => (
-                    <img
-                      key={index}
-                      src={
-                        i?.url
-                          ? i.url
-                          : typeof i === "string"
-                          ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
-                              i.startsWith("/") ? i : "/" + i
-                            }`
-                          : "https://ui-avatars.com/api/?name=" +
-                            encodeURIComponent(data.name || "Product")
-                      }
-                      alt={data?.name}
-                      className={`w-16 h-16 object-contain rounded-sm shadow-sm border-2 cursor-pointer transition-all duration-200 ${
-                        select === index
-                          ? "border-gray-500 shadow-lg scale-105"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelect(index)}
-                    />
-                  ))}
+                  !allImagesError &&
+                  data.images.map((i, index) =>
+                    imgErrorArr.includes(index) ? null : (
+                      <img
+                        key={index}
+                        src={
+                          i &&
+                          `${process.env.REACT_APP_BACKEND_NON_API_URL}/${i}`
+                        }
+                        alt={data?.name}
+                        className={`w-16 h-16 object-contain rounded-sm shadow-sm border-2 cursor-pointer transition-all duration-200 ${
+                          select === index
+                            ? "border-gray-500 shadow-lg scale-105"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                        onClick={() => setSelect(index)}
+                        onError={() => {
+                          setImgErrorArr((prev) =>
+                            prev.includes(index) ? prev : [...prev, index]
+                          );
+                        }}
+                      />
+                    )
+                  )}
               </div>
               <Link
                 to={`/seller/profile/preview/${data?.seller._id}`}
@@ -141,20 +185,15 @@ const ProductDetails = ({ data }) => {
               >
                 <img
                   src={
-                    data?.seller?.avatar?.url
-                      ? data.seller.avatar.url
-                      : data?.seller?.avatar &&
-                        typeof data.seller.avatar === "string"
-                      ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
-                          data.seller.avatar.startsWith("/")
-                            ? data.seller.avatar
-                            : "/" + data.seller.avatar
-                        }`
-                      : "https://ui-avatars.com/api/?name=" +
-                        encodeURIComponent(data?.seller?.name || "Seller")
+                    data?.seller.avatar &&
+                    `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data?.seller.avatar}`
                   }
                   alt={data?.seller?.name}
                   className="w-12 h-12 rounded-full border-2 border-gray-400 object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = profilePlaceholderImg;
+                  }}
                 />
                 <div>
                   <h3 className="font-semibold text-orange-500">
@@ -227,7 +266,7 @@ const ProductDetails = ({ data }) => {
                 </button>
               </div>
               <button
-                className="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-gray-800 text-white font-semibold rounded-sm py-3 shadow-lg transition"
+                className="mt-6 flex items-center justify-center gap-2 bg-orange-500 hover:bg-gray-800 text-white font-semibold rounded-sm py-3 transition"
                 onClick={() => addToCartHandler(data._id)}
               >
                 Add to cart <AiOutlineShoppingCart size={22} />
@@ -244,17 +283,8 @@ const ProductDetails = ({ data }) => {
             <ProductDetailsInfo
               data={data}
               products={products}
-              totalReviewsLength={data?.reviews?.length || 0}
-              averageRating={
-                data?.reviews?.length
-                  ? (
-                      data.reviews.reduce(
-                        (acc, item) => acc + (item.rating || 0),
-                        0
-                      ) / data.reviews.length
-                    ).toFixed(1)
-                  : 0
-              }
+              totalReviewsLength={totalReviewsLength}
+              averageRating={averageRating}
             />
           </div>
         </>
@@ -319,7 +349,6 @@ const ProductDetailsInfo = ({
           {data.description}
         </p>
       )}
-
       {active === 2 && (
         <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
           {data &&
@@ -330,9 +359,16 @@ const ProductDetailsInfo = ({
                 key={index}
               >
                 <img
-                  src={`${item.user.avatar?.url}`}
+                  src={
+                    item?.user?.avatar &&
+                    `${process.env.REACT_APP_BACKEND_NON_API_URL}/${item.user.avatar}`
+                  }
                   alt=""
-                  className="w-[50px] h-[50px] rounded-smll border border-gray-100"
+                  className="w-[50px] h-[50px] rounded-full border-2 border-gray-200"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = profilePlaceholderImg;
+                  }}
                 />
                 <div className="pl-2 ">
                   <div className="w-full flex items-center">
@@ -361,20 +397,15 @@ const ProductDetailsInfo = ({
               <div className="flex items-center">
                 <img
                   src={
-                    data?.seller?.avatar?.url
-                      ? data.seller.avatar.url
-                      : data?.seller?.avatar &&
-                        typeof data.seller.avatar === "string"
-                      ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
-                          data.seller.avatar.startsWith("/")
-                            ? data.seller.avatar
-                            : "/" + data.seller.avatar
-                        }`
-                      : "https://ui-avatars.com/api/?name=" +
-                        encodeURIComponent(data?.seller?.name || "Seller")
+                    data?.seller?.avatar &&
+                    `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.seller.avatar}`
                   }
                   className="w-[50px] h-[50px] rounded-full border-2 border-gray-400"
                   alt={data?.seller?.name || "Seller"}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = profilePlaceholderImg;
+                  }}
                 />
                 <div className="pl-3">
                   <h3 className="font-semibold text-orange-500">
@@ -403,13 +434,13 @@ const ProductDetailsInfo = ({
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Total Reviews:{" "}
+                Total Reviews:
                 <span className="font-[500]">{totalReviewsLength}</span>
               </h5>
               <Link to={`/seller/profile/preview/${data.seller._id}`}>
                 <div className="rounded-smpx] h-[39.5px] mt-3 bg-orange-500 hover:bg-gray-800 flex items-center justify-center px-4">
                   <h4 className="text-white font-semibold">
-                    Visit Seller Shop
+                    Visit Seller Profile
                   </h4>
                 </div>
               </Link>

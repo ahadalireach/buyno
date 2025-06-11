@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { addToCart } from "../../redux/actions/cart";
 import { useDispatch, useSelector } from "react-redux";
 import CountDown from "./CountDown";
+import { eventPlaceholderImg } from "../../assets";
 
 const MAX_NAME_LENGTH = 50;
 const MAX_DESC_LENGTH = 150;
@@ -33,11 +34,11 @@ const EventCard = ({ active, data }) => {
 
   return (
     <div
-      className={`relative rounded-sm overflow-hidden shadow-sm ${
+      className={`relative rounded-sm overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.05)] ${
         active ? "border-2 border-gray-300" : "mb-10 border-2"
       }`}
     >
-      <span className="absolute top-4 left-4 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full z-10 shadow">
+      <span className="absolute top-5 left-5 bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-sm z-10 shadow">
         🎉 Event of The Day
       </span>
 
@@ -45,24 +46,15 @@ const EventCard = ({ active, data }) => {
         <div className="md:w-1/2 w-full bg-gray-200 flex items-center justify-center p-4">
           <img
             src={
-              data.images && data.images[0]?.url
-                ? data.images[0].url
-                : data.images && typeof data.images[0] === "string"
-                ? `${process.env.REACT_APP_BACKEND_NON_API_URL}${
-                    data.images[0].startsWith("/")
-                      ? data.images[0]
-                      : "/" + data.images[0]
-                  }`
-                : "https://ui-avatars.com/api/?name=" +
-                  encodeURIComponent(data.name || "Event")
+              data?.images &&
+              data.images[0] &&
+              `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.images[0]}`
             }
             alt={data.name || "Event"}
             className="w-full h-64 md:h-96 object-contain rounded-sm bg-white"
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src =
-                "https://ui-avatars.com/api/?name=" +
-                encodeURIComponent(data.name || "Event");
+              e.target.src = eventPlaceholderImg;
             }}
           />
         </div>
@@ -77,9 +69,11 @@ const EventCard = ({ active, data }) => {
             </p>
             <div className="flex items-center justify-between mb-4">
               <div className="flex gap-2 items-end">
-                <span className="text-sm text-gray-400 line-through">
-                  ${data.originalPrice}
-                </span>
+                {data.originalPrice && (
+                  <span className="text-sm text-gray-400 line-through">
+                    ${data.originalPrice}
+                  </span>
+                )}
                 <span className="text-xl font-bold text-orange-500">
                   ${data.discountPrice}
                 </span>

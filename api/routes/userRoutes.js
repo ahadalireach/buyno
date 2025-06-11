@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { upload } = require("../multer");
-const { isAuthenticated } = require("../middleware/auth");
+const { isAuthenticated, isAdmin } = require("../middleware/auth");
 const userController = require("../controllers/userController");
 
 router.post("/register", upload.single("file"), userController.registerUser);
@@ -30,6 +30,19 @@ router.put(
   isAuthenticated,
   userController.updateUserPassword
 );
+router.get("/info/:id", userController.getUserInfo);
 router.get("/logout", isAuthenticated, userController.logoutUser);
+router.get(
+  "/admin/all-users",
+  isAuthenticated,
+  isAdmin("Admin"),
+  userController.getAllUsersByAdmin
+);
+router.delete(
+  "/admin/delete-user/:id",
+  isAuthenticated,
+  isAdmin("Admin"),
+  userController.deleteUserByAdmin
+);
 
 module.exports = router;

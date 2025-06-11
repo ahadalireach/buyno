@@ -82,3 +82,17 @@ exports.getSellerEvents = catchAsyncErrors(async (req, res, next) => {
     return next(new errorHandler(error, 400));
   }
 });
+
+exports.getAllEventsByAdmin = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const events = await Event.find().sort({
+      createdAt: -1,
+    });
+    res.status(201).json({
+      success: true,
+      events,
+    });
+  } catch (error) {
+    return next(new errorHandler(error, 400));
+  }
+});

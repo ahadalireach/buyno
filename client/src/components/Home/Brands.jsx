@@ -19,14 +19,14 @@ const Brands = () => {
         <div className="mb-12">
           <div
             ref={scrollRef}
-            className="sm:hidden flex overflow-x-auto gap-4 px-2 py-4 rounded-2xl bg-gray-50 scrollbar-hide"
+            className="sm:hidden flex overflow-x-auto gap-4 px-2 py-4 rounded-sm bg-gray-50 scrollbar-hide"
             style={{ scrollBehavior: "smooth" }}
             aria-label="Sponsored Brands Carousel"
           >
             {sponsoredBrands.map((brand, idx) => (
               <div
                 key={idx}
-                className="flex-shrink-0 w-20 h-20 bg-white rounded-full shadow flex items-center justify-center hover:scale-105 transition-transform"
+                className="flex-shrink-0 w-20 h-20 bg-white rounded-sm shadow flex items-center justify-center hover:scale-105 transition-transform"
               >
                 <img
                   src={brand.src}
@@ -37,11 +37,11 @@ const Brands = () => {
             ))}
           </div>
 
-          <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 bg-gray-50 rounded-2xl py-6 px-4">
+          <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 bg-gray-50 rounded-sm py-6 px-4">
             {sponsoredBrands.map((brand, idx) => (
               <div
                 key={idx}
-                className="bg-white w-full aspect-square rounded-full shadow flex flex-col items-center justify-center transition-transform"
+                className="bg-white w-full aspect-square rounded-sm shadow flex flex-col items-center justify-center transition-transform"
               >
                 <img
                   src={brand.src}
@@ -60,9 +60,9 @@ const Brands = () => {
           {brandingData?.map((item, idx) => (
             <div
               key={idx}
-              className="flex flex-col sm:flex-col lg:flex-row items-center bg-gray-50 hover:bg-gray-100 rounded-xl p-4 sm:p-6 md:p-8 shadow-sm transition"
+              className="flex flex-col sm:flex-col lg:flex-row items-center bg-gray-50 hover:bg-gray-100 rounded-sm p-4 sm:p-6 md:p-8 shadow-sm transition"
             >
-              <div className="flex-shrink-0 w-14 h-14 sm:w-20 sm:h-20 bg-gray-white shadow rounded-full flex items-center justify-center text-2xl sm:text-4xl text-black mb-3 sm:mb-4 lg:mb-0 lg:mr-6">
+              <div className="flex-shrink-0 w-14 h-14 sm:w-20 sm:h-20 bg-gray-white shadow rounded-sm flex items-center justify-center text-2xl sm:text-4xl text-black mb-3 sm:mb-4 lg:mb-0 lg:mr-6">
                 {item.icon}
               </div>
               <div className="text-center sm:text-center lg:text-left">

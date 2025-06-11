@@ -16,12 +16,9 @@ const FaqPage = () => {
   return (
     <div>
       <Header />
-      <Breadcrumb mainTitle="Commonly Asked Questions" page="FAQ" />
+      <Breadcrumb mainTitle="Questions" page="FAQ" />
       <div className={`w-11/12 mx-auto my-12`}>
         <div className="max-w-2xl mx-auto rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] p-8">
-          <h2 className="text-4xl font-extrabold text-gray-800 mb-8 text-center tracking-tight">
-            Frequently Asked Questions
-          </h2>
           <div className="divide-y divide-gray-200">
             {FaqData.map((faq, idx) => (
               <div key={idx} className="py-4">

@@ -105,3 +105,27 @@ export const getAllProducts = () => async (dispatch) => {
     });
   }
 };
+
+export const getAllProductsByAdmin = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getAllProductsRequestByAdmin",
+    });
+
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/products/admin/all-products`,
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch({
+      type: "getAllProductsSuccessByAdmin",
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: "getAllProductsFailByAdmin",
+      payload: error.response.data.message,
+    });
+  }
+};

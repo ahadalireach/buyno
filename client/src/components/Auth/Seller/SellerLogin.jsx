@@ -140,13 +140,13 @@ const SellerLogin = () => {
             <div className="flex gap-4 mt-4">
               <Link
                 to="/seller/register"
-                className="w-1/2 py-2 bg-gray-800 text-white text-base text-center rounded-sm uppercase hover:bg-gray-200 hover:text-black transition"
+                className="w-1/2 py-2 bg-gray-800 text-white text-base font-semibold text-center rounded-sm uppercase hover:bg-gray-200 hover:text-black transition"
               >
                 Create a account
               </Link>
               <Link
                 to="/forgot-password"
-                className="w-1/2 py-2 bg-gray-200 text-gray-700 text-base text-center rounded-sm uppercase hover:bg-gray-800 hover:text-white transition"
+                className="w-1/2 py-2 bg-gray-300 text-gray-700 text-base font-semibold text-center rounded-sm uppercase hover:bg-gray-800 hover:text-white transition"
               >
                 Forget password?
               </Link>

@@ -1,42 +1,66 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import { ToastContainer } from "react-toastify";
-import { Elements } from "@stripe/react-stripe-js";
-import { getAllEvents } from "./redux/actions/event";
-import { getAllProducts } from "./redux/actions/product";
-import { getUser, getSeller } from "./redux/actions/user";
-import { ProtectedRoute, SellerProtectedRoute } from "./routes";
+import { ToastContainer, toast } from "react-toastify";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { getUser } from "./redux/actions/user";
+import { getSeller } from "./redux/actions/user";
+import { getAllProducts } from "./redux/actions/product";
+import { getAllEvents } from "./redux/actions/event";
 import {
-  FaqPage,
+  UserProtectedRoute,
+  AdminProtectedRoute,
+  SellerProtectedRoute,
+} from "./routes";
+import {
   HomePage,
-  MainPage,
-  OrderPage,
-  OrdersPage,
-  EventsPage,
-  PaymentPage,
-  ProductsPage,
+  FaqPage,
   NotFoundPage,
-  CheckoutPage,
-  UserLoginPage,
-  CouponCodePage,
-  AddProductPage,
-  UserProfilePage,
   ProductListPage,
-  CreateEventPage,
-  SellerLoginPage,
-  OrderDetailsPage,
-  OrderSuccessPage,
-  SellerEventsPage,
-  UserRegisterPage,
-  SellerProfilePage,
   ProductDetailsPage,
+  BestSellingProductsPage,
+  EventsPage,
+
+  // User
+  UserLoginPage,
+  UserRegisterPage,
+  UserProfilePage,
+  UserDashboardInboxPage,
+  UserDashboardOrderDetailsPage,
+  UserDashboardTrackOrderPage,
+  UserCheckoutPage,
+  UserOrderSuccessPage,
   UserActivationPage,
+  UserPaymentPage,
+
+  // Seller
+  SellerLoginPage,
   SellerRegisterPage,
   SellerActivationPage,
-  BestSellingProductsPage,
   SellerProfilePreviewPage,
+  SellerProfilePage,
+  SellerDashboardPage,
+  SellerDashboardOrdersPage,
+  SellerDashboardOrderPage,
+  SellerDashboardAddProductPage,
+  SellerDashboardProductsPage,
+  SellerDashboardCreateEventPage,
+  SellerDashboardEventsPage,
+  SellerDashboardCouponCodePage,
+  SellerDashboardRefundOrdersPage,
+  SellerDashboardWithdrawPage,
+  SellerDashboardMessagesPage,
+  SellerDashboardSettingsPage,
+
+  // Admin
+  AdminDashboardPage,
+  AdminDashboardUsersPage,
+  AdminDashboardSellersPage,
+  AdminDashboardOrdersPage,
+  AdminDashboardProductsPage,
+  AdminDashboardEventsPage,
+  AdminDashboardWithdrawPage,
 } from "./pages";
 import "./App.css";
 import store from "./redux/store";
@@ -45,27 +69,40 @@ import axios from "axios";
 
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
+  const setBackendError = () => {};
 
   async function getStripeApikey() {
-    const { data } = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}/payments/key`
-    );
-    setStripeApiKey(data.stripeApikey);
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/payments/key`
+      );
+      setStripeApiKey(data.stripeApikey);
+    } catch (error) {}
   }
 
   useEffect(() => {
-    store.dispatch(getUser());
-    store.dispatch(getSeller());
-    store.dispatch(getAllProducts());
-    store.dispatch(getAllEvents());
-    getStripeApikey();
+    const fetchInitialData = async () => {
+      try {
+        await Promise.all([
+          store.dispatch(getUser()),
+          store.dispatch(getSeller()),
+          store.dispatch(getAllProducts()),
+          store.dispatch(getAllEvents()),
+          getStripeApikey(),
+        ]);
+      } catch (error) {
+        setBackendError(true);
+        toast.error("Backend is not running or unreachable.");
+      }
+    };
+    fetchInitialData();
   }, []);
 
   const PaymentPageWithStripe = () => (
     <Elements stripe={loadStripe(stripeApikey)}>
-      <ProtectedRoute>
-        <PaymentPage />
-      </ProtectedRoute>
+      <UserProtectedRoute>
+        <UserPaymentPage />
+      </UserProtectedRoute>
     </Elements>
   );
 
@@ -92,33 +129,49 @@ const App = () => {
         <Route
           path="/user/profile"
           element={
-            <ProtectedRoute>
+            <UserProtectedRoute>
               <UserProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/cart/checkout"
-          element={
-            <ProtectedRoute>
-              <CheckoutPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/order/success"
-          element={
-            <ProtectedRoute>
-              <OrderSuccessPage />
-            </ProtectedRoute>
+            </UserProtectedRoute>
           }
         />
         <Route
           path="/user/order/:id"
           element={
-            <ProtectedRoute>
-              <OrderDetailsPage />
-            </ProtectedRoute>
+            <UserProtectedRoute>
+              <UserDashboardOrderDetailsPage />
+            </UserProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/track/order/:id"
+          element={
+            <UserProtectedRoute>
+              <UserDashboardTrackOrderPage />
+            </UserProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/inbox"
+          element={
+            <UserProtectedRoute>
+              <UserDashboardInboxPage />
+            </UserProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart/checkout"
+          element={
+            <UserProtectedRoute>
+              <UserCheckoutPage />
+            </UserProtectedRoute>
+          }
+        />
+        <Route
+          path="/order/success"
+          element={
+            <UserProtectedRoute>
+              <UserOrderSuccessPage />
+            </UserProtectedRoute>
           }
         />
         <Route path="/seller/register" element={<SellerRegisterPage />} />
@@ -143,7 +196,7 @@ const App = () => {
           path="/seller/dashboard"
           element={
             <SellerProtectedRoute>
-              <MainPage />
+              <SellerDashboardPage />
             </SellerProtectedRoute>
           }
         />
@@ -151,7 +204,7 @@ const App = () => {
           path="/seller/dashboard-orders"
           element={
             <SellerProtectedRoute>
-              <OrdersPage />
+              <SellerDashboardOrdersPage />
             </SellerProtectedRoute>
           }
         />
@@ -159,7 +212,7 @@ const App = () => {
           path="/seller/order/:id"
           element={
             <SellerProtectedRoute>
-              <OrderPage />
+              <SellerDashboardOrderPage />
             </SellerProtectedRoute>
           }
         />
@@ -167,7 +220,7 @@ const App = () => {
           path="/seller/dashboard-create-product"
           element={
             <SellerProtectedRoute>
-              <AddProductPage />
+              <SellerDashboardAddProductPage />
             </SellerProtectedRoute>
           }
         />
@@ -175,7 +228,7 @@ const App = () => {
           path="/seller/dashboard-products"
           element={
             <SellerProtectedRoute>
-              <ProductsPage />
+              <SellerDashboardProductsPage />
             </SellerProtectedRoute>
           }
         />
@@ -183,7 +236,7 @@ const App = () => {
           path="/seller/dashboard-create-event"
           element={
             <SellerProtectedRoute>
-              <CreateEventPage />
+              <SellerDashboardCreateEventPage />
             </SellerProtectedRoute>
           }
         />
@@ -191,7 +244,7 @@ const App = () => {
           path="/seller/dashboard-events"
           element={
             <SellerProtectedRoute>
-              <SellerEventsPage />
+              <SellerDashboardEventsPage />
             </SellerProtectedRoute>
           }
         />
@@ -199,8 +252,96 @@ const App = () => {
           path="/seller/dashboard-coupon-codes"
           element={
             <SellerProtectedRoute>
-              <CouponCodePage />
+              <SellerDashboardCouponCodePage />
             </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-refund-orders"
+          element={
+            <SellerProtectedRoute>
+              <SellerDashboardRefundOrdersPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-withdraw-money"
+          element={
+            <SellerProtectedRoute>
+              <SellerDashboardWithdrawPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-messages"
+          element={
+            <SellerProtectedRoute>
+              <SellerDashboardMessagesPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/dashboard-settings"
+          element={
+            <SellerProtectedRoute>
+              <SellerDashboardSettingsPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboardPage />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard-users"
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboardUsersPage />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard-sellers"
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboardSellersPage />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard-orders"
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboardOrdersPage />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard-products"
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboardProductsPage />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard-events"
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboardEventsPage />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard-withdraw-requests"
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboardWithdrawPage />
+            </AdminProtectedRoute>
           }
         />
       </Routes>

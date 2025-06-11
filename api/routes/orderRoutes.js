@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { isSeller, isAuthenticated } = require("../middleware/auth");
+const { isSeller, isAuthenticated, isAdmin } = require("../middleware/auth");
 const orderController = require("../controllers/orderController");
 
 router.post("/create", orderController.createOrder);
@@ -20,6 +20,12 @@ router.put(
   "/seller/order-refund/:id",
   isSeller,
   orderController.sellerRefundOrderSuccess
+);
+router.get(
+  "/admin/all-orders",
+  isAuthenticated,
+  isAdmin("Admin"),
+  orderController.getAllOrdersByAdmin
 );
 
 module.exports = router;

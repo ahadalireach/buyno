@@ -79,18 +79,20 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
       return next(new errorHandler("Order not found with this id.", 400));
     }
     if (req.body.status === "Transferred to delivery partner") {
-      order.cart.forEach(async (o) => {
-        await updateOrder(o._id, o.qty);
-      });
+      for (const o of order.cart) {
+        await updateOrder(o.productId || o._id, o.qty);
+      }
     }
 
     order.status = req.body.status;
-
     if (req.body.status === "Delivered") {
       order.deliveredAt = Date.now();
       order.paymentInfo.status = "Succeeded";
       const serviceCharge = order.totalPrice * 0.1;
       await updateSellerInfo(order.totalPrice - serviceCharge);
+      for (const o of order.cart) {
+        await updateOrder(o.productId || o._id, o.qty);
+      }
     }
 
     await order.save({ validateBeforeSave: false });
@@ -102,10 +104,9 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
 
     async function updateOrder(id, qty) {
       const product = await Product.findById(id);
-
+      if (!product) return;
       product.stock -= qty;
-      product.soldOut += qty;
-
+      product.soldOut = (product.soldOut || 0) + qty;
       await product.save({ validateBeforeSave: false });
     }
 
@@ -168,6 +169,21 @@ exports.sellerRefundOrderSuccess = catchAsyncErrors(async (req, res, next) => {
 
       await product.save({ validateBeforeSave: false });
     }
+  } catch (error) {
+    return next(new errorHandler(error.message, 500));
+  }
+});
+
+exports.getAllOrdersByAdmin = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const orders = await Order.find().sort({
+      deliveredAt: -1,
+      createdAt: -1,
+    });
+    res.status(201).json({
+      success: true,
+      orders,
+    });
   } catch (error) {
     return next(new errorHandler(error.message, 500));
   }
