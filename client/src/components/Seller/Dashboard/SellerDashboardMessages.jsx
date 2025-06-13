@@ -1,51 +1,46 @@
 /* eslint-disable jsx-a11y/role-supports-aria-props */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { format } from "timeago.js";
-import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { TfiGallery } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
+import { profilePlaceholderImg, messagePlaceholderImg } from "../../../assets";
 import socketIO from "socket.io-client";
 import axios from "axios";
-import { profilePlaceholderImg, messagePlaceholderImg } from "../../../assets";
 const socketId = socketIO(process.env.REACT_APP_SOCKET_ENDPOINT, {
   transports: ["websocket"],
 });
 
 const SellerDashboardMessages = () => {
-  const [open, setOpen] = useState(false);
+  const { seller, isLoading } = useSelector((state) => state.seller);
+  const [conversations, setConversations] = useState([]);
+  const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [currentChat, setCurrentChat] = useState();
   const [messages, setMessages] = useState([]);
   const [userData, setUserData] = useState(null);
   const [newMessage, setNewMessage] = useState("");
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [currentChat, setCurrentChat] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [conversations, setConversations] = useState([]);
   const [activeStatus, setActiveStatus] = useState(false);
-  const [arrivalMessage, setArrivalMessage] = useState(null);
-  const { isLoading, seller } = useSelector((state) => state.seller);
+  const [image, setImage] = useState();
+  const [open, setOpen] = useState(false);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     socketId.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
         text: data.text,
-        createdAt: Date.now(),
+        image: data.image,
+        createdAt: data.createdAt || Date.now(),
       });
     });
   }, []);
 
   useEffect(() => {
-    if (
-      arrivalMessage &&
-      currentChat &&
-      Array.isArray(currentChat.members) &&
-      currentChat.members.includes(arrivalMessage.sender)
-    ) {
+    arrivalMessage &&
+      currentChat?.members.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
-    }
   }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
@@ -57,9 +52,10 @@ const SellerDashboardMessages = () => {
             withCredentials: true,
           }
         );
+
         setConversations(resonse.data.conversations);
       } catch (error) {
-        console.log(error?.response);
+        // console.log(error);
       }
     };
     getConversation();
@@ -75,6 +71,14 @@ const SellerDashboardMessages = () => {
     }
   }, [seller]);
 
+  const onlineCheck = (chat) => {
+    const chatMembers = chat.members.find((member) => member !== seller?._id);
+    const online = onlineUsers.find((user) => user.userId === chatMembers);
+
+    return online ? true : false;
+  };
+
+  // get messages
   useEffect(() => {
     const getMessage = async () => {
       try {
@@ -83,44 +87,24 @@ const SellerDashboardMessages = () => {
         );
         setMessages(response.data.messages);
       } catch (error) {
-        console.log(error?.response);
+        console.log(error);
       }
     };
     getMessage();
   }, [currentChat]);
 
-  const onlineCheck = (chat) => {
-    const chatMembers = chat.members.find((member) => member !== seller?._id);
-    const online = onlineUsers.find((user) => user.userId === chatMembers);
-
-    return online ? true : false;
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImageFile(file);
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      setImagePreview(null);
-    }
-  };
-
+  // create new message
   const sendMessageHandler = async (e) => {
     e.preventDefault();
 
-    if (!newMessage && !imageFile) return;
-
-    const formData = new FormData();
-    formData.append("sender", seller._id);
-    formData.append("conversationId", currentChat._id);
-    formData.append("text", newMessage);
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
+    const message = {
+      sender: seller._id,
+      text: newMessage,
+      conversationId: currentChat._id,
+    };
 
     const receiverId = currentChat.members.find(
-      (member) => member !== seller._id
+      (member) => member.id !== seller._id
     );
 
     socketId.emit("sendMessage", {
@@ -130,37 +114,22 @@ const SellerDashboardMessages = () => {
     });
 
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/messages/new-message`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      const newMsg = res.data.message;
-      setMessages([...messages, newMsg]);
-      updateLastMessage();
-
-      setConversations((prevConvos) =>
-        prevConvos.map((convo) =>
-          convo._id === currentChat._id
-            ? {
-                ...convo,
-                lastMessage: newMsg.text,
-                lastMessageId: newMsg.sender,
-              }
-            : convo
-        )
-      );
-
-      setNewMessage("");
-      setImageFile(null);
-      setImagePreview(null);
+      if (newMessage !== "") {
+        await axios
+          .post(
+            `${process.env.REACT_APP_BACKEND_URL}/messages/new-message`,
+            message
+          )
+          .then((res) => {
+            setMessages([...messages, res.data.message]);
+            updateLastMessage();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     } catch (error) {
-      console.log(error?.response);
-      toast.error(
-        error?.response?.data?.message || "Error while sending message."
-      );
+      console.log(error);
     }
   };
 
@@ -179,13 +148,71 @@ const SellerDashboardMessages = () => {
         }
       )
       .then((res) => {
-        console.log(res.data.conversation);
         setNewMessage("");
       })
       .catch((error) => {
-        console.log(error?.response);
+        console.log(error);
       });
   };
+
+  const handleImageUpload = async (e) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+        imageSendingHandler(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  const imageSendingHandler = async (e) => {
+    const receiverId = currentChat?.members.find(
+      (member) => member !== seller._id
+    );
+
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/messages/new-message`,
+        {
+          image: e,
+          sender: seller._id,
+          text: newMessage,
+          conversationId: currentChat._id,
+        }
+      );
+
+      const newMsg = res.data.message;
+      socketId.emit("sendMessage", {
+        senderId: seller._id,
+        receiverId,
+        image: newMsg.image,
+        createdAt: newMsg.createdAt,
+      });
+
+      setImage();
+      setMessages([...messages, res.data.message]);
+      updateLastMessageForImage();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateLastMessageForImage = async () => {
+    await axios.put(
+      `${process.env.REACT_APP_BACKEND_URL}/conversations/update-last-message/${currentChat._id}`,
+      {
+        lastMessage: "Photo",
+        lastMessageId: seller._id,
+      }
+    );
+  };
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ beahaviour: "smooth" });
+  }, [messages]);
 
   return (
     <div className="w-full max-w-4xl mx-auto bg-white rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.05)] h-[85vh] flex overflow-hidden">
@@ -206,6 +233,7 @@ const SellerDashboardMessages = () => {
                 index={index}
                 me={seller._id}
                 setOpen={setOpen}
+                userData={userData}
                 isLoading={isLoading}
                 setUserData={setUserData}
                 online={onlineCheck(item)}
@@ -228,15 +256,16 @@ const SellerDashboardMessages = () => {
         {open ? (
           <SellerInbox
             setOpen={setOpen}
-            userData={userData}
             messages={messages}
+            userData={userData}
             sellerId={seller._id}
+            scrollRef={scrollRef}
             newMessage={newMessage}
+            setMessages={setMessages}
             activeStatus={activeStatus}
             setNewMessage={setNewMessage}
+            handleImageUpload={handleImageUpload}
             sendMessageHandler={sendMessageHandler}
-            handleImageChange={handleImageChange}
-            imagePreview={imagePreview}
           />
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-gray-400">
@@ -300,7 +329,7 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${user?.avatar}`}
+          src={user?.avatar?.url}
           alt=""
           className="w-12 h-12 rounded-full border-2 border-gray-200 object-cover shadow-sm"
           onError={(e) => {
@@ -319,16 +348,12 @@ const MessageList = ({
           {user?.name}
         </h1>
 
-        {!isLoading && data?.lastMessageId && (
-          <p className="text-sm text-gray-500 truncate">
-            {data.lastMessageId !== user?._id
-              ? "You: "
-              : user?.name
-              ? `${user.name.split(" ")[0]}: `
-              : ""}
-            {data?.lastMessage}
-          </p>
-        )}
+        <p className="text-sm text-gray-500 truncate">
+          {!isLoading && data?.lastMessageId !== user?._id
+            ? "You:"
+            : user?.name.split(" ")[0] + ": "}{" "}
+          {data?.lastMessage}
+        </p>
       </div>
     </div>
   );
@@ -340,18 +365,18 @@ const SellerInbox = ({
   sellerId,
   userData,
   newMessage,
+  scrollRef,
   activeStatus,
   setNewMessage,
+  handleImageUpload,
   sendMessageHandler,
-  handleImageChange,
-  imagePreview,
 }) => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
         <div className="flex items-center gap-3">
           <img
-            src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${userData?.avatar}`}
+            src={userData?.avatar?.url}
             alt=""
             className="w-14 h-14 rounded-full border-2 border-gray-200 object-cover shadow-sm"
             onError={(e) => {
@@ -387,10 +412,11 @@ const SellerInbox = ({
               className={`flex w-full my-2 ${
                 item.sender === sellerId ? "justify-end" : "justify-start"
               }`}
+              ref={scrollRef}
             >
               {item.sender !== sellerId && (
                 <img
-                  src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${userData?.avatar}`}
+                  src={userData?.avatar?.url}
                   className="w-10 h-10 rounded-full mr-3 border border-gray-200 object-cover"
                   alt=""
                   onError={(e) => {
@@ -401,7 +427,7 @@ const SellerInbox = ({
               )}
               {item.image && (
                 <img
-                  src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${item.image}`}
+                  src={item.image?.url}
                   className="w-[300px] h-[300px] object-cover rounded-sm border border-gray-300 mr-2"
                   alt="chat-img"
                   onError={(e) => {
@@ -410,7 +436,7 @@ const SellerInbox = ({
                   }}
                 />
               )}
-              {item.text !== "" && (
+              {item.text && (
                 <div>
                   <div
                     className={`max-w-xs md:max-w-md p-3 rounded-sm shadow text-base break-words ${
@@ -438,7 +464,7 @@ const SellerInbox = ({
       <form
         className="flex items-center gap-3 px-6 py-4 border-t bg-gray-50"
         onSubmit={sendMessageHandler}
-        encType="multipart/form-data"
+        aria-required={true}
       >
         <div className="w-8">
           <label htmlFor="image">
@@ -452,17 +478,10 @@ const SellerInbox = ({
             type="file"
             accept="image/*"
             className="hidden"
-            onChange={handleImageChange}
+            onChange={handleImageUpload}
           />
         </div>
 
-        {imagePreview && (
-          <img
-            src={imagePreview}
-            alt="preview"
-            className="w-12 h-12 object-cover rounded-sm border border-gray-300"
-          />
-        )}
         <div className="flex-1 relative">
           <input
             type="text"

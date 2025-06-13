@@ -1,25 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const { upload } = require("../multer");
-const { isSeller, isAdmin, isAuthenticated } = require("../middleware/auth");
 const sellerController = require("../controllers/sellerController");
+const { isSeller, isAdmin, isAuthenticated } = require("../middleware/auth");
 
-router.post(
-  "/register",
-  upload.single("file"),
-  sellerController.registerSeller
-);
+router.post("/register", sellerController.registerSeller);
 router.post("/activate", sellerController.activateSeller);
 router.post("/login", sellerController.loginSeller);
 router.get("/profile", isSeller, sellerController.getSellerProfile);
 router.get("/info/:id", sellerController.getSellerInfo);
 router.put("/update-info", isSeller, sellerController.updateSellerInfo);
-router.put(
-  "/update-avatar",
-  isSeller,
-  upload.single("file"),
-  sellerController.updateSellerAvatar
-);
+router.put("/update-avatar", isSeller, sellerController.updateSellerAvatar);
 router.put(
   "/update-withdraw-method",
   isSeller,

@@ -12,32 +12,37 @@ const SellerRegister = () => {
   const [avatar, setAvatar] = useState(null);
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState();
   const [avatarPreview, setAvatarPreview] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("file", avatar);
-      formData.append("phoneNumber", phoneNumber);
-      formData.append("address", address);
-      formData.append("zipCode", zipCode);
+      let avatarBase64 = "";
+      if (avatar) {
+        avatarBase64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(avatar);
+        });
+      }
 
-      const config = {
-        headers: { "Content-Type": "multipart/form-data" },
+      const payload = {
+        name,
+        email,
+        password,
+        avatar: avatarBase64,
+        phoneNumber,
+        address,
+        zipCode,
       };
 
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/sellers/register`,
-        formData,
-        config
+        payload,
+        { headers: { "Content-Type": "application/json" } }
       );
 
       toast.success(response.data.message);
@@ -51,8 +56,6 @@ const SellerRegister = () => {
       setAvatarPreview(null);
     } catch (err) {
       toast.error(err.response?.data.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -245,31 +248,8 @@ const SellerRegister = () => {
               <button
                 type="submit"
                 className={`w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold tracking-wide transition flex items-center justify-center`}
-                disabled={loading}
               >
-                {loading ? (
-                  <svg
-                    className="animate-spin h-5 w-5 mr-2 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    ></path>
-                  </svg>
-                ) : null}
-                {loading ? "Submitting..." : "Submit"}
+                Submit
               </button>
             </div>
 

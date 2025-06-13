@@ -14,7 +14,7 @@ const UserDashboardInboxPage = () => {
   return (
     <>
       <Header />
-      <Breadcrumb mainTitle={"User Inbox"} page={"Inbox"} />
+      <Breadcrumb mainTitle={"Your Chats"} page={"Inbox"} />
       <UserDashboardInbox />
       <br />
       <br />

@@ -114,7 +114,13 @@ const SellerDashboardWithdraw = () => {
           ${availableBalance}
         </p>
         <button
-          onClick={() => Number(availableBalance) > 0 && setOpen(true)}
+          onClick={() => {
+            if (Number(availableBalance) > 0) {
+              setOpen(true);
+            } else {
+              toast.error("You have no available balance to withdraw.");
+            }
+          }}
           className="w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-medium transition"
         >
           Withdraw Funds
@@ -165,7 +171,7 @@ const SellerDashboardWithdraw = () => {
                 ))}
                 <button
                   type="submit"
-                  className="w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm"
+                  className="w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm flex items-center justify-center"
                 >
                   Add Method
                 </button>
@@ -204,7 +210,7 @@ const SellerDashboardWithdraw = () => {
                   />
                   <button
                     onClick={handleWithdraw}
-                    className="w-full mt-2 py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm"
+                    className="w-full mt-2 py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm flex items-center justify-center"
                   >
                     Withdraw
                   </button>

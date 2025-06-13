@@ -70,11 +70,7 @@ const ProductCard = ({ data, isEvent }) => {
             className="w-full h-full flex items-center justify-center"
           >
             <img
-              src={
-                data?.images &&
-                data.images[0] &&
-                `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.images[0]}`
-              }
+              src={`${data.images && data.images[0]?.url}`}
               alt={data.name}
               className="w-[80%] h-[150px] object-contain transition-transform duration-300 group-hover:scale-105"
               onError={(e) => {

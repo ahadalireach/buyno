@@ -61,7 +61,7 @@ const SellerDashboardHeader = () => {
         <Link to={`/seller/${seller?._id}`}>
           {seller?.avatar ? (
             <img
-              src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${seller.avatar}`}
+              src={`${seller.avatar?.url}`}
               alt="avatar"
               className="w-8 h-8 rounded-full object-cover border-2 border-gray-300"
               onError={(e) => {

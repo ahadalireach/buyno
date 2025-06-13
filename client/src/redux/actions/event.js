@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const createEvent = (formData) => async (dispatch) => {
+export const createEvent = (payload) => async (dispatch) => {
   try {
     dispatch({
       type: "createEventRequest",
@@ -8,14 +8,14 @@ export const createEvent = (formData) => async (dispatch) => {
 
     const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       withCredentials: true,
     };
 
     const { data } = await axios.post(
       `${process.env.REACT_APP_BACKEND_URL}/events/create`,
-      formData,
+      payload,
       config
     );
 
@@ -59,7 +59,7 @@ export const deleteEvent = (id) => async (dispatch) => {
     });
 
     const { data } = await axios.delete(
-      `${process.env.REACT_APP_BACKEND_URL}/events/seller/${id}`,
+      `${process.env.REACT_APP_BACKEND_URL}/events/event/${id}`,
       {
         withCredentials: true,
       }
@@ -93,7 +93,7 @@ export const getAllEvents = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllEventsFail",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || error.message,
     });
   }
 };

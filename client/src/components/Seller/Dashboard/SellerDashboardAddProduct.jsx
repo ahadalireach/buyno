@@ -15,7 +15,6 @@ const SellerDashboardAddProduct = () => {
   const [stock, setStock] = useState(0);
   const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
-  const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
   const [discountPrice, setDiscountPrice] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
@@ -56,50 +55,61 @@ const SellerDashboardAddProduct = () => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (loading) return;
-    setLoading(true);
-    const newForm = new FormData();
 
-    const imageInput = document.querySelector("input[type='file']");
-    const imageFiles = imageInput.files;
-
-    for (let i = 0; i < imageFiles.length; i++) {
-      newForm.append("images", imageFiles[i]);
+    if (!seller || !seller._id) {
+      toast.error("Seller not found. Please login again.");
+      return;
     }
 
     if (!stock || Number(stock) <= 0) {
       toast.error("Stock must be greater than 0.");
-      setLoading(false);
       return;
     }
-    if (!discountPrice || Number(discountPrice) < 10) {
-      toast.error("Price (With Discount) must be at least 10.");
-      setLoading(false);
+    if (!discountPrice || Number(discountPrice) < 3) {
+      toast.error("Price (With Discount) must be at least 3.");
       return;
     }
-
-    if (originalPrice && Number(originalPrice) >= Number(discountPrice)) {
-      newForm.append("originalPrice", originalPrice);
+    if (originalPrice && Number(originalPrice) < Number(discountPrice)) {
+      toast.error(
+        "Original Price must be greater than or equal to Discount Price."
+      );
+      return;
     }
-
     if (images.length === 0) {
       toast.error("Please upload at least one image.");
-      setLoading(false);
       return;
     }
 
-    newForm.append("name", name);
-    newForm.append("description", description);
-    newForm.append("category", category);
-    newForm.append("tags", tags);
-    newForm.append("originalPrice", originalPrice);
-    newForm.append("discountPrice", discountPrice);
-    newForm.append("stock", stock);
-    newForm.append("sellerId", seller._id);
+    let imagesBase64 = images;
+    if (images.length && typeof images[0] !== "string") {
+      imagesBase64 = await Promise.all(
+        Array.from(images).map(
+          (file) =>
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            })
+        )
+      );
+    }
 
-    dispatch(addProduct(newForm));
+    const payload = {
+      name,
+      description,
+      category,
+      tags,
+      originalPrice,
+      discountPrice,
+      stock,
+      sellerId: seller._id,
+      images: imagesBase64,
+    };
+
+    dispatch(addProduct(payload));
   };
 
   return (
@@ -231,7 +241,7 @@ const SellerDashboardAddProduct = () => {
               <div className="flex items-center flex-wrap gap-3 mt-2">
                 <label
                   htmlFor="upload"
-                  className="cursor-pointer flex flex-col items-center justify-center w-28 h-28 border-2 border-dashed border-orange-400 bg-orange-50 rounded-lg hover:bg-orange-100 transition"
+                  className="cursor-pointer flex flex-col items-center justify-center w-28 h-28 border-2 border-dashed border-orange-400 bg-orange-50 rounded-sm hover:bg-orange-100 transition"
                 >
                   <AiOutlinePlusCircle size={32} className="text-orange-500" />
                   <span className="text-xs text-gray-500 mt-1">Add Images</span>
@@ -259,31 +269,8 @@ const SellerDashboardAddProduct = () => {
             <button
               type="submit"
               className="w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold tracking-wide transition mt-4 flex items-center justify-center"
-              disabled={loading}
             >
-              {loading ? (
-                <svg
-                  className="animate-spin h-5 w-5 mr-2 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                  ></path>
-                </svg>
-              ) : null}
-              {loading ? "Adding..." : "Add"}
+              Add
             </button>
           </form>
         </div>

@@ -1,4 +1,4 @@
-const fs = require("fs");
+const cloudinary = require("cloudinary");
 const Event = require("../models/Event");
 const Seller = require("../models/Seller");
 const errorHandler = require("../utils/errorHandler");
@@ -10,19 +10,36 @@ exports.createEvent = catchAsyncErrors(async (req, res, next) => {
     const seller = await Seller.findById(sellerId);
     if (!seller) {
       return next(new errorHandler("Invalid seller ID.", 400));
-    } else {
-      const files = req.files;
-      const imageUrls = files.map((file) => file.filename);
-      const eventData = req.body;
-      eventData.images = imageUrls;
-      eventData.seller = seller;
-      const product = await Event.create(eventData);
+    }
 
-      res.status(201).json({
-        success: true,
-        product,
+    let images = [];
+    if (typeof req.body.images === "string") {
+      images.push(req.body.images);
+    } else if (Array.isArray(req.body.images)) {
+      images = req.body.images;
+    }
+
+    const imagesLinks = [];
+    for (let i = 0; i < images.length; i++) {
+      const result = await cloudinary.v2.uploader.upload(images[i], {
+        folder: "events",
+      });
+      imagesLinks.push({
+        public_id: result.public_id,
+        url: result.secure_url,
       });
     }
+
+    const eventData = req.body;
+    eventData.images = imagesLinks;
+    eventData.seller = seller;
+
+    const event = await Event.create(eventData);
+
+    res.status(201).json({
+      success: true,
+      event,
+    });
   } catch (error) {
     return next(new errorHandler(error, 400));
   }
@@ -35,20 +52,12 @@ exports.deleteEvent = catchAsyncErrors(async (req, res, next) => {
       return next(new errorHandler("Event is not found with this id", 404));
     }
 
-    event.images.forEach((imageUrl) => {
-      const filename = imageUrl;
-      const filePath = `uploads/${filename}`;
+    for (let i = 0; i < event.images.length; i++) {
+      await cloudinary.v2.uploader.destroy(event.images[i].public_id);
+    }
 
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error(`Error deleting file ${filePath}:`, err);
-        } else {
-          console.log(`File ${filePath} deleted successfully.`);
-        }
-      });
-    });
+    await event.deleteOne();
 
-    await Event.deleteOne({ _id: req.params.id });
     res.status(200).json({
       success: true,
       message: "Event Deleted successfully.",
@@ -61,7 +70,7 @@ exports.deleteEvent = catchAsyncErrors(async (req, res, next) => {
 exports.getAllEvents = catchAsyncErrors(async (req, res, next) => {
   try {
     const events = await Event.find();
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       events,
     });
@@ -73,8 +82,7 @@ exports.getAllEvents = catchAsyncErrors(async (req, res, next) => {
 exports.getSellerEvents = catchAsyncErrors(async (req, res, next) => {
   try {
     const events = await Event.find({ sellerId: req.params.id });
-
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       events,
     });
@@ -85,10 +93,8 @@ exports.getSellerEvents = catchAsyncErrors(async (req, res, next) => {
 
 exports.getAllEventsByAdmin = catchAsyncErrors(async (req, res, next) => {
   try {
-    const events = await Event.find().sort({
-      createdAt: -1,
-    });
-    res.status(201).json({
+    const events = await Event.find().sort({ createdAt: -1 });
+    res.status(200).json({
       success: true,
       events,
     });

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/role-supports-aria-props */
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -7,6 +9,7 @@ import { Country, State } from "country-state-city";
 import { getUser } from "../../../redux/actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserOrders } from "../../../redux/actions/order";
+import { profilePlaceholderImg } from "../../../assets";
 import {
   AiOutlineArrowRight,
   AiOutlineCamera,
@@ -47,26 +50,41 @@ const UserProfileData = ({ active }) => {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    const validTypes = ["image/jpeg", "image/jpg", "image/png"];
 
-    setAvatar(URL.createObjectURL(file));
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      await axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/users/update-avatar`,
-        formData,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      dispatch(getUser());
-      toast.success("Avatar updated successfully.");
-    } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to update avatar.");
+    if (!file) {
+      toast.error("Please select an image file.");
+      return;
     }
+
+    if (!validTypes.includes(file.type)) {
+      toast.error("Only JPG, JPEG, and PNG files are allowed.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      setAvatar(reader.result);
+
+      try {
+        await axios.put(
+          `${process.env.REACT_APP_BACKEND_URL}/users/update-avatar`,
+          { avatar: reader.result },
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        dispatch(getUser());
+        toast.success("Avatar updated successfully.");
+      } catch (error) {
+        toast.error(
+          error?.response?.data?.message || "Failed to update avatar."
+        );
+      }
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -76,12 +94,13 @@ const UserProfileData = ({ active }) => {
           <div className="flex justify-center w-full mb-8">
             <div className="relative">
               <img
-                src={
-                  avatar ||
-                  `${process.env.REACT_APP_BACKEND_NON_API_URL}/${user?.avatar}`
-                }
+                src={`${user?.avatar?.url}`}
                 className="w-32 h-32 md:w-40 md:h-40 lg:w-[150px] lg:h-[150px] rounded-full object-cover border-4 border-gray-400 shadow-[0_0_20px_rgba(0,0,0,0.05)]"
                 alt="User Profile"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = profilePlaceholderImg;
+                }}
               />
               <div className="w-8 h-8 md:w-[34px] md:h-[34px] bg-gray-100 rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px] border-2 border-gray-400">
                 <input
@@ -844,7 +863,7 @@ const Address = () => {
                   </div>
 
                   <div className="w-full pb-2">
-                    <label className="block pb-2">Choose your City</label>
+                    <label className="block pb-2">Choose your State</label>
                     <select
                       name=""
                       id=""
@@ -853,7 +872,7 @@ const Address = () => {
                       className="block w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm placeholder-gray-500 focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-lg"
                     >
                       <option value="" className="block border pb-2">
-                        Choose your city
+                        Choose your state
                       </option>
                       {State &&
                         State.getStatesOfCountry(country).map((item) => (

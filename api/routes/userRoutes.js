@@ -1,20 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { upload } = require("../multer");
-const { isAuthenticated, isAdmin } = require("../middleware/auth");
 const userController = require("../controllers/userController");
+const { isAuthenticated, isAdmin } = require("../middleware/auth");
 
-router.post("/register", upload.single("file"), userController.registerUser);
+router.post("/register", userController.registerUser);
 router.post("/activate", userController.activateUser);
 router.post("/login", userController.loginUser);
 router.get("/profile", isAuthenticated, userController.getUserProfile);
 router.put("/update-info", isAuthenticated, userController.updateUserInfo);
-router.put(
-  "/update-avatar",
-  isAuthenticated,
-  upload.single("file"),
-  userController.updateUserAvatar
-);
+router.put("/update-avatar", isAuthenticated, userController.updateUserAvatar);
 router.put(
   "/update-addresses",
   isAuthenticated,

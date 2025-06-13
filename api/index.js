@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const colors = require("colors");
 const connectDB = require("./db/db");
+const cloudinary = require("cloudinary");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/userRoutes");
@@ -26,6 +27,12 @@ process.on("uncaughtException", (err) => {
 
 connectDB();
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
@@ -33,11 +40,13 @@ app.use(
   })
 );
 
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
-app.use("/uploads", express.static("uploads"));
-app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 app.use("/api/users", userRoutes);
 app.use("/api/sellers", sellerRoutes);
 app.use("/api/products", productRoutes);

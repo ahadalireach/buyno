@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const addProduct = (formData) => async (dispatch) => {
+export const addProduct = (payload) => async (dispatch) => {
   try {
     dispatch({
       type: "addProductRequest",
@@ -8,14 +8,14 @@ export const addProduct = (formData) => async (dispatch) => {
 
     const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       withCredentials: true,
     };
 
     const { data } = await axios.post(
       `${process.env.REACT_APP_BACKEND_URL}/products/add`,
-      formData,
+      payload,
       config
     );
 
@@ -79,7 +79,7 @@ export const deleteProduct = (productId) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: "deleteProductFailed",
+      type: "deleteProductFail",
       payload: error.response?.data?.message || error.message,
     });
   }
@@ -94,6 +94,7 @@ export const getAllProducts = () => async (dispatch) => {
     const { data } = await axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/products/all`
     );
+
     dispatch({
       type: "getAllProductsSuccess",
       payload: data.products,
@@ -101,7 +102,7 @@ export const getAllProducts = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAllProductsFail",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || error.message,
     });
   }
 };

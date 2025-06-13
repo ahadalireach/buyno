@@ -27,7 +27,7 @@ const sendMail = async (options) => {
       <div style="font-family: Arial, sans-serif; background: #f9fafb; padding: 40px 0;">
         <div style="max-width: 480px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0000000d; overflow: hidden;">
           <div style="background: ${mainColor}; padding: 24px 0; text-align: center;">
-            <h1 style="color: #fff; margin: 0; font-size: 2rem;">Multivendor Marketplace</h1>
+            <h1 style="color: #fff; margin: 0; font-size: 2rem;">Buyno Marketplace</h1>
           </div>
           <div style="padding: 32px;">
             <h2 style="color: ${mainColor}; margin-top: 0;">Activate your ${entityLabelLower}</h2>
@@ -51,7 +51,7 @@ const sendMail = async (options) => {
             </p>
           </div>
           <div style="background: #f3f4f6; padding: 16px; text-align: center; color: #9ca3af; font-size: 0.9rem;">
-            &copy; ${new Date().getFullYear()} Multivendor Marketplace. All rights reserved.
+            &copy; ${new Date().getFullYear()} Buyno Marketplace. All rights reserved.
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@ const sendMail = async (options) => {
       <div style="font-family: Arial, sans-serif; background: #f9fafb; padding: 40px 0;">
         <div style="max-width: 480px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0000000d; overflow: hidden;">
           <div style="background: ${mainColor}; padding: 24px 0; text-align: center;">
-            <h1 style="color: #fff; margin: 0; font-size: 2rem;">Multivendor Marketplace</h1>
+            <h1 style="color: #fff; margin: 0; font-size: 2rem;">Buyno Marketplace</h1>
           </div>
           <div style="padding: 32px;">
             <p style="color: #374151; font-size: 1rem;">
@@ -69,7 +69,7 @@ const sendMail = async (options) => {
             </p>
           </div>
           <div style="background: #f3f4f6; padding: 16px; text-align: center; color: #9ca3af; font-size: 0.9rem;">
-            &copy; ${new Date().getFullYear()} Multivendor Marketplace. All rights reserved.
+            &copy; ${new Date().getFullYear()} Buyno Marketplace. All rights reserved.
           </div>
         </div>
       </div>

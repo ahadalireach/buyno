@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { upload } = require("../multer");
-const { isSeller, isAuthenticated, isAdmin } = require("../middleware/auth");
 const productController = require("../controllers/productController");
+const { isSeller, isAuthenticated, isAdmin } = require("../middleware/auth");
 
-router.post("/add", upload.array("images"), productController.addProduct);
+router.post("/add", productController.addProduct);
 router.get("/seller/:id", productController.getSellerProducts);
 router.delete("/seller/:id", isSeller, productController.deleteProduct);
 router.get("/all", productController.getAllProducts);

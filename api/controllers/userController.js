@@ -1,11 +1,10 @@
-const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const cloudinary = require("cloudinary");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
 const errorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const path = require("path");
 
 const createActivationToken = (user) => {
   return jwt.sign(user, process.env.ACTIVATION_TOKEN_SECRET, {
@@ -15,24 +14,38 @@ const createActivationToken = (user) => {
 
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, avatar } = req.body;
+
     const userEmail = await User.findOne({ email });
     if (userEmail) {
-      const filename = req.file ? req.file.filename : "";
-      const filePath = `uploads/${filename}`;
-      if (filename) {
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.error("Error deleting file:", err);
-          }
-        });
-      }
       return next(
         new errorHandler("A user with this email already exists.", 400)
       );
     }
-    const fileUrl = req.file ? req.file.filename : "";
-    const user = { name, email, password, avatar: fileUrl };
+
+    let avatarObj;
+    if (avatar) {
+      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "avatars",
+      });
+      avatarObj = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
+    } else {
+      avatarObj = {
+        public_id: "default_avatar",
+        url: "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=",
+      };
+    }
+
+    const user = {
+      name: name,
+      email: email,
+      password: password,
+      avatar: avatarObj,
+    };
+
     const activationToken = createActivationToken(user);
     const activationUrl = `${process.env.FRONTEND_URL}/user/activation/${activationToken}`;
 
@@ -177,34 +190,27 @@ exports.updateUserInfo = catchAsyncErrors(async (req, res, next) => {
 
 exports.updateUserAvatar = catchAsyncErrors(async (req, res, next) => {
   try {
-    const existUser = await User.findById(req.user.id);
-    if (!existUser) {
-      return next(new errorHandler("User does not exist.", 400));
-    }
+    let existsUser = await User.findById(req.user.id);
+    if (req.body.avatar !== "") {
+      const imageId = existsUser.avatar.public_id;
 
-    if (!req.file) {
-      return next(new errorHandler("No file uploaded.", 400));
-    }
+      await cloudinary.v2.uploader.destroy(imageId);
 
-    const existAvatar = `uploads/${existUser.avatar}`;
-    if (existUser.avatar && fs.existsSync(existAvatar)) {
-      fs.unlink(existAvatar, (err) => {
-        if (err) {
-          console.error("Error deleting old avatar:", err);
-        }
+      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "avatars",
+        width: 150,
       });
+
+      existsUser.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
     }
 
-    const fileUrl = req.file.filename;
-    const user = await User.findByIdAndUpdate(
-      req.user.id,
-      { avatar: fileUrl },
-      { new: true }
-    );
-
+    await existsUser.save();
     res.status(200).json({
       success: true,
-      user,
+      user: existsUser,
     });
   } catch (error) {
     if (req.file) {

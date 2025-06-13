@@ -17,7 +17,6 @@ exports.createCouponCode = catchAsyncErrors(async (req, res, next) => {
       success: true,
       couponCode,
     });
-    console.log(req.body, couponCode);
   } catch (error) {
     return next(new errorHandler(error, 400));
   }

@@ -49,6 +49,8 @@ export const productReducer = createReducer(initialState, (builder) => {
       state.allProducts = action.payload;
     })
     .addCase("getAllProductsFail", (state, action) => {
+      console.log(action.payload);
+
       state.isLoading = false;
       state.error = action.payload;
     })

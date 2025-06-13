@@ -1,4 +1,4 @@
-import logo from "./logo.png";
+import logo from "./logo.svg";
 import img404 from "./img404.png";
 import pel from "./brands/pel.png";
 import haier from "./brands/haier.png";

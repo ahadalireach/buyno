@@ -45,11 +45,7 @@ const EventCard = ({ active, data }) => {
       <div className="flex flex-col md:flex-row w-full">
         <div className="md:w-1/2 w-full bg-gray-200 flex items-center justify-center p-4">
           <img
-            src={
-              data?.images &&
-              data.images[0] &&
-              `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.images[0]}`
-            }
+            src={`${data.images[0]?.url}`}
             alt={data.name || "Event"}
             className="w-full h-64 md:h-96 object-contain rounded-sm bg-white"
             onError={(e) => {

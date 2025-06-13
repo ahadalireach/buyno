@@ -1,5 +1,5 @@
-const fs = require("fs");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("cloudinary");
 const Seller = require("../models/Seller");
 const sendMail = require("../utils/sendMail");
 const sendSellerToken = require("../utils/sellerToken");
@@ -14,29 +14,37 @@ const createActivationToken = (seller) => {
 
 exports.registerSeller = catchAsyncErrors(async (req, res, next) => {
   try {
-    const { name, email, password, address, phoneNumber, zipCode } = req.body;
+    const { name, email, password, avatar, address, phoneNumber, zipCode } =
+      req.body;
+
     const sellerEmail = await Seller.findOne({ email });
     if (sellerEmail) {
-      const filename = req.file ? req.file.filename : "";
-      const filePath = `uploads/${filename}`;
-      if (filename) {
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.error("Error deleting file:", err);
-          }
-        });
-      }
       return next(
         new errorHandler("Seller already registered with this email.", 400)
       );
     }
 
-    const fileUrl = req.file ? req.file.filename : "";
+    let avatarObj;
+    if (avatar) {
+      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "avatars",
+      });
+      avatarObj = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
+    } else {
+      avatarObj = {
+        public_id: "default_avatar",
+        url: "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=",
+      };
+    }
+
     const seller = {
       name,
       email,
       password,
-      avatar: fileUrl,
+      avatar: avatarObj,
       address,
       phoneNumber,
       zipCode,
@@ -179,34 +187,28 @@ exports.getSellerInfo = catchAsyncErrors(async (req, res, next) => {
 
 exports.updateSellerAvatar = catchAsyncErrors(async (req, res, next) => {
   try {
-    const existSeller = await Seller.findById(req.seller.id);
-    if (!existSeller) {
+    const existsSeller = await Seller.findById(req.seller._id);
+    if (!existsSeller) {
       return next(new errorHandler("Seller does not exist.", 400));
     }
 
-    if (!req.file) {
-      return next(new errorHandler("No file uploaded.", 400));
-    }
+    const imageId = existsSeller.avatar.public_id;
 
-    const existAvatar = `uploads/${existSeller.avatar}`;
-    if (existSeller.avatar && fs.existsSync(existAvatar)) {
-      fs.unlink(existAvatar, (err) => {
-        if (err) {
-          console.error("Error deleting old avatar:", err);
-        }
-      });
-    }
+    await cloudinary.v2.uploader.destroy(imageId);
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+      width: 150,
+    });
 
-    const fileUrl = req.file.filename;
-    const seller = await Seller.findByIdAndUpdate(
-      req.seller.id,
-      { avatar: fileUrl },
-      { new: true }
-    );
+    existsSeller.avatar = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
 
+    await existsSeller.save();
     res.status(200).json({
       success: true,
-      seller,
+      seller: existsSeller,
     });
   } catch (error) {
     if (req.file) {

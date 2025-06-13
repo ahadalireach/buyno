@@ -37,9 +37,9 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
-      const groupTitle = data._id + user._id;
       const userId = user._id;
       const sellerId = data.seller._id;
+      const groupTitle = [userId, sellerId].sort().join("_");
 
       await axios
         .post(
@@ -116,9 +116,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                     src={
                       imgError
                         ? productPlaceholderImg
-                        : data?.images &&
-                          data.images[0] &&
-                          `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.images[0]}`
+                        : data.images && data.images[0]?.url
                     }
                     alt={data.name}
                     className="w-[220px] h-[220px] object-contain rounded-sm shadow-sm bg-gray-50"
@@ -130,10 +128,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   className="flex items-center gap-3 mb-4 hover:underline"
                 >
                   <img
-                    src={
-                      data?.seller?.avatar &&
-                      `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.seller.avatar}`
-                    }
+                    src={data?.seller?.avatar?.url}
                     alt={data.seller.name}
                     className="w-12 h-12 rounded-full border-2 border-gray-400 object-cover"
                     onError={(e) => {

@@ -5,7 +5,7 @@ import { BsFillBagFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserOrders } from "../../../redux/actions/order";
 import { AiFillStar, AiOutlineMessage, AiOutlineStar } from "react-icons/ai";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../../General/Loader";
 
@@ -34,7 +34,7 @@ const UserDashboardOrderDetails = () => {
         { status: "Processing refund" },
         { withCredentials: true }
       );
-      toast.success("Order updated!");
+      toast.success("Your refund request has been sent successfully!");
       dispatch(getUserOrders(user._id));
     } catch (error) {
       toast.error(
@@ -70,9 +70,9 @@ const UserDashboardOrderDetails = () => {
 
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
-      const groupTitle = data._id + user._id;
       const userId = user._id;
-      const sellerId = data.seller._id;
+      const sellerId = data?.cart[0]?.seller?._id;
+      const groupTitle = [userId, sellerId].sort().join("_");
 
       await axios
         .post(
@@ -133,11 +133,7 @@ const UserDashboardOrderDetails = () => {
               className="flex flex-col md:flex-row md:items-center gap-4 border-b pb-4 last:border-b-0 bg-gray-50 rounded-sm px-4 py-3"
             >
               <img
-                src={
-                  item?.images &&
-                  item.images[0] &&
-                  `${process.env.REACT_APP_BACKEND_NON_API_URL}/${item.images[0]}`
-                }
+                src={item?.images && item.images[0]?.url}
                 alt=""
                 className="w-20 h-20 object-cover rounded-sm border shadow-sm"
               />
@@ -178,11 +174,7 @@ const UserDashboardOrderDetails = () => {
               </h2>
               <div className="w-full flex items-center mb-6">
                 <img
-                  src={
-                    selectedItem?.images &&
-                    selectedItem.images[0] &&
-                    `${process.env.REACT_APP_BACKEND_NON_API_URL}/${selectedItem.images[0]}`
-                  }
+                  src={selectedItem?.images && selectedItem.images[0]?.url}
                   alt=""
                   className="w-20 h-20 object-cover rounded-sm border"
                 />
@@ -296,14 +288,12 @@ const UserDashboardOrderDetails = () => {
               Give a Refund
             </button>
           )}
-          <Link to="/" className="w-full md:w-auto">
-            <button
-              className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-gray-300 hover:text-black text-white font-semibold rounded-sm py-2 shadow-sm transition"
-              onClick={handleMessageSubmit}
-            >
-              Send Message <AiOutlineMessage size={20} />
-            </button>
-          </Link>
+          <button
+            className="w-full md:w-auto flex items-center justify-center gap-2 bg-orange-500 hover:bg-gray-300 hover:text-black text-white font-semibold rounded-sm py-3 px-4 shadow-sm transition"
+            onClick={handleMessageSubmit}
+          >
+            Send Message <AiOutlineMessage size={20} />
+          </button>
         </div>
       </div>
     </div>

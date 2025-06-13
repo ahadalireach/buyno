@@ -89,7 +89,7 @@ const SellerDashboardEvents = () => {
                 </div>
                 <div className="flex justify-end">
                   <button
-                    className="bg-red-500 hover:bg-red-800 text-white rounded-sm p-2 transition-colors duration-200"
+                    className="bg-red-500 hover:bg-gray-800 text-white rounded-sm p-2 transition-colors duration-200"
                     title="Delete"
                     onClick={() => handleDelete(event._id)}
                   >
@@ -174,7 +174,7 @@ const SellerDashboardEvents = () => {
                   </td>
                   <td className="px-4 lg:px-6 py-3">
                     <button
-                      className="bg-red-500 hover:bg-red-800 text-white rounded-sm p-2 transition-colors duration-200"
+                      className="bg-red-500 hover:bg-gray-800 text-white rounded-sm p-2 transition-colors duration-200"
                       title="Delete"
                       onClick={() => handleDelete(event._id)}
                     >

@@ -68,10 +68,7 @@ const SellerProfileSideBar = ({ isOwner }) => {
         <div className="w-full bg-white shadow-[0_0_20px_rgba(0,0,0,0.05)] rounded-sm p-6 border border-gray-100">
           <div className="flex flex-col items-center">
             <img
-              src={
-                data?.avatar &&
-                `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.avatar}`
-              }
+              src={data?.avatar?.url}
               alt={data?.name || "Seller"}
               className="w-28 h-28 rounded-full border-2 border-gray-800 object-cover"
               onError={(e) => {

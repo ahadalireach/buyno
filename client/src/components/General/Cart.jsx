@@ -123,11 +123,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
     <div className="flex items-center gap-4 bg-white p-4 mb-4 border border-gray-200 relative">
       <div className="flex-shrink-0 flex items-center justify-center w-24 h-24 bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
         <img
-          src={
-            data?.images &&
-            data.images[0] &&
-            `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.images[0]}`
-          }
+          src={`${data?.images[0]?.url}`}
           alt={data.name}
           className="w-20 h-20 max-w-full max-h-full object-contain bg-white"
           onError={(e) => {

@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-use-before-define */
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { AiOutlineCamera } from "react-icons/ai";
@@ -9,7 +7,7 @@ import axios from "axios";
 
 const SellerDashboardSettings = () => {
   const dispatch = useDispatch();
-  const [avatar, setAvatar] = useState();
+  const [avatar] = useState();
   const { seller } = useSelector((state) => state.seller);
   const [name, setName] = useState(seller && seller.name);
   const [zipCode, setZipcode] = useState(seller && seller.zipCode);
@@ -24,30 +22,30 @@ const SellerDashboardSettings = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setAvatar(URL.createObjectURL(file));
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      await axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/sellers/update-avatar`,
-        formData,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-      dispatch(getSeller());
-      toast.success("Avatar updated successfully.");
-    } catch (error) {
-      console.log(error?.response);
-      toast.error(error?.response?.data?.message || "Failed to update avatar.");
-    }
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      try {
+        await axios.put(
+          `${process.env.REACT_APP_BACKEND_URL}/sellers/update-avatar`,
+          { avatar: reader.result },
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        dispatch(getSeller());
+        toast.success("Avatar updated successfully.");
+      } catch (error) {
+        toast.error(
+          error?.response?.data?.message || "Failed to update avatar."
+        );
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const updateHandler = async (e) => {
     e.preventDefault();
-
     await axios
       .put(
         `${process.env.REACT_APP_BACKEND_URL}/sellers/update-info`,
@@ -76,10 +74,7 @@ const SellerDashboardSettings = () => {
       <div className="flex justify-center w-full mb-8">
         <div className="relative">
           <img
-            src={
-              avatar ||
-              `${process.env.REACT_APP_BACKEND_NON_API_URL}/${seller?.avatar}`
-            }
+            src={avatar ? avatar : `${seller.avatar?.url}`}
             className="w-32 h-32 md:w-40 md:h-40 lg:w-[150px] lg:h-[150px] rounded-full object-cover border-4 border-gray-400 shadow-[0_0_20px_rgba(0,0,0,0.05)]"
             alt="Seller Profile"
           />
@@ -179,12 +174,12 @@ const SellerDashboardSettings = () => {
                 />
               </div>
             </div>
-            <input
-              className="w-full py-2 md:py-3 bg-orange-500 hover:bg-gray-800 text-white cursor-pointer rounded-sm font-semibold tracking-wide transition mt-4"
-              required
-              value="Update"
+            <button
               type="submit"
-            />
+              className="w-full py-2 md:py-3 bg-orange-500 hover:bg-gray-800 text-white cursor-pointer rounded-sm font-semibold tracking-wide transition mt-4 flex items-center justify-center"
+            >
+              Update
+            </button>
           </form>
         </div>
       </div>

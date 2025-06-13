@@ -1,4 +1,4 @@
-const fs = require("fs");
+const cloudinary = require("cloudinary");
 const Order = require("../models/Order");
 const Seller = require("../models/Seller");
 const Product = require("../models/Product");
@@ -12,10 +12,26 @@ exports.addProduct = catchAsyncErrors(async (req, res, next) => {
     if (!seller) {
       return next(new errorHandler("Invalid seller ID.", 400));
     } else {
-      const files = req.files;
-      const imageUrls = files.map((file) => file.filename);
+      let images = [];
+      if (typeof req.body.images === "string") {
+        images.push(req.body.images);
+      } else {
+        images = req.body.images;
+      }
+
+      const imagesLinks = [];
+      for (let i = 0; i < images.length; i++) {
+        const result = await cloudinary.v2.uploader.upload(images[i], {
+          folder: "products",
+        });
+        imagesLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+        });
+      }
+
       const productData = req.body;
-      productData.images = imageUrls;
+      productData.images = imagesLinks;
       productData.seller = seller;
 
       const product = await Product.create(productData);
@@ -50,18 +66,9 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
       return next(new errorHandler("Product is not found with this id", 404));
     }
 
-    product.images.forEach((imageUrl) => {
-      const filename = imageUrl;
-      const filePath = `uploads/${filename}`;
-
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error(`Error deleting file ${filePath}:`, err);
-        } else {
-          console.log(`File ${filePath} deleted successfully.`);
-        }
-      });
-    });
+    for (let i = 0; i < product.images.length; i++) {
+      await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+    }
 
     await Product.deleteOne({ _id: req.params.id });
     res.status(200).json({
@@ -128,7 +135,7 @@ exports.addReview = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Reveiwed added successfully.",
+      message: "Reviewed added successfully.",
     });
   } catch (error) {
     return next(new errorHandler(error, 400));

@@ -15,8 +15,8 @@ const Footer = () => {
         <div>
           <h2 className="text-lg font-semibold mb-4 tracking-wide">ABOUT US</h2>
           <p className="text-gray-300 mb-6">
-            Welcome to Multivendor, your trusted online marketplace for a wide
-            variety of quality products. We are committed to providing excellent
+            Welcome to Buyno, your trusted online marketplace for a wide variety
+            of quality products. We are committed to providing excellent
             customer service, secure shopping, and fast delivery.
           </p>
           <div className="flex space-x-4">
@@ -54,7 +54,7 @@ const Footer = () => {
         </div>
         <div>
           <h2 className="text-lg font-semibold mb-4 tracking-wide">
-            INFORMATION
+            QUICK LINKS
           </h2>
           <ul className="space-y-2">
             {footerInformationLinks.map((link, idx) => (
@@ -70,9 +70,7 @@ const Footer = () => {
           </ul>
         </div>
         <div>
-          <h2 className="text-lg font-semibold mb-4 tracking-wide">
-            MY ACCOUNT
-          </h2>
+          <h2 className="text-lg font-semibold mb-4 tracking-wide">ACCOUNT</h2>
           <ul className="space-y-2">
             {footerAccountLinks.map((link, idx) => (
               <li key={idx}>
@@ -121,9 +119,17 @@ const Footer = () => {
       <div className="border-t border-gray-700 py-6 bg-[#23262a]">
         <div className="w-[95%] sm:w-11/12 mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <span className="text-gray-400 text-sm">
-            © {new Date().getFullYear()} Multivendor. Made with{" "}
-            <span className="text-orange-500">♥</span> by{" "}
-            <span className="font-semibold">Ahad Ali</span>.
+            © {new Date().getFullYear()} Buyno. Made with
+            <span className="text-orange-500"> ♥ </span>by{" "}
+            <a
+              href="https://ahadali.me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold underline hover:text-orange-500 transition"
+            >
+              Ahad Ali
+            </a>
+            .
           </span>
           <div className="flex items-center gap-2">
             <img

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { isSeller, isAuthenticated, isAdmin } = require("../middleware/auth");
 const withdrawController = require("../controllers/withdrawController");
+const { isSeller, isAuthenticated, isAdmin } = require("../middleware/auth");
 
 router.post(
   "/seller/request-withdraw",

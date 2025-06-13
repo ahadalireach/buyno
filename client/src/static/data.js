@@ -73,7 +73,7 @@ export const adminSidebarItems = [
     key: 8,
     label: "Settings",
     icon: AiOutlineSetting,
-    route: "/admin/profile",
+    route: "/user/profile",
   },
 ];
 
@@ -402,16 +402,16 @@ export const navItems = [
 
 export const footerInformationLinks = [
   {
-    name: "About us",
-    link: "/about",
+    name: "Home",
+    link: "/",
   },
   {
-    name: "Contact us",
-    link: "/contact",
+    name: "Best Selling",
+    link: "/best-selling",
   },
   {
-    name: "FAQ",
-    link: "/faq",
+    name: "Products",
+    link: "/products",
   },
   {
     name: "Events",
@@ -422,19 +422,19 @@ export const footerInformationLinks = [
 export const footerAccountLinks = [
   {
     name: "Login",
-    link: "/login",
+    link: "/user/login",
   },
   {
-    name: "My Cart",
-    link: "/cart",
+    name: "Checkout",
+    link: "/checkout",
   },
   {
-    name: "Wishlist",
-    link: "/wishlist",
+    name: "User Profile",
+    link: "/user/profile",
   },
   {
-    name: "My Account",
-    link: "/profile",
+    name: "Admin Dashboard",
+    link: "/admin/dashboard",
   },
 ];
 
@@ -482,7 +482,7 @@ export const heroSlides = [
       <>
         Discover unbeatable deals on electronics, fashion, and more.
         <br />
-        Enjoy secure payments, fast delivery, and 24/7 support at Multivendor.
+        Enjoy secure payments, fast delivery, and 24/7 support at Buyno.
       </>
     ),
     btn: "Start Shopping",

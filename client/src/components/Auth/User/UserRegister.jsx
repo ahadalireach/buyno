@@ -10,46 +10,59 @@ const UserRegister = () => {
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState(null);
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    const reader = new FileReader();
 
-    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
-    if (!allowedTypes.includes(file.type)) {
-      toast.error("Only PNG, JPG, or JPEG files are allowed.");
+    const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+
+    if (!file) {
+      toast.error("Please select an image file.");
       return;
     }
 
-    setAvatar(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatarPreview(reader.result);
+    if (!validTypes.includes(file.type)) {
+      toast.error("Only JPG, JPEG, and PNG files are allowed.");
+      return;
+    }
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(file);
+        setAvatarPreview(reader.result);
+      }
     };
+
     reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("file", avatar);
+      let avatarBase64 = "";
+      if (avatar) {
+        const reader = new FileReader();
+        avatarBase64 = await new Promise((resolve, reject) => {
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(avatar);
+        });
+      }
 
-      const config = {
-        headers: { "Content-Type": "multipart/form-data" },
+      const payload = {
+        name,
+        email,
+        password,
+        avatar: avatarBase64,
       };
 
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/users/register`,
-        formData,
-        config
+        payload,
+        { headers: { "Content-Type": "application/json" } }
       );
 
       toast.success(response.data.message);
@@ -60,8 +73,6 @@ const UserRegister = () => {
       setAvatarPreview(null);
     } catch (err) {
       toast.error(err.response?.data.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -152,6 +163,7 @@ const UserRegister = () => {
                     <img
                       src={avatarPreview}
                       alt="avatar preview"
+                      accept=".jpg,.jpeg,.png"
                       className="h-full w-full object-cover rounded-full border border-gray-300"
                     />
                   ) : (
@@ -179,31 +191,8 @@ const UserRegister = () => {
               <button
                 type="submit"
                 className={`w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold tracking-wide transition flex items-center justify-center`}
-                disabled={loading}
               >
-                {loading ? (
-                  <svg
-                    className="animate-spin h-5 w-5 mr-2 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    ></path>
-                  </svg>
-                ) : null}
-                {loading ? "Submitting..." : "Submit"}
+                Submit
               </button>
             </div>
 

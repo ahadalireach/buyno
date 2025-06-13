@@ -246,13 +246,13 @@ const ShippingInfo = ({
             </select>
           </div>
           <div className="flex-1">
-            <label className="block text-sm font-semibold mb-1">City</label>
+            <label className="block text-sm font-semibold mb-1">State</label>
             <select
               className="w-full px-4 py-2 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 text-base"
               value={city}
               onChange={(e) => setCity(e.target.value)}
             >
-              <option value="">Choose your City</option>
+              <option value="">Choose your State</option>
               {State &&
                 State.getStatesOfCountry(country).map((item) => (
                   <option key={item.isoCode} value={item.isoCode}>

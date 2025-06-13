@@ -86,7 +86,13 @@ const SellerDashboardCouponCode = () => {
           <Loader />
         </div>
       ) : (
-        <div className="w-full">
+        <div className="w-full space-y-6">
+          <button
+            className="bg-gray-300 hover:bg-gray-800 hover:text-white font-semibold px-5 py-2 rounded-sm transition-shadow duration-300 focus:outline-none"
+            onClick={() => setOpen(true)}
+          >
+            Create Coupon Code
+          </button>
           <div className="block md:hidden space-y-4">
             {coupons.length === 0 ? (
               <div className="bg-white shadow-[0_0_20px_rgba(0,0,0,0.05)] rounded-sm p-8 text-center">
@@ -209,7 +215,7 @@ const SellerDashboardCouponCode = () => {
                       </td>
                       <td className="px-4 lg:px-6 py-3">
                         <button
-                          className="bg-red-700 hover:bg-red-800 text-white rounded-sm p-2 shadow-md transition-shadow duration-300 focus:outline-none"
+                          className="bg-red-500 hover:bg-gray-800 text-white rounded-sm p-2 transition-shadow duration-300 focus:outline-none"
                           title="Delete"
                           onClick={() => handleDelete(item._id)}
                         >
@@ -306,7 +312,7 @@ const SellerDashboardCouponCode = () => {
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    className="w-full py-2 bg-orange-500 hover:bg-gray-800 text-white rounded-sm font-semibold duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400 flex items-center justify-center"
                   >
                     Create
                   </button>

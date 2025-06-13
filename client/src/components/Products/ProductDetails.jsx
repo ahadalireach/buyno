@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { addToCart } from "../../redux/actions/cart";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllSellerProducts } from "../../redux/actions/product";
+import { productPlaceholderImg, profilePlaceholderImg } from "../../assets";
 import {
   AiFillHeart,
   AiOutlineHeart,
@@ -16,7 +17,6 @@ import {
 } from "../../redux/actions/wishlist";
 import Ratings from "./Ratings";
 import axios from "axios";
-import { productPlaceholderImg, profilePlaceholderImg } from "../../assets";
 
 const ProductDetails = ({ data }) => {
   const dispatch = useDispatch();
@@ -81,10 +81,9 @@ const ProductDetails = ({ data }) => {
 
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
-      const groupTitle = data._id + user._id;
       const userId = user._id;
       const sellerId = data.seller._id;
-      console.log(userId, sellerId);
+      const groupTitle = [userId, sellerId].sort().join("_");
 
       await axios
         .post(
@@ -137,11 +136,7 @@ const ProductDetails = ({ data }) => {
                   />
                 ) : (
                   <img
-                    src={
-                      data?.images &&
-                      data.images[select] &&
-                      `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.images[select]}`
-                    }
+                    src={`${data && data.images[select]?.url}`}
                     alt={data?.name}
                     className="w-[90%] h-[400px] object-contain rounded-sm bg-gray-50 shadow"
                     onError={() => {
@@ -159,10 +154,7 @@ const ProductDetails = ({ data }) => {
                     imgErrorArr.includes(index) ? null : (
                       <img
                         key={index}
-                        src={
-                          i &&
-                          `${process.env.REACT_APP_BACKEND_NON_API_URL}/${i}`
-                        }
+                        src={`${i?.url}`}
                         alt={data?.name}
                         className={`w-16 h-16 object-contain rounded-sm shadow-sm border-2 cursor-pointer transition-all duration-200 ${
                           select === index
@@ -184,10 +176,7 @@ const ProductDetails = ({ data }) => {
                 className="flex items-center gap-3 mb-4 hover:underline"
               >
                 <img
-                  src={
-                    data?.seller.avatar &&
-                    `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data?.seller.avatar}`
-                  }
+                  src={`${data?.seller?.avatar?.url}`}
                   alt={data?.seller?.name}
                   className="w-12 h-12 rounded-full border-2 border-gray-400 object-cover"
                   onError={(e) => {
@@ -359,10 +348,7 @@ const ProductDetailsInfo = ({
                 key={index}
               >
                 <img
-                  src={
-                    item?.user?.avatar &&
-                    `${process.env.REACT_APP_BACKEND_NON_API_URL}/${item.user.avatar}`
-                  }
+                  src={`${item.user.avatar?.url}`}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full border-2 border-gray-200"
                   onError={(e) => {
@@ -396,10 +382,7 @@ const ProductDetailsInfo = ({
             <Link to={`/seller/profile/preview/${data.seller._id}`}>
               <div className="flex items-center">
                 <img
-                  src={
-                    data?.seller?.avatar &&
-                    `${process.env.REACT_APP_BACKEND_NON_API_URL}/${data.seller.avatar}`
-                  }
+                  src={`${data?.seller?.avatar?.url}`}
                   className="w-[50px] h-[50px] rounded-full border-2 border-gray-400"
                   alt={data?.seller?.name || "Seller"}
                   onError={(e) => {

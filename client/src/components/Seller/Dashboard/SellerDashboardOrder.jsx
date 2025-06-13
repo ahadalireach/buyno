@@ -98,11 +98,7 @@ const SellerDashboardOrder = () => {
               className="flex flex-col md:flex-row md:items-center gap-4 border-b pb-4 last:border-b-0 bg-gray-50 rounded-sm px-4 py-3"
             >
               <img
-                src={
-                  item?.images &&
-                  item.images[0] &&
-                  `${process.env.REACT_APP_BACKEND_NON_API_URL}/${item.images[0]}`
-                }
+                src={`${item.images[0]?.url}`}
                 alt=""
                 className="w-20 h-20 object-cover rounded-sm border"
                 onError={(e) => {

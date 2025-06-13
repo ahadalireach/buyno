@@ -91,7 +91,7 @@ const Header = () => {
             <img
               src={logo}
               alt="Multivendor"
-              className="h-10 sm:h-12 md:h-14 w-auto object-contain"
+              className="h-10 sm:h-14 md:h-16 w-auto object-contain"
             />
           </Link>
 
@@ -120,11 +120,7 @@ const Header = () => {
                       className="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
                       <img
-                        src={
-                          i?.images &&
-                          i.images[0] &&
-                          `${process.env.REACT_APP_BACKEND_NON_API_URL}/${i.images[0]}`
-                        }
+                        src={`${i.images[0]?.url}`}
                         alt={i.name}
                         className="w-8 h-8 mr-3 rounded"
                         onError={(e) => {
@@ -163,7 +159,7 @@ const Header = () => {
               {isAuthenticated ? (
                 <Link to="/user/profile">
                   <img
-                    src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${user?.avatar}`}
+                    src={`${user?.avatar?.url}`}
                     className="w-7 h-7 rounded-full object-cover border-2 border-gray-500"
                     alt="profile"
                     onError={(e) => {
@@ -281,7 +277,7 @@ const Header = () => {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <img
-                        src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${i.images[0]}`}
+                        src={i.image_Url[0]?.url}
                         alt={i.name}
                         className="w-8 h-8 mr-3 rounded"
                         onError={(e) => {
@@ -327,7 +323,7 @@ const Header = () => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <img
-                      src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${user?.avatar}`}
+                      src={`${user.avatar?.url}`}
                       className="w-7 h-7 rounded-full object-cover border-2 border-gray-500"
                       alt="profile"
                       onError={(e) => {

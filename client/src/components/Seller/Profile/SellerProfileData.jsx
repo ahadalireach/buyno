@@ -106,7 +106,7 @@ const SellerProfileData = ({ isOwner }) => {
                 key={index}
               >
                 <img
-                  src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${item?.user?.avatar}`}
+                  src={`${item.user.avatar?.url}`}
                   className="w-14 h-14 rounded-full border border-gray-200 object-cover"
                   alt={item?.user?.name}
                   onError={(e) => {

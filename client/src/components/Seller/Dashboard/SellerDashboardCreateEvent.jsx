@@ -75,9 +75,13 @@ const SellerDashboardCreateEvent = () => {
     setEndDate(end);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!seller || !seller._id) {
+      toast.error("Seller not found. Please login again.");
+      return;
+    }
     if (!stock || Number(stock) <= 0) {
       toast.error("Stock must be greater than 0.");
       return;
@@ -114,26 +118,40 @@ const SellerDashboardCreateEvent = () => {
       return;
     }
 
-    const newForm = new FormData();
-    const imageInput = document.querySelector("input[type='file']");
-    const imageFiles = imageInput.files;
-
-    for (let i = 0; i < imageFiles.length; i++) {
-      newForm.append("images", imageFiles[i]);
+    let imagesBase64 = images;
+    if (images.length && typeof images[0] !== "string") {
+      imagesBase64 = await Promise.all(
+        Array.from(images).map(
+          (file) =>
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            })
+        )
+      );
     }
 
-    newForm.append("name", name);
-    newForm.append("description", description);
-    newForm.append("category", category);
-    newForm.append("tags", tags);
-    newForm.append("originalPrice", originalPrice);
-    newForm.append("discountPrice", discountPrice);
-    newForm.append("stock", stock);
-    newForm.append("sellerId", seller._id);
-    newForm.append("startDate", startDate.toISOString());
-    newForm.append("finishDate", endDate.toISOString());
+    const payload = {
+      name,
+      description,
+      category,
+      tags,
+      originalPrice,
+      discountPrice,
+      stock,
+      sellerId: seller._id,
+      startDate: startDate.toISOString(),
+      finishDate: endDate.toISOString(),
+      images: imagesBase64,
+    };
 
-    dispatch(createEvent(newForm));
+    try {
+      await dispatch(createEvent(payload));
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to create event.");
+    }
   };
 
   return (

@@ -1,9 +1,8 @@
-import { logo, profilePlaceholderImg } from "../../../assets";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { AiOutlineGift } from "react-icons/ai";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { BiMessageSquareDetail } from "react-icons/bi";
+import { logo, profilePlaceholderImg } from "../../../assets";
 import { FiPackage, FiShoppingBag, FiUser } from "react-icons/fi";
 
 const AdminDashboardHeader = () => {
@@ -18,12 +17,6 @@ const AdminDashboardHeader = () => {
         <img src={logo} alt="Logo" className="h-7 sm:h-12" />
       </Link>
       <div className="flex items-center gap-2 sm:gap-6">
-        <Link to="/dashboard/cupouns" title="Coupons">
-          <AiOutlineGift
-            size={24}
-            className="text-gray-600 hover:text-orange-500 transition"
-          />
-        </Link>
         <Link to="/admin/dashboard-events" title="Events">
           <MdOutlineLocalOffer
             size={24}
@@ -57,7 +50,7 @@ const AdminDashboardHeader = () => {
         <Link to="/user/profile">
           {user?.avatar ? (
             <img
-              src={`${process.env.REACT_APP_BACKEND_NON_API_URL}/${user?.avatar}`}
+              src={`${user?.avatar?.url}`}
               className="w-7 h-7 rounded-full object-cover border-2 border-gray-500 bg-gray-200"
               alt="profile"
               onError={(e) => {

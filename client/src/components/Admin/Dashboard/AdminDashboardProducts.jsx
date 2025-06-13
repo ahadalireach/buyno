@@ -16,7 +16,7 @@ const AdminDashboardProducts = () => {
   }, [dispatch]);
 
   const [page, setPage] = useState(1);
-  const pageSize = 7;
+  const pageSize = 6;
   const totalPages = adminProducts
     ? Math.ceil(adminProducts.length / pageSize)
     : 1;
