@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { format } from "timeago.js";
 import { useSelector } from "react-redux";
 import { TfiGallery } from "react-icons/tfi";
@@ -11,6 +12,7 @@ import axios from "axios";
 const socketId = socketIO(process.env.REACT_APP_SOCKET_ENDPOINT, {
   transports: ["websocket"],
 });
+const SOCKET_OFF = true;
 
 const SellerDashboardMessages = () => {
   const { seller, isLoading } = useSelector((state) => state.seller);
@@ -93,7 +95,6 @@ const SellerDashboardMessages = () => {
     getMessage();
   }, [currentChat]);
 
-  // create new message
   const sendMessageHandler = async (e) => {
     e.preventDefault();
 
@@ -104,30 +105,38 @@ const SellerDashboardMessages = () => {
     };
 
     const receiverId = currentChat.members.find(
-      (member) => member.id !== seller._id
+      (member) => member !== seller._id
     );
 
-    socketId.emit("sendMessage", {
-      senderId: seller._id,
-      receiverId,
-      text: newMessage,
-    });
+    if (!newMessage.trim()) return;
 
     try {
-      if (newMessage !== "") {
-        await axios
-          .post(
-            `${process.env.REACT_APP_BACKEND_URL}/messages/new-message`,
-            message
-          )
-          .then((res) => {
-            setMessages([...messages, res.data.message]);
-            updateLastMessage();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/messages/new-message`,
+        message
+      );
+
+      setMessages([...messages, res.data.message]);
+      updateLastMessage();
+
+      if (!SOCKET_OFF) {
+        socketId.emit("sendMessage", {
+          senderId: seller._id,
+          receiverId,
+          text: newMessage,
+        });
+
+        socketId.emit("updateLastMessage", {
+          lastMessage: newMessage,
+          lastMessageId: seller._id,
+        });
+      } else {
+        toast.warning(
+          "⚠️ Real-time messaging is not enabled. You may need to refresh the page to see new messages."
+        );
       }
+
+      setNewMessage("");
     } catch (error) {
       console.log(error);
     }
@@ -347,13 +356,14 @@ const MessageList = ({
         <h1 className="text-base font-semibold text-gray-800 truncate">
           {user?.name}
         </h1>
-
-        <p className="text-sm text-gray-500 truncate">
-          {!isLoading && data?.lastMessageId !== user?._id
-            ? "You:"
-            : user?.name.split(" ")[0] + ": "}{" "}
-          {data?.lastMessage}
-        </p>
+        {data?.lastMessageId && (
+          <p className="text-sm text-gray-500 truncate">
+            {!isLoading && data?.lastMessageId !== user?._id
+              ? "You:"
+              : `${user?.name?.split?.(" ")[0] || "User"}: `}
+            {data?.lastMessage}
+          </p>
+        )}
       </div>
     </div>
   );

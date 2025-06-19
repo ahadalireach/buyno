@@ -10,7 +10,7 @@ const AdminDashboardSideBar = ({ active }) => {
   const logoutHandler = async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/admin/logout`,
+        `${process.env.REACT_APP_BACKEND_URL}/users/logout`,
         { withCredentials: true }
       );
       toast.success(res.data.message);

@@ -45,11 +45,7 @@ const Header = () => {
   };
 
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 70) {
-      setActive(true);
-    } else {
-      setActive(false);
-    }
+    setActive(window.scrollY > 70);
   });
 
   useEffect(() => {
@@ -61,11 +57,13 @@ const Header = () => {
         setDropDown(false);
       }
     }
+
     if (dropDown) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
     }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -77,6 +75,7 @@ const Header = () => {
         setSearchData(null);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -111,7 +110,7 @@ const Header = () => {
                 <AiOutlineSearch size={20} />
               </button>
 
-              {searchData && searchData.length !== 0 && (
+              {searchData && searchData.length > 0 && (
                 <div className="absolute left-0 right-0 mt-2 bg-white shadow-lg rounded z-10 max-h-60 overflow-y-auto">
                   {searchData.map((i) => (
                     <Link
@@ -120,7 +119,11 @@ const Header = () => {
                       className="flex items-center px-4 py-2 hover:bg-gray-100"
                     >
                       <img
-                        src={`${i.images[0]?.url}`}
+                        src={
+                          i.images && i.images[0]?.url
+                            ? i.images[0].url
+                            : productPlaceholderImg
+                        }
                         alt={i.name}
                         className="w-8 h-8 mr-3 rounded"
                         onError={(e) => {
@@ -159,7 +162,7 @@ const Header = () => {
               {isAuthenticated ? (
                 <Link to="/user/profile">
                   <img
-                    src={`${user?.avatar?.url}`}
+                    src={user?.avatar?.url || profilePlaceholderImg}
                     className="w-7 h-7 rounded-full object-cover border-2 border-gray-500"
                     alt="profile"
                     onError={(e) => {
@@ -178,7 +181,7 @@ const Header = () => {
             </div>
 
             <Link
-              to={`${isSeller ? "/seller/dashboard" : "/seller/register"}`}
+              to={isSeller ? "/seller/dashboard" : "/seller/register"}
               className="ml-4 px-4 py-2 bg-orange-500 text-white rounded-sm font-medium hover:bg-gray-800 transition"
             >
               {isSeller ? "Go Dashboard" : "Become Seller"}
@@ -267,7 +270,8 @@ const Header = () => {
               <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
                 <AiOutlineSearch size={20} />
               </button>
-              {searchData && searchData.length !== 0 && (
+
+              {searchData && searchData.length > 0 && (
                 <div className="absolute left-0 right-0 mt-2 bg-white shadow-lg rounded-sm z-10 max-h-60 overflow-y-auto">
                   {searchData.map((i) => (
                     <Link
@@ -277,7 +281,11 @@ const Header = () => {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <img
-                        src={i.image_Url[0]?.url}
+                        src={
+                          i.image_Url && i.image_Url[0]?.url
+                            ? i.image_Url[0].url
+                            : productPlaceholderImg
+                        }
                         alt={i.name}
                         className="w-8 h-8 mr-3 rounded"
                         onError={(e) => {
@@ -291,6 +299,7 @@ const Header = () => {
                 </div>
               )}
             </div>
+
             <div className="flex items-center gap-6">
               <button
                 onClick={() => {
@@ -323,7 +332,7 @@ const Header = () => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <img
-                      src={`${user.avatar?.url}`}
+                      src={user?.avatar?.url || profilePlaceholderImg}
                       className="w-7 h-7 rounded-full object-cover border-2 border-gray-500"
                       alt="profile"
                       onError={(e) => {
@@ -349,6 +358,7 @@ const Header = () => {
                 Become Seller
               </Link>
             </div>
+
             <div className="mt-6">
               <div className="rounded-sm bg-gray-800 py-2">
                 <Navbar />

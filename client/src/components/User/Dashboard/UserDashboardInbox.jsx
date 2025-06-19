@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 import { useEffect, useRef, useState } from "react";
 import { format } from "timeago.js";
+import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { TfiGallery } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +12,7 @@ import socketIO from "socket.io-client";
 const socketId = socketIO(process.env.REACT_APP_SOCKET_ENDPOINT, {
   transports: ["websocket"],
 });
+const SOCKET_OFF = true;
 
 const UserDashboardInbox = () => {
   const scrollRef = useRef(null);
@@ -95,36 +97,45 @@ const UserDashboardInbox = () => {
   const sendMessageHandler = async (e) => {
     e.preventDefault();
 
+    if (!newMessage.trim()) return;
+
     const message = {
       sender: user._id,
       text: newMessage,
       conversationId: currentChat._id,
     };
+
     const receiverId = currentChat.members.find(
-      (member) => member !== user?._id
+      (member) => member !== user._id
     );
 
-    socketId.emit("sendMessage", {
-      senderId: user?._id,
-      receiverId,
-      text: newMessage,
-    });
-
     try {
-      if (newMessage !== "") {
-        await axios
-          .post(
-            `${process.env.REACT_APP_BACKEND_URL}/messages/new-message`,
-            message
-          )
-          .then((res) => {
-            setMessages([...messages, res.data.message]);
-            updateLastMessage();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/messages/new-message`,
+        message
+      );
+
+      setMessages([...messages, res.data.message]);
+      updateLastMessage();
+
+      if (!SOCKET_OFF) {
+        socketId.emit("sendMessage", {
+          senderId: user._id,
+          receiverId,
+          text: newMessage,
+        });
+
+        socketId.emit("updateLastMessage", {
+          lastMessage: newMessage,
+          lastMessageId: user._id,
+        });
+      } else {
+        toast.warning(
+          "⚠️ Real-time messaging is not enabled. You may need to refresh the page to see new messages."
+        );
       }
+
+      setNewMessage("");
     } catch (error) {
       console.log(error);
     }
@@ -346,12 +357,14 @@ const MessageList = ({
           {user?.name}
         </h1>
 
-        <p className="text-sm text-gray-500 truncate">
-          {!loading && data?.lastMessageId !== user?._id
-            ? "You:"
-            : user?.name.split(" ")[0] + ": "}{" "}
-          {data?.lastMessage}
-        </p>
+        {data?.lastMessageId && (
+          <p className="text-sm text-gray-500 truncate">
+            {!loading && data?.lastMessageId !== user?._id
+              ? "You:"
+              : `${user?.name?.split?.(" ")[0] || "User"}: `}
+            {data?.lastMessage}
+          </p>
+        )}
       </div>
     </div>
   );
