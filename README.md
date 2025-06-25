@@ -22,7 +22,8 @@
 - **Account Management**: Signup/login with profile image upload, update profile & avatar.
 - **Browsing**: Home with featured, best-selling products, and time-based events.
 - **Cart & Wishlist**: Add/remove products.
-- **Checkout**: COD, Stripe, and PayPal payments.
+- **Checkout**: COD, Stripe, and PayPal payments with coupon code discounts.
+- **Coupon System**: Apply seller coupon codes for discounts during checkout.
 - **Order Tracking**: Real-time status updates, refunds, order history.
 - **Reviews**: Add reviews only after purchasing a product.
 - **Messaging**: Real-time chat with sellers (text/image).
@@ -31,6 +32,7 @@
 
 - **Onboarding**: Complete info-based signup/login.
 - **Product/Event Management**: Add/edit/delete products and events with image uploads.
+- **Coupon Management**: Create, edit, and delete coupon codes with customizable discounts.
 - **Dashboard**: See stats, latest orders, earnings, and product info.
 - **Chat**: Real-time messaging with users.
 - **Withdrawals**: Setup withdraw methods and request earnings.

@@ -5,6 +5,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Footer,
   Header,
+  Loader,
   Breadcrumb,
   ProductDetails,
   SuggestedProducts,
@@ -14,8 +15,10 @@ const ProductDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const eventData = searchParams.get("isEvent");
+
   const { allEvents } = useSelector((state) => state.events);
   const { allProducts } = useSelector((state) => state.products);
 
@@ -24,34 +27,50 @@ const ProductDetailsPage = () => {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
+
     let found = null;
+
     if (eventData !== null) {
-      if (Array.isArray(allEvents)) {
+      if (Array.isArray(allEvents) && allEvents.length > 0) {
         found = allEvents.find((i) => i._id === id);
-        setData(found || null);
-        if (allEvents.length && !found) {
+        if (!found) {
           toast.error("Oops! The Event you're looking for is not found.");
           navigate("/");
+          return;
         }
       }
     } else {
-      if (Array.isArray(allProducts)) {
+      if (Array.isArray(allProducts) && allProducts.length > 0) {
         found = allProducts.find((i) => i._id === id);
-        setData(found || null);
-        if (allProducts.length && !found) {
+        if (!found) {
           toast.error("Oops! The Product you're looking for is not found.");
           navigate("/");
+          return;
         }
       }
     }
+
+    setData(found || null);
+    setLoading(false);
   }, [id, allProducts, allEvents, eventData, navigate]);
 
   return (
     <>
       <Header />
       <Breadcrumb mainTitle="Product Details" page="Product" />
-      {data && <ProductDetails data={data} />}
-      {!eventData && data && <SuggestedProducts data={data} />}
+
+      {loading ? (
+        <div className="w-full min-h-[60vh] flex items-center justify-center">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          {data && <ProductDetails data={data} />}
+          {!eventData && data && <SuggestedProducts data={data} />}
+        </>
+      )}
+
       <Footer />
     </>
   );

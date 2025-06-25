@@ -2,9 +2,8 @@ import { useSelector } from "react-redux";
 import EventCard from "../Misc/EventCard";
 
 const HotEvent = () => {
-  const { allEvents, isLoading } = useSelector((state) => state.events);
+  const { allEvents } = useSelector((state) => state.events);
 
-  if (isLoading) return null;
   let featuredEvent = null;
 
   if (allEvents && allEvents.length === 1) {

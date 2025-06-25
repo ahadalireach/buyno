@@ -16,6 +16,7 @@ import {
 } from "../../redux/actions/wishlist";
 import axios from "axios";
 import { productPlaceholderImg, profilePlaceholderImg } from "../../assets";
+import { getAllSellerProducts } from "../../redux/actions/product";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const dispatch = useDispatch();
@@ -25,15 +26,18 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   const [imgError, setImgError] = useState(false);
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
+  const { products } = useSelector((state) => state.products);
+
   const { user, isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (wishlist && wishlist.find((i) => i._id === data._id)) {
+    dispatch(getAllSellerProducts(data && data?.seller._id));
+    if (wishlist && wishlist.find((i) => i._id === data?._id)) {
       setClick(true);
     } else {
       setClick(false);
     }
-  }, [data._id, wishlist]);
+  }, [data, dispatch, wishlist]);
 
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
@@ -96,6 +100,21 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     }
   };
 
+  const totalReviewsLength =
+    products &&
+    products.reduce((acc, product) => acc + product.reviews.length, 0);
+
+  const totalRatings =
+    products &&
+    products.reduce(
+      (acc, product) =>
+        acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
+      0
+    );
+
+  const avg = totalRatings / totalReviewsLength || 0;
+  const averageRating = avg.toFixed(1);
+
   return (
     <div>
       {data ? (
@@ -141,7 +160,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                       {data.seller.name}
                     </h3>
                     <h5 className="text-xs text-gray-500">
-                      {data?.seller.ratings} Ratings
+                      ({averageRating}/5) Ratings
                     </h5>
                   </div>
                 </Link>
