@@ -16,7 +16,6 @@ import {
 } from "../../redux/actions/wishlist";
 import axios from "axios";
 import { productPlaceholderImg, profilePlaceholderImg } from "../../assets";
-import { getAllSellerProducts } from "../../redux/actions/product";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const dispatch = useDispatch();
@@ -24,20 +23,34 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [imgError, setImgError] = useState(false);
+  const [sellerProducts, setSellerProducts] = useState([]);
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
-  const { products } = useSelector((state) => state.products);
 
   const { user, isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getAllSellerProducts(data && data?.seller._id));
+    const fetchSellerProducts = async () => {
+      if (data && data?.seller._id) {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_BACKEND_URL}/products/seller/${data.seller._id}`
+          );
+          setSellerProducts(response.data.products);
+        } catch (error) {
+          console.error("Error fetching seller products:", error);
+        }
+      }
+    };
+
+    fetchSellerProducts();
+
     if (wishlist && wishlist.find((i) => i._id === data?._id)) {
       setClick(true);
     } else {
       setClick(false);
     }
-  }, [data, dispatch, wishlist]);
+  }, [data, wishlist]);
 
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
@@ -101,12 +114,12 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   };
 
   const totalReviewsLength =
-    products &&
-    products.reduce((acc, product) => acc + product.reviews.length, 0);
+    sellerProducts &&
+    sellerProducts.reduce((acc, product) => acc + product.reviews.length, 0);
 
   const totalRatings =
-    products &&
-    products.reduce(
+    sellerProducts &&
+    sellerProducts.reduce(
       (acc, product) =>
         acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
       0

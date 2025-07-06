@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { RxPerson } from "react-icons/rx";
 import { TbAddressBook } from "react-icons/tb";
 import { RiLockPasswordLine } from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AiOutlineLogin, AiOutlineMessage } from "react-icons/ai";
 import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
 import {
