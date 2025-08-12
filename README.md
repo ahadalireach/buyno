@@ -142,7 +142,7 @@ node index.js
 ## Live Demo (Optional)
 
 - 🌐 Website: [buyno.vercel.app](https://buyno.vercel.app)
-- 📹 Live Demo Video: Coming Soon
+- 📹 Live Demo Video: [Watch Now](https://youtu.be/D1QOLKhh91c?si=k1ObHGC1AQllqTVZ)
 - ⭐ GitHub: [github.com/ahadalireach/buyno](https://github.com/ahadalireach/buyno)
 
 ---
